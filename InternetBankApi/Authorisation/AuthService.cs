@@ -1,4 +1,4 @@
-﻿namespace MobileBank.Authorisation;
+﻿namespace InternetBankApi.Authorisation;
 
 public interface IAuthService
 {

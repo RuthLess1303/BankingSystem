@@ -2,7 +2,7 @@ namespace InternetBankCore.Db.Entities;
 
 public class CurrencyEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
     public string Code { get; set; }
     public int Quantity { get; set; }
     public decimal RateFormatted { get; set; }

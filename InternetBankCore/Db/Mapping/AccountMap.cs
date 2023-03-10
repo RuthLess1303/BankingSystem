@@ -15,9 +15,5 @@ public class AccountMap : IEntityTypeConfiguration<AccountEntity>
         builder.Property(a => a.Amount).IsRequired();
         builder.Property(a => a.Hash).IsRequired();
         builder.Property(a => a.CreationDate).IsRequired();
-        builder
-            .HasOne(a => a.Transactions)
-            .WithMany()
-            .HasForeignKey(a => a.Iban);
     }
 }

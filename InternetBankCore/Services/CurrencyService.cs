@@ -68,7 +68,7 @@ public class CurrencyService : ICurrencyService
             toRate /= toCurrency.Quantity;
         }
         
-        if (from == "Gel")
+        if (from.ToUpper() == "GEL")
         {
             amount /= toRate;
         }

@@ -22,4 +22,4 @@ using var host = Host.CreateDefaultBuilder(args)
     .Build();
 
 var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-optionsBuilder.UseSqlServer("Server=localhost;Database=MobileBank;User Id=sa; Password=wavedi123;Encrypt=False;");
+optionsBuilder.UseSqlServer("Server=localhost;Database=MobileBankDb;User Id=sa; Password=wavedi123;Encrypt=False;");
