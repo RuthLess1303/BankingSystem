@@ -59,6 +59,7 @@ public class UserService : IUserService
         
         var accountEntity = new AccountEntity
         {
+            Id = Guid.NewGuid(),
             PrivateNumber = request.PrivateNumber,
             Iban = request.Iban,
             CurrencyCode = request.CurrencyCode,
@@ -93,6 +94,7 @@ public class UserService : IUserService
 
         var cardEntity = new CardEntity
         {
+            Id = Guid.NewGuid(),
             CardNumber = request.CardNumber,
             NameOnCard = request.NameOnCard,
             Cvv = request.Cvv,
@@ -107,7 +109,13 @@ public class UserService : IUserService
     public async Task Login(LoginRequest request)
     {
         var user = await _userRepository.GetUserWithEmail(request.Email);
+        var operatorEntity = await _userRepository.GetOperatorWithEmail(request.Email);
+        
         if (user == null || user.Password != request.Password)
+        {
+            throw new Exception("Incorrect credentials");
+        }
+        else if (operatorEntity == null || operatorEntity.Password != request.Password)
         {
             throw new Exception("Incorrect credentials");
         }

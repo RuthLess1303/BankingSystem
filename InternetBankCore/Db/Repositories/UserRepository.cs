@@ -12,6 +12,7 @@ public interface IUserRepository
     Task Register(RegisterUserRequest request);
     Task CreateCard(CardEntity cardEntity);
     Task<UserEntity?> GetUserWithEmail(string email);
+    Task<OperatorEntity?> GetOperatorWithEmail(string email);
 }
 
 public class UserRepository : IUserRepository
@@ -48,6 +49,7 @@ public class UserRepository : IUserRepository
     {
         var user = new UserEntity
         {
+            Id = Guid.NewGuid(),
             Password = request.Password,
             Name = request.Name,
             Surname = request.Surname,
@@ -72,5 +74,12 @@ public class UserRepository : IUserRepository
         var user = await Task.Run(() => _db.User.FirstOrDefault(u => u.Email == email));
 
         return user;
+    }
+    
+    public async Task<OperatorEntity?> GetOperatorWithEmail(string email)
+    {
+        var operatorEntity = await Task.Run(() => _db.Operator.FirstOrDefault(u => u.Email == email));
+
+        return operatorEntity;
     }
 }

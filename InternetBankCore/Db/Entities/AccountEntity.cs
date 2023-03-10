@@ -9,5 +9,4 @@ public class AccountEntity
     public decimal Amount { get; set; }
     public string Hash { get; set; }
     public DateTime CreationDate { get; set; }
-    public List<TransactionEntity> Transactions { get; set; }
 }

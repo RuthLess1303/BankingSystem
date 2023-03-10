@@ -2,7 +2,7 @@ namespace InternetBankCore.Db.Entities;
 
 public class TransactionEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
     public decimal Amount { get; set; }
     public decimal GrossAmount { get; set; }
     public string AggressorIban { get; set; }
