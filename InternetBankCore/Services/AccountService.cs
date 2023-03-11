@@ -1,5 +1,5 @@
-using InternetBankCore.Db.Entities;
-using InternetBankCore.Db.Models;
+using BankingSystemSharedDb.Db.Entities;
+using BankingSystemSharedDb.Db.Models;
 using InternetBankCore.Validations;
 
 namespace InternetBankCore.Services;

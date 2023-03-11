@@ -1,7 +1,6 @@
-using InternetBankCore.Requests;
+using BankingSystemSharedDb.Requests;
 using InternetBankCore.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MobileBank.Controllers;

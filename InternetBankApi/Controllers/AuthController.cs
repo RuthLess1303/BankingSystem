@@ -1,9 +1,8 @@
-﻿using InternetBankApi.Authorisation;
-using InternetBankCore.Db.Repositories;
-using InternetBankCore.Requests;
+﻿using BankingSystemSharedDb.Db.Repositories;
+using BankingSystemSharedDb.Requests;
+using InternetBankApi.Authorisation;
 using InternetBankCore.Services;
 using Microsoft.AspNetCore.Mvc;
-using MobileBank.Requests;
 
 namespace InternetBankApi.Controllers;
 

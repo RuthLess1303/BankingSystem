@@ -1,11 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
-using InternetBankCore.Db.Entities;
-using InternetBankCore.Db.Models;
-using InternetBankCore.Db.Repositories;
-using InternetBankCore.Requests;
+using BankingSystemSharedDb.Db.Entities;
+using BankingSystemSharedDb.Db.Repositories;
+using BankingSystemSharedDb.Requests;
 using InternetBankCore.Validations;
-using MobileBank.Requests;
 
 namespace InternetBankCore.Services;
 

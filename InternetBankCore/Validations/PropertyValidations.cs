@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
-using InternetBankCore.Db.Models;
-using InternetBankCore.Db.Repositories;
+using BankingSystemSharedDb.Db.Models;
+using BankingSystemSharedDb.Db.Repositories;
 
 namespace InternetBankCore.Validations;
 
