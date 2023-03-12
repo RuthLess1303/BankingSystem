@@ -20,8 +20,8 @@ public class TokenGenerator
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(ClaimTypes.Role, "api-user"),
-            new Claim("test type", "test value")
+            new Claim(ClaimTypes.Role, "ApiUser"),
+            new Claim(ClaimTypes.Role, "ApiOperator")
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecrectKey));

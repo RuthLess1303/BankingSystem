@@ -1,10 +1,11 @@
 using BankingSystemSharedDb.Db.Entities;
 using BankingSystemSharedDb.Db.Mapping;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternetBankCore.Db;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
 {
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
     {
@@ -28,5 +29,11 @@ public class AppDbContext : DbContext
         builder.ApplyConfiguration(new CardAccountConnectionMap());
         
         base.OnModelCreating(builder);
+        
+        builder.Entity<RoleEntity>().HasData(new[]
+        {
+            new RoleEntity { Id = 1, Name = "user" },
+            new RoleEntity { Id = 2, Name = "operator" }
+        });
     }
 }

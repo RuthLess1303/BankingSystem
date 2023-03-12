@@ -36,14 +36,21 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody]LoginRequest request)
     {
         var user = _userRepository.FindWithEmail(request.Email);
-        if (user == null)
-        {
-            var operatorEntity = _userRepository.GetOperatorWithEmail(request.Email);
-
-            return Ok(_tokenGenerator.Generate(operatorEntity.Id.ToString()));
-        }
         await _userService.Login(request);
 
         return Ok(_tokenGenerator.Generate(user.Id.ToString()));
+    }
+    
+    [HttpPost("operator_login")]
+    public async Task<IActionResult> OperatorLogin([FromBody]LoginRequest request)
+    {
+        var operatorEntity = _userRepository.GetOperatorWithEmail(request.Email);
+        if (operatorEntity == null)
+        {
+            throw new Exception("Incorrect Credentials");
+        }
+        await _userService.Login(request);
+
+        return Ok(_tokenGenerator.Generate(operatorEntity.Id.ToString()));
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace BankingSystemSharedDb.Db.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class RoleEntity
+namespace BankingSystemSharedDb.Db.Entities;
+
+public class RoleEntity : IdentityRole<int>
 {
 }
