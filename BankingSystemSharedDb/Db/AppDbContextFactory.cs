@@ -1,8 +1,7 @@
-using InternetBankCore.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace MobileBank.Db;
+namespace BankingSystemSharedDb.Db;
 
 public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {

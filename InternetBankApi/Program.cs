@@ -1,11 +1,18 @@
+using BankingSystemSharedDb.Db;
 using InternetBankApi.Authorisation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<TokenGenerator>();
+
 AuthConfigurator.Configure(builder);
+
+builder.Services.AddDbContext<AppDbContext>(c =>
+    c.UseSqlServer(builder.Configuration["AppDbContextConnection"]));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -3,7 +3,7 @@ using BankingSystemSharedDb.Db.Mapping;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace InternetBankCore.Db;
+namespace BankingSystemSharedDb.Db;
 
 public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
 {
