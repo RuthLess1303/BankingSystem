@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text;
+using BankingSystemSharedDb.Db;
 using BankingSystemSharedDb.Db.Entities;
-using InternetBankCore.Db;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
