@@ -28,8 +28,8 @@ public class PropertyValidations : IPropertyValidations
     private readonly IAccountRepository _accountRepository;
 
     public PropertyValidations(
-        CurrencyRepository currencyRepository, 
-        UserRepository userRepository, 
+        ICurrencyRepository currencyRepository, 
+        IUserRepository userRepository, 
         IAccountRepository accountRepository)
     {
         _currencyRepository = currencyRepository;
