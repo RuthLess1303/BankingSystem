@@ -1,6 +1,5 @@
 using BankingSystemSharedDb.Db.Entities;
 using BankingSystemSharedDb.Requests;
-using InternetBankCore.Db;
 
 namespace BankingSystemSharedDb.Db.Repositories;
 
