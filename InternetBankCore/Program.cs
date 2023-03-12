@@ -5,6 +5,7 @@ using InternetBankCore.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
@@ -22,4 +23,4 @@ using var host = Host.CreateDefaultBuilder(args)
     .Build();
 
 var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-optionsBuilder.UseSqlServer("Server=localhost;Database=MobileBankDb;User Id=sa; Password=wavedi123;Encrypt=False;");
+optionsBuilder.UseSqlServer("Server=localhost;Database=MobileBankDb;User Id=nika; Password=123;Encrypt=False;");

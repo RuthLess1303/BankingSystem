@@ -1,5 +1,7 @@
-﻿namespace InternetBankCore.Db.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class RoleEntity
+namespace InternetBankCore.Db.Entities;
+
+public class RoleEntity:IdentityRole<int>
 {
 }

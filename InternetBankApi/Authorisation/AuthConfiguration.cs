@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
 using System.Text;
+using InternetBankCore.Db;
+using InternetBankCore.Db.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-
 
 namespace InternetBankApi.Authorisation;
 
@@ -44,5 +46,17 @@ public static class AuthConfigurator
             options.AddPolicy("ApiOperator",
                 policy => policy.RequireClaim(ClaimTypes.Role, "api-operator"));
         });
-    }
+        
+        builder.Services
+            .AddIdentity<UserEntity, RoleEntity>(o =>
+            {
+                o.Password.RequireDigit = true;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 8;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+    } 
 }

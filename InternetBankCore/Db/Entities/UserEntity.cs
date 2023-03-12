@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace InternetBankCore.Db.Entities;
 
-public class UserEntity
+public class UserEntity:IdentityUser<int>
 {
     public Guid Id { get; set; }
     public string Password { get; set; }

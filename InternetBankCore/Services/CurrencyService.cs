@@ -20,6 +20,46 @@ public class CurrencyService : ICurrencyService
         _db = db;
     }
 
+    public async Task AddInDb()
+    {
+        var currencies = GetCurrencies().Result;
+        Parallel.ForEach(currencies, async currency => { await _db.AddAsync(currency); });
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<decimal> ConvertAmount(string from, string to, decimal amount)
+    {
+        var toCurrency = await Task.Run(() => _db.Currency
+            .OrderByDescending(c => c.Date)
+            .FirstOrDefault(c => c.Code == to));
+        var toRate = toCurrency.Rate;
+
+        if (toCurrency.Quantity != 1) toRate /= toCurrency.Quantity;
+
+        if (from.ToUpper() == "GEL") amount /= toRate;
+        var fromCurrency = await Task.Run(() => _db.Currency
+            .OrderByDescending(c => c.Date)
+            .FirstOrDefault(c => c.Code == from));
+        var fromRate = fromCurrency.Rate;
+
+        if (fromCurrency.Quantity != 1) toRate /= fromCurrency.Quantity;
+
+        amount *= fromRate;
+        amount /= toRate;
+
+        return amount;
+    }
+
+    public async Task<decimal> GetRate(string currencyCode)
+    {
+        var rate = await Task.Run(() => _db.Currency
+            .OrderByDescending(c => c.Date)
+            .FirstOrDefault(c => c.Code == currencyCode));
+
+        return rate.Rate;
+    }
+
     private async Task<List<CurrencyEntity>> GetCurrencies()
     {
         var client = new HttpClient();
@@ -44,60 +84,7 @@ public class CurrencyService : ICurrencyService
             })
             .ToList();
     }
-
-    public async Task AddInDb()
-    {
-        var currencies = GetCurrencies().Result;
-        Parallel.ForEach(currencies, async currency =>
-        {
-            await _db.AddAsync(currency);
-        });
-
-        await _db.SaveChangesAsync();
-    }
-
-    public async Task<decimal> ConvertAmount(string from, string to, decimal amount)
-    {
-        var toCurrency = await Task.Run(() => _db.Currency
-            .OrderByDescending(c => c.Date)
-            .FirstOrDefault(c => c.Code == to));
-        var toRate = toCurrency.Rate;
-        
-        if (toCurrency.Quantity != 1)
-        {
-            toRate /= toCurrency.Quantity;
-        }
-        
-        if (from.ToUpper() == "GEL")
-        {
-            amount /= toRate;
-        }
-        var fromCurrency = await Task.Run(() => _db.Currency
-            .OrderByDescending(c => c.Date)
-            .FirstOrDefault(c => c.Code == from));
-        var fromRate = fromCurrency.Rate;
-        
-        if (fromCurrency.Quantity != 1)
-        {
-            toRate /= fromCurrency.Quantity;
-        }
-        
-        amount *= fromRate;
-        amount /= toRate;
-        
-        return amount;
-    }
-
-    public async Task<decimal> GetRate(string currencyCode)
-    {
-        var rate = await Task.Run(() => _db.Currency
-                .OrderByDescending(c => c.Date)
-                .FirstOrDefault(c => c.Code == currencyCode));
-
-        return rate.Rate;
-    }
 }
-
 
 public class Root
 {

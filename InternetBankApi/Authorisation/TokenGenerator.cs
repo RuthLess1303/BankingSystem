@@ -14,14 +14,14 @@ public class TokenGenerator
     {
         _settings = settings.Value;
     }
-    
+
     public string Generate(string userId)
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(ClaimTypes.Role, "api-user"),
-            new Claim("test type", "test value")
+            new(JwtRegisteredClaimNames.Sub, userId),
+            new(ClaimTypes.Role, "api-user"),
+            new("test type", "test value")
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecrectKey));

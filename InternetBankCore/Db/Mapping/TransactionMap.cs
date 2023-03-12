@@ -19,5 +19,4 @@ public class TransactionMap : IEntityTypeConfiguration<TransactionEntity>
         builder.Property(t => t.Rate).IsRequired();
         builder.Property(t => t.TransactionTime).IsRequired();
     }
-    
 }

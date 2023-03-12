@@ -1,11 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
 using InternetBankCore.Db.Entities;
-using InternetBankCore.Db.Models;
 using InternetBankCore.Db.Repositories;
 using InternetBankCore.Requests;
 using InternetBankCore.Validations;
-using MobileBank.Requests;
 
 namespace InternetBankCore.Services;
 
@@ -19,28 +17,18 @@ public interface IUserService
 
 public class UserService : IUserService
 {
+    private readonly IAccountRepository _accountRepository;
     private readonly IPropertyValidations _propertyValidations;
     private readonly IUserRepository _userRepository;
-    private readonly IAccountRepository _accountRepository;
 
     public UserService(
-        IPropertyValidations propertyValidations, 
-        IUserRepository userRepository, 
+        IPropertyValidations propertyValidations,
+        IUserRepository userRepository,
         IAccountRepository accountRepository)
     {
         _propertyValidations = propertyValidations;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
-    }
-
-    private async Task UserDataCheck(RegisterUserRequest request)
-    {
-        _propertyValidations.CheckStrongPassword(request.Password);
-        await _propertyValidations.CheckPrivateNumberUsage(request.PrivateNumber);
-        _propertyValidations.CheckNameOrSurname(request.Name);
-        _propertyValidations.CheckNameOrSurname(request.Surname);
-        _propertyValidations.CheckEmailDomainExistence(request.Email);
-        await _propertyValidations.EmailInUse(request.Email);
     }
 
     public async Task Register(RegisterUserRequest request)
@@ -55,8 +43,8 @@ public class UserService : IUserService
         _propertyValidations.CheckIbanFormat(request.Iban);
         await _propertyValidations.CheckIbanUsage(request.Iban);
         await _propertyValidations.CheckCurrency(request.CurrencyCode);
-        var forHash = request.Iban + request.Amount.ToString() + DateTime.Now.ToString();
-        
+        var forHash = request.Iban + request.Amount + DateTime.Now;
+
         var accountEntity = new AccountEntity
         {
             Id = Guid.NewGuid(),
@@ -71,26 +59,10 @@ public class UserService : IUserService
         await _accountRepository.Create(accountEntity);
     }
 
-    private string GetHash(string input)
-    {
-        using (SHA256 sha256Hash = SHA256.Create())
-        {
-            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                builder.Append(bytes[i].ToString("x2"));
-            }
-            return builder.ToString();
-        }
-    }
-
     public async Task CreateCard(CreateCardRequest request)
     {
         if (request.ExpirationDate <= DateTime.Now || request.ExpirationDate.Year <= DateTime.Now.Year)
-        {
             throw new Exception("Expiration date must be more than 1 year apart");
-        }
 
         var cardEntity = new CardEntity
         {
@@ -110,14 +82,30 @@ public class UserService : IUserService
     {
         var user = await _userRepository.GetUserWithEmail(request.Email);
         var operatorEntity = await _userRepository.GetOperatorWithEmail(request.Email);
-        
+
         if (user == null || user.Password != request.Password)
-        {
             throw new Exception("Incorrect credentials");
-        }
-        else if (operatorEntity == null || operatorEntity.Password != request.Password)
-        {
+        if (operatorEntity == null || operatorEntity.Password != request.Password)
             throw new Exception("Incorrect credentials");
-        }
+    }
+
+    private async Task UserDataCheck(RegisterUserRequest request)
+    {
+        _propertyValidations.CheckStrongPassword(request.Password);
+        await _propertyValidations.CheckPrivateNumberUsage(request.PrivateNumber);
+        _propertyValidations.CheckNameOrSurname(request.Name);
+        _propertyValidations.CheckNameOrSurname(request.Surname);
+        _propertyValidations.CheckEmailDomainExistence(request.Email);
+        await _propertyValidations.EmailInUse(request.Email);
+    }
+
+    private string GetHash(string input)
+    {
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(input));
+        var builder = new StringBuilder();
+        foreach (var t in bytes)
+            builder.Append(t.ToString("x2"));
+
+        return builder.ToString();
     }
 }

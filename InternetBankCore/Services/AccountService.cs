@@ -16,22 +16,19 @@ public class AccountService : IAccountService
     private readonly IPropertyValidations _propertyValidations;
 
     public AccountService(
-        IAccountValidation accountValidation, 
+        IAccountValidation accountValidation,
         IPropertyValidations propertyValidations)
     {
         _accountValidation = accountValidation;
         _propertyValidations = propertyValidations;
     }
 
-    public async Task<(decimal,List<TransactionEntity>?)> SeeAccount(string iban)
+    public async Task<(decimal, List<TransactionEntity>?)> SeeAccount(string iban)
     {
         var balance = await _accountValidation.GetAmountWithIban(iban);
         var transactionCheck = await _accountValidation.HasTransaction(iban);
-        if (!transactionCheck)
-        {
-            return (balance, null);
-        }
-        
+        if (!transactionCheck) return (balance, null);
+
         var transactions = await _accountValidation.GetTransactionsWithIban(iban);
         return (balance, transactions);
     }
@@ -48,15 +45,10 @@ public class AccountService : IAccountService
             ExpirationDate = card.ExpirationDate
         };
 
-        if (isCardExpired)
-        {
-            return (cardModel, "Card is Expired");
-        }
+        if (isCardExpired) return (cardModel, "Card is Expired");
 
-        if (DateTime.Now.Year == card.ExpirationDate.Year && card.ExpirationDate.Month-DateTime.Now.Month <= 3)
-        {
+        if (DateTime.Now.Year == card.ExpirationDate.Year && card.ExpirationDate.Month - DateTime.Now.Month <= 3)
             return (cardModel, $"Card will expire in: {card.ExpirationDate.Month - DateTime.Now.Month} month");
-        }
 
         return (cardModel, null);
     }

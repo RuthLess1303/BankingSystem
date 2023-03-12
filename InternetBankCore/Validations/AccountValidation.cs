@@ -19,11 +19,11 @@ public interface IAccountValidation
 
 public class AccountValidation : IAccountValidation
 {
-    private readonly IPropertyValidations _propertyValidations;
     private readonly IAccountRepository _accountRepository;
+    private readonly IPropertyValidations _propertyValidations;
 
     public AccountValidation(
-        IPropertyValidations propertyValidations, 
+        IPropertyValidations propertyValidations,
         IAccountRepository accountRepository)
     {
         _propertyValidations = propertyValidations;
@@ -37,14 +37,11 @@ public class AccountValidation : IAccountValidation
         await _propertyValidations.CheckCurrency(request.CurrencyCode);
         await _propertyValidations.CheckPrivateNumberUsage(request.PrivateNumber);
     }
-    
+
     public async Task AccountWithIbanExists(string iban)
     {
         var account = await _accountRepository.GetAccountWithIban(iban);
-        if (account == null)
-        {
-            throw new Exception("Account does not exist");
-        }
+        if (account == null) throw new Exception("Account does not exist");
     }
 
     public async Task<bool> IsCurrencySame(string aggressorIban, string receiverIban)
@@ -52,10 +49,7 @@ public class AccountValidation : IAccountValidation
         var aggressorCurrencyCode = await _accountRepository.GetAccountCurrencyCode(aggressorIban);
         var receiverCurrencyCode = await _accountRepository.GetAccountCurrencyCode(receiverIban);
 
-        if (aggressorCurrencyCode == receiverCurrencyCode)
-        {
-            return true;
-        }
+        if (aggressorCurrencyCode == receiverCurrencyCode) return true;
 
         return false;
     }
@@ -63,30 +57,21 @@ public class AccountValidation : IAccountValidation
     public async Task HasSufficientBalance(string iban, decimal amount)
     {
         var accountMoney = await _accountRepository.GetAccountMoney(iban);
-        if (accountMoney < amount)
-        {
-            throw new Exception("Insufficient balance");
-        }
+        if (accountMoney < amount) throw new Exception("Insufficient balance");
     }
-    
+
     public async Task<decimal> GetAmountWithIban(string iban)
     {
         var account = await _accountRepository.GetAccountWithIban(iban);
-        if (account == null)
-        {
-            throw new Exception("Account does not exist");
-        }
+        if (account == null) throw new Exception("Account does not exist");
 
         return account.Amount;
     }
-    
+
     public async Task<AccountEntity?> GetAccountWithIban(string iban)
     {
         var account = await _accountRepository.GetAccountWithIban(iban);
-        if (account == null)
-        {
-            throw new Exception("Account does not exist");
-        }
+        if (account == null) throw new Exception("Account does not exist");
 
         return account;
     }
@@ -95,10 +80,7 @@ public class AccountValidation : IAccountValidation
     {
         var transaction = await _accountRepository.HasTransaction(iban);
 
-        if (transaction == null)
-        {
-            return false;
-        }
+        if (transaction == null) return false;
 
         return true;
     }
@@ -106,10 +88,10 @@ public class AccountValidation : IAccountValidation
     public async Task<List<TransactionEntity>> GetTransactionsWithIban(string iban)
     {
         var allTransactions = new List<TransactionEntity>();
-        
+
         var transactionsAsAggressor = await _accountRepository.GetAggressorTransactions(iban);
         var transactionsAsReceiver = await _accountRepository.GetReceiverTransactions(iban);
-        
+
         allTransactions.AddRange(transactionsAsAggressor);
         allTransactions.AddRange(transactionsAsReceiver);
 
@@ -119,10 +101,7 @@ public class AccountValidation : IAccountValidation
     public async Task<CardEntity> GetCardWithIban(string iban)
     {
         var card = await _accountRepository.GetCardWithIban(iban);
-        if (card == null)
-        {
-            throw new Exception("There are 0 cards registered under provided Iban");
-        }
+        if (card == null) throw new Exception("There are 0 cards registered under provided Iban");
 
         return card;
     }

@@ -1,6 +1,6 @@
 using InternetBankCore.Db.Entities;
 using InternetBankCore.Requests;
-using MobileBank.Requests;
+using Microsoft.AspNetCore.Identity;
 
 namespace InternetBankCore.Db.Repositories;
 
@@ -18,10 +18,14 @@ public interface IUserRepository
 public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _db;
+    private readonly UserManager<UserEntity> _userManager;
+    private readonly RoleManager<RoleEntity> _roleManager;
 
-    public UserRepository(AppDbContext db)
+    public UserRepository(AppDbContext db, UserManager<UserEntity> userManager, RoleManager<RoleEntity> roleManager)
     {
         _db = db;
+        _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     public async Task<UserEntity?> FindWithPrivateNumber(string privateNumber)
@@ -37,11 +41,11 @@ public class UserRepository : IUserRepository
 
         return user;
     }
-    
+
     public async Task<UserEntity?> FindWithEmail(string email)
     {
         var user = await Task.Run(() => _db.User.FirstOrDefault(u => u.Email == email));
-        
+
         return user;
     }
 
@@ -59,8 +63,17 @@ public class UserRepository : IUserRepository
             CreationDate = DateTime.Now
         };
 
-        await _db.AddAsync(user);
-        await _db.SaveChangesAsync();
+        var result = await _userManager.CreateAsync(user, request.Password);
+        await _userManager.AddToRoleAsync(user, "user");
+        
+        if (!result.Succeeded)
+        {
+            var firstError = result.Errors.First();
+            throw new  Exception(firstError.Description);
+        }
+        
+        // await _db.AddAsync(user);
+        // await _db.SaveChangesAsync();
     }
 
     public async Task CreateCard(CardEntity cardEntity)
@@ -75,7 +88,7 @@ public class UserRepository : IUserRepository
 
         return user;
     }
-    
+
     public async Task<OperatorEntity?> GetOperatorWithEmail(string email)
     {
         var operatorEntity = await Task.Run(() => _db.Operator.FirstOrDefault(u => u.Email == email));

@@ -9,6 +9,7 @@ public interface ITransactionRepository
     Task MakeTransactionWithFee(TransactionRequest request);
     Task AddDataInDb(TransactionEntity entity);
 }
+
 public class TransactionRepository : ITransactionRepository
 {
     private readonly AppDbContext _db;
@@ -25,10 +26,10 @@ public class TransactionRepository : ITransactionRepository
 
         aggressor.Amount -= request.Amount;
         receiver.Amount += request.Amount;
-        
+
         await _db.SaveChangesAsync();
     }
-    
+
     public async Task MakeTransactionWithFee(TransactionRequest request)
     {
         var aggressor = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.AggressorIban));
@@ -36,7 +37,7 @@ public class TransactionRepository : ITransactionRepository
 
         aggressor.Amount -= request.Amount * (decimal)1.01 + (decimal)0.5;
         receiver.Amount += request.Amount;
-        
+
         await _db.SaveChangesAsync();
     }
 

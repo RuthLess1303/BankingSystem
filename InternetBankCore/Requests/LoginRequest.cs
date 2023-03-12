@@ -1,4 +1,4 @@
-﻿namespace MobileBank.Requests;
+﻿namespace InternetBankCore.Requests;
 
 public class LoginRequest
 {

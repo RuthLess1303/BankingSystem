@@ -1,14 +1,16 @@
 using InternetBankCore.Db.Entities;
 using InternetBankCore.Db.Mapping;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternetBankCore.Db;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<UserEntity,RoleEntity,int>
 {
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
     {
     }
+
     public DbSet<OperatorEntity> Operator { get; set; }
     public DbSet<UserEntity> User { get; set; }
     public DbSet<AccountEntity> Account { get; set; }
@@ -26,7 +28,13 @@ public class AppDbContext : DbContext
         builder.ApplyConfiguration(new TransactionMap());
         builder.ApplyConfiguration(new UserMap());
         builder.ApplyConfiguration(new CardAccountConnectionMap());
-        
+
         base.OnModelCreating(builder);
+        
+        builder.Entity<RoleEntity>().HasData(new[]
+        {
+            new RoleEntity { Id = 1, Name = "user" },
+            new RoleEntity { Id = 2, Name = "operator" }
+        });
     }
 }

@@ -1,5 +1,4 @@
 using InternetBankCore.Db.Entities;
-using InternetBankCore.Requests;
 
 namespace InternetBankCore.Db.Repositories;
 
@@ -53,7 +52,7 @@ public class AccountRepository : IAccountRepository
 
         return aggressorTransactions;
     }
-    
+
     public async Task<List<TransactionEntity>> GetReceiverTransactions(string iban)
     {
         var receiverTransactions = await Task.Run(() => _db.Transaction.Where(t => t.ReceiverIban == iban).ToList());
@@ -81,5 +80,4 @@ public class AccountRepository : IAccountRepository
         await _db.AddAsync(accountEntity);
         await _db.SaveChangesAsync();
     }
-    
 }

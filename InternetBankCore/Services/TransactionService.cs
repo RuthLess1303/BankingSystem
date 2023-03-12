@@ -12,15 +12,15 @@ public interface ITransactionService
 
 public class TransactionService : ITransactionService
 {
-    private readonly ITransactionRepository _transactionRepository;
-    private readonly ICurrencyService _currencyService;
-    private readonly IAccountValidation _accountValidation;
     private readonly IAccountRepository _accountRepository;
+    private readonly IAccountValidation _accountValidation;
+    private readonly ICurrencyService _currencyService;
+    private readonly ITransactionRepository _transactionRepository;
 
     public TransactionService(
-        ITransactionRepository transactionRepository, 
-        ICurrencyService currencyService, 
-        IAccountValidation accountValidation, 
+        ITransactionRepository transactionRepository,
+        ICurrencyService currencyService,
+        IAccountValidation accountValidation,
         IAccountRepository accountRepository)
     {
         _transactionRepository = transactionRepository;
@@ -36,7 +36,8 @@ public class TransactionService : ITransactionService
         await _accountValidation.AccountWithIbanExists(request.ReceiverIban);
         var aggressorCurrency = _accountRepository.GetAccountCurrencyCode(request.AggressorIban);
         var receiverCurrency = _accountRepository.GetAccountCurrencyCode(request.ReceiverIban);
-        var convertedAmount = await _currencyService.ConvertAmount(aggressorCurrency.Result, receiverCurrency.Result, request.Amount);
+        var convertedAmount =
+            await _currencyService.ConvertAmount(aggressorCurrency.Result, receiverCurrency.Result, request.Amount);
         request.Amount = convertedAmount;
         var transactionEntity = new TransactionEntity
         {
@@ -44,7 +45,7 @@ public class TransactionService : ITransactionService
             AggressorIban = request.AggressorIban,
             ReceiverIban = request.ReceiverIban,
             CurrencyCode = receiverCurrency.Result,
-            Rate = await _currencyService.GetRate(receiverCurrency.Result),
+            Rate = await _currencyService.GetRate(receiverCurrency.Result)
         };
 
         if (request.ReceiverIban.Contains("CD"))
@@ -57,6 +58,7 @@ public class TransactionService : ITransactionService
             await _transactionRepository.AddDataInDb(transactionEntity);
             return;
         }
+
         await _transactionRepository.MakeTransactionWithFee(request);
         transactionEntity.Type = "Outside";
         transactionEntity.Fee = request.Amount / 100 + (decimal)0.5;

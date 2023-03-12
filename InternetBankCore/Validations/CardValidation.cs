@@ -19,10 +19,7 @@ public class CardValidation : ICardValidation
     public void OnCreate(CreateCardRequest request)
     {
         var cardExpired = _propertyValidations.IsCardExpired(request.ExpirationDate);
-        if (cardExpired)
-        {
-            throw new Exception("Expiration date should not equal today's date");
-        }
+        if (cardExpired) throw new Exception("Expiration date should not equal today's date");
         _propertyValidations.CheckCardNumberFormat(request.CardNumber);
     }
 }
