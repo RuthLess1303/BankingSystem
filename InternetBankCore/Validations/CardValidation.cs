@@ -1,4 +1,4 @@
-using InternetBankCore.Requests;
+using BankingSystemSharedDb.Requests;
 
 namespace InternetBankCore.Validations;
 

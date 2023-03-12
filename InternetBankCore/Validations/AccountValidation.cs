@@ -1,6 +1,6 @@
-using InternetBankCore.Db.Entities;
-using InternetBankCore.Db.Repositories;
-using InternetBankCore.Requests;
+using BankingSystemSharedDb.Db.Entities;
+using BankingSystemSharedDb.Db.Repositories;
+using BankingSystemSharedDb.Requests;
 
 namespace InternetBankCore.Validations;
 

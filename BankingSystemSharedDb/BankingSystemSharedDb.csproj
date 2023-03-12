@@ -15,11 +15,6 @@
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.1.23111.4" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0-preview.1.23110.8" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3-beta1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\BankingSystemSharedDb\BankingSystemSharedDb.csproj" />
     </ItemGroup>
 
 </Project>
