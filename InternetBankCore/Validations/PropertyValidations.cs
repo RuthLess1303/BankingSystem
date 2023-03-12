@@ -124,7 +124,7 @@ public class PropertyValidations : IPropertyValidations
 
     public bool IsCardExpired(DateTime expirationDate)
     {
-        if (expirationDate == DateTime.Now || expirationDate > DateTime.Now)
+        if (expirationDate >= DateTime.Now)
         {
             return true;
         }
