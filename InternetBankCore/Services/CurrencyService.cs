@@ -1,5 +1,5 @@
+using BankingSystemSharedDb.Db;
 using BankingSystemSharedDb.Db.Entities;
-using InternetBankCore.Db;
 using Newtonsoft.Json;
 
 namespace InternetBankCore.Services;
