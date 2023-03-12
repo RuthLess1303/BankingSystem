@@ -11,6 +11,7 @@ using var host = Host.CreateDefaultBuilder(args)
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IAccountRepository, AccountRepository>();
         services.AddTransient<ITransactionRepository, TransactionRepository>();
+        services.AddTransient<IUserRepository, UserRepository>();
     })
     .Build();
 
