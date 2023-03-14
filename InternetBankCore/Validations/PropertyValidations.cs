@@ -142,10 +142,8 @@ public class PropertyValidations : IPropertyValidations
     
     public void CheckEmailDomainExistence(string email)
     {
-        var domainIndex = email.IndexOf('@');
-        var domainLastIndex = email.IndexOf('.');
-        var domain = email.Substring(domainIndex, domainLastIndex - domainIndex);
-        if (!Enum.IsDefined(typeof(EmailModel), domain))
+        var validEmail = new EmailValidation.EmailAttribute().IsValid(email);
+        if (!validEmail)
         {
             throw new Exception("Incorrect email provider");
         }
@@ -153,19 +151,19 @@ public class PropertyValidations : IPropertyValidations
 
     public void CheckStrongPassword(string password)
     {
-        if (!Regex.IsMatch(password, @"^[a-z]"))
+        if (!Regex.IsMatch(password, @"^(?=.*[a-z]).+$"))
         {
             throw new Exception("Password must contain minimum 1 lowercase character");
         }
-        else if (!Regex.IsMatch(password, @"^[A-Z]"))
+        else if (!Regex.IsMatch(password, @"^(?=.*[A-Z]).+$"))
         {
             throw new Exception("Password must contain minimum 1 uppercase character");
         }
-        if (!Regex.IsMatch(password, @"^[0-9]"))
+        if (!Regex.IsMatch(password, @"^(?=.*[0-9]).+$"))
         {
             throw new Exception("Password must contain minimum 1 number");
         }
-        else if (!Regex.IsMatch(password, @"\W\S"))
+        else if (!Regex.IsMatch(password, @"^(?=.*[\W_]).+$"))
         {
             throw new Exception("Password must contain minimum 1 symbol");
         }

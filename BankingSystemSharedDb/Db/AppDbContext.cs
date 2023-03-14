@@ -32,8 +32,8 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         
         builder.Entity<RoleEntity>().HasData(new[]
         {
-            new RoleEntity { Id = 1, Name = "api-user" },
-            new RoleEntity { Id = 2, Name = "api-operator" }
+            new RoleEntity { Id = 1, Name = "api-user", NormalizedName = "API-USER"},
+            new RoleEntity { Id = 2, Name = "api-operator", NormalizedName = "API-OPERATOR"}
         });
         
         var userName = "operator@bank.com";
