@@ -5,6 +5,7 @@ namespace BankingSystemSharedDb.Db.Repositories;
 
 public interface IUserRepository
 {
+    AccountEntity GetAccountByCardDetails(string cardNumber, int pin);
     Task<UserEntity?> FindWithPrivateNumber(string privateNumber);
     Task<UserEntity?> FindWithId(Guid id);
     Task<UserEntity?> FindWithEmail(string email);
@@ -80,5 +81,28 @@ public class UserRepository : IUserRepository
         var operatorEntity = await Task.Run(() => _db.Operator.FirstOrDefault(u => u.Email == email));
 
         return operatorEntity;
+    }
+    
+    public AccountEntity GetAccountByCardDetails(string cardNumber, int pin)
+    {
+        var card = _db.Card.FirstOrDefault(c => c.CardNumber == cardNumber && c.Pin == pin);
+        if (card == null)
+        {
+            throw new UnauthorizedAccessException("Invalid card number or PIN code");
+        }
+
+        var cardAccountConnection = _db.CardAccountConnection.FirstOrDefault(c => c.CardId == card.Id);
+        if (cardAccountConnection == null)
+        {
+            throw new Exception("No account found for the card");
+        }
+
+        var account = _db.Account.FirstOrDefault(a => a.Iban == cardAccountConnection.Iban);
+        if (account == null)
+        {
+            throw new Exception("No account found for the card");
+        }
+
+        return account;
     }
 }

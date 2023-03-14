@@ -3,7 +3,7 @@ using InternetBankCore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MobileBank.Controllers;
+namespace InternetBankApi.Controllers;
 
 [ApiController]
 [Route("api/user")]

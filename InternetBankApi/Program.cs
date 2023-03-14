@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<TokenGenerator>();
-
 AuthConfigurator.Configure(builder);
 
 builder.Services.AddDbContext<AppDbContext>(c =>
