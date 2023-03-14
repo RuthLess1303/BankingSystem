@@ -15,14 +15,17 @@ public class TokenGenerator
         _settings = settings.Value;
     }
     
-    public string Generate(string userId)
+    public string Generate(string userId, IList<string> roles)
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(ClaimTypes.Role, "ApiUser"),
-            new Claim(ClaimTypes.Role, "ApiOperator")
+            new Claim(JwtRegisteredClaimNames.Sub, userId)
         };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecrectKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
