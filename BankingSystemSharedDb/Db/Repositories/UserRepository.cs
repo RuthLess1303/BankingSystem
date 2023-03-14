@@ -60,6 +60,9 @@ public class UserRepository : IUserRepository
             CreationDate = DateTime.Now
         };
         
+        var hasher = new PasswordHasher<UserEntity>();
+        user.PasswordHash = hasher.HashPassword(user, request.Password);
+        
         await _userManager.CreateAsync(user, request.Password);
         await _userManager.AddToRoleAsync(user, "user");
     }
