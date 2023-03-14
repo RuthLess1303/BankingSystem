@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystemSharedDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230314091905_operator_removed")]
-    partial class operator_removed
+    [Migration("20230314200844_role_names_changed_in_db_context")]
+    partial class role_names_changed_in_db_context
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,12 +206,12 @@ namespace BankingSystemSharedDb.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "user"
+                            Name = "ApiUser"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "operator"
+                            Name = "api-operator"
                         });
                 });
 
@@ -352,6 +352,26 @@ namespace BankingSystemSharedDb.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccessFailedCount = 0,
+                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "c0f9b3c5-edc7-4644-9037-db2f21a3d488",
+                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "operator@bank.com",
+                            EmailConfirmed = false,
+                            FirstName = "example",
+                            LastName = "exampleLastname",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAEGfmEqTYskqB7Eif9ZT1OBMO+dSqcZphOMyqRzspCK66h66r+w4kw0vCaukDf3w+rg==",
+                            PhoneNumberConfirmed = false,
+                            PrivateNumber = "01000000003",
+                            TwoFactorEnabled = false,
+                            UserName = "operator@bank.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -436,6 +456,13 @@ namespace BankingSystemSharedDb.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 2
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>

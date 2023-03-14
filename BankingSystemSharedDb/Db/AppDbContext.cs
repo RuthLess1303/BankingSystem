@@ -1,5 +1,6 @@
 using BankingSystemSharedDb.Db.Entities;
 using BankingSystemSharedDb.Db.Mapping;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,8 +32,29 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         
         builder.Entity<RoleEntity>().HasData(new[]
         {
-            new RoleEntity { Id = 1, Name = "user" },
-            new RoleEntity { Id = 2, Name = "operator" }
+            new RoleEntity { Id = 1, Name = "api-user" },
+            new RoleEntity { Id = 2, Name = "api-operator" }
+        });
+        
+        var userName = "operator@bank.com";
+        var password = "abc123";
+        var operatorUser = new UserEntity
+        {
+            Id = 1,
+            Email = userName,
+            UserName = userName,
+            FirstName = "example",
+            LastName = "exampleLastname",
+            PrivateNumber = "01000000003"
+        };
+        
+        var hasher = new PasswordHasher<UserEntity>();
+        operatorUser.PasswordHash = hasher.HashPassword(operatorUser, password);
+        builder.Entity<UserEntity>().HasData(operatorUser);
+        
+        builder.Entity<IdentityUserRole<int>>().HasData(new []
+        {
+            new IdentityUserRole<int> { UserId = 1, RoleId = 2 }
         });
     }
 }

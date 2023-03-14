@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BankingSystemSharedDb.Migrations
 {
     /// <inheritdoc />
-    public partial class updates : Migration
+    public partial class seeding : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,15 +51,14 @@ namespace BankingSystemSharedDb.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PrivateNumber = table.Column<string>(type: "nchar(11)", fixedLength: true, maxLength: 11, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -130,21 +129,6 @@ namespace BankingSystemSharedDb.Migrations
                 {
                     table.PrimaryKey("PK_Currency", x => x.Id);
                     table.UniqueConstraint("AK_Currency_Code", x => x.Code);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Operator",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(320)", maxLength: 320, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Operator", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -283,6 +267,16 @@ namespace BankingSystemSharedDb.Migrations
                     { 2, null, "operator", null }
                 });
 
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "44e3e7dc-79c5-4f71-bf95-16b27d38e364", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, null, null, "AQAAAAIAAYagAAAAECa2TuFBt3nhV7ba4YDW1J/VOv+78CphxiRz4+EFUVtF45APHPLoa/nzqvmQ8Jkosw==", null, false, "01000000003", null, false, "operator@bank.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { 2, 1 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -352,9 +346,6 @@ namespace BankingSystemSharedDb.Migrations
 
             migrationBuilder.DropTable(
                 name: "Currency");
-
-            migrationBuilder.DropTable(
-                name: "Operator");
 
             migrationBuilder.DropTable(
                 name: "Transaction");
