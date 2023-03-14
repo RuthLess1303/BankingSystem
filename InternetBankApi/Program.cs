@@ -8,6 +8,9 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<AppDbContext>(c =>
+    c.UseSqlServer(builder.Configuration["AppDbContext"]));
+
 // Add services to the container.
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IPropertyValidations, PropertyValidations>();
@@ -22,9 +25,6 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 AuthConfigurator.Configure(builder);
-
-builder.Services.AddDbContext<AppDbContext>(c =>
-    c.UseSqlServer(builder.Configuration["Server=localhost;Database=MobileBankDb;User Id=sa; Password=wavedi123;Encrypt=False;"]));
 
 builder.Services.AddTransient<TokenGenerator>();
 

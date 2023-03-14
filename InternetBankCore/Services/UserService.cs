@@ -4,6 +4,7 @@ using BankingSystemSharedDb.Db.Entities;
 using BankingSystemSharedDb.Db.Repositories;
 using BankingSystemSharedDb.Requests;
 using InternetBankCore.Validations;
+using Microsoft.AspNetCore.Identity;
 
 namespace InternetBankCore.Services;
 
@@ -20,15 +21,18 @@ public class UserService : IUserService
     private readonly IPropertyValidations _propertyValidations;
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
+    private readonly UserManager<UserEntity> _userManager;
 
     public UserService(
         IPropertyValidations propertyValidations, 
         IUserRepository userRepository, 
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository,
+        UserManager<UserEntity> userManager)
     {
         _propertyValidations = propertyValidations;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
+        _userManager = userManager;
     }
 
     private async Task UserDataCheck(RegisterUserRequest request)
@@ -106,14 +110,9 @@ public class UserService : IUserService
 
     public async Task Login(LoginRequest request)
     {
-        var user = await _userRepository.GetUserWithEmail(request.Email);
-        var operatorEntity = await _userRepository.GetOperatorWithEmail(request.Email);
+        var user = await _userManager.FindByEmailAsync(request.Email);
         
-        if (user == null || user.Password != request.Password)
-        {
-            throw new Exception("Incorrect credentials");
-        }
-        else if (operatorEntity == null || operatorEntity.Password != request.Password)
+        if (user == null || !(await _userManager.CheckPasswordAsync(user, request.Password)))
         {
             throw new Exception("Incorrect credentials");
         }
