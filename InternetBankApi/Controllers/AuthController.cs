@@ -40,9 +40,14 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody]LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        await _userService.Login(request);
-
+        var user = await _userService.Login(request);
+        // var user = await _userManager.FindByEmailAsync(request.Email);
+        var u = await _userManager.GetRolesAsync(user);
+        foreach (var role in u)
+        {
+            Console.WriteLine(role);
+        }
+        
         var roles = await _userManager.GetRolesAsync(user);
         return Ok(_tokenGenerator.Generate(user.Id.ToString(), roles));
     }

@@ -13,7 +13,7 @@ public interface IUserService
     Task Register(RegisterUserRequest request);
     Task CreateAccount(CreateAccountRequest request);
     Task CreateCard(CreateCardRequest request);
-    Task Login(LoginRequest request);
+    Task<UserEntity> Login(LoginRequest request);
 }
 
 public class UserService : IUserService
@@ -108,13 +108,19 @@ public class UserService : IUserService
         await _userRepository.CreateCard(cardEntity);
     }
 
-    public async Task Login(LoginRequest request)
+    public async Task<UserEntity> Login(LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        // var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userRepository.FindWithEmail(request.Email);
         
-        if (user == null || !(await _userManager.CheckPasswordAsync(user, request.Password)))
+        var checkPassword = await _userManager.CheckPasswordAsync(user, request.Password);
+
+        if (user == null || !checkPassword)
         {
-            throw new Exception("Incorrect credentials");
+            Console.WriteLine(checkPassword);
+            throw new Exception($"Incorrect credentials: {await _userManager.CheckPasswordAsync(user, request.Password)}");
         }
+
+        return user;
     }
 }

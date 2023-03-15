@@ -4,6 +4,7 @@ using BankingSystemSharedDb.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystemSharedDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230314201036_user_role_name_changed_in_db_context")]
+    partial class user_role_name_changed_in_db_context
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,14 +206,12 @@ namespace BankingSystemSharedDb.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "api-user",
-                            NormalizedName = "API-USER"
+                            Name = "api-user"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "api-operator",
-                            NormalizedName = "API-OPERATOR"
+                            Name = "api-operator"
                         });
                 });
 
@@ -358,14 +359,14 @@ namespace BankingSystemSharedDb.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "29627d51-565f-46f1-8320-c9e8b1b95d81",
+                            ConcurrencyStamp = "a7971da5-f33f-487d-a9f2-b0d2510aa00a",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
                             FirstName = "example",
                             LastName = "exampleLastname",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAELiHwZvieAqP0TmvCl1f97/1NRKSCwrH6kmi58WyaZvlhdde9fWC+EwUGM20GvWEXw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBWM0/JQIsotRIJOaqrqojfXmpGTh9LMA3OLXuD0+rDDy9byBssl3AnBW4czBaOwSQ==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,
