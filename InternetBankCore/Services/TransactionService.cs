@@ -71,8 +71,8 @@ public class TransactionService : ITransactionService
             var receiverCurrency = await _accountRepository.GetAccountCurrencyCode(request.ReceiverIban);
             var convertedAmount = await _currencyService.ConvertAmount(aggressorCurrency, receiverCurrency, request.Amount);
             request.Amount = convertedAmount;
-            var transactionEntity = CreateTransactionEntity(request, receiverCurrency);
-            await SaveTransaction(await transactionEntity, request);
+            var transactionEntity = await CreateTransactionEntity(request, receiverCurrency);
+            await SaveTransaction(transactionEntity, request);
         }
 
         private async Task ValidateRequest(TransactionRequest request)
