@@ -26,7 +26,7 @@ public class AccountMap : IEntityTypeConfiguration<AccountEntity>
 
         builder.HasOne(x => x.user)
             .WithMany(x => x.Accounts)
-            .HasForeignKey(x => x.UserEntityId)
+            .HasForeignKey(x => x.PrivateNumber)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(x => x.IncomingTransactions)
