@@ -99,15 +99,15 @@ public class TransactionService : ITransactionService
                 transactionEntity.Fee = 0;
                 transactionEntity.GrossAmount = request.Amount;
                 transactionEntity.Rate = await _currencyService.GetCurrencyAsync(receiverCurrency);
+                
+                return transactionEntity;
             }
-            else
-            {
-                transactionEntity.Type = "Outside";
-                transactionEntity.Fee = request.Amount / 100 + (decimal)0.5;
-                transactionEntity.GrossAmount = request.Amount * (decimal)1.01 + (decimal)0.5;
-                transactionEntity.Rate = await _currencyService.GetCurrencyAsync(receiverCurrency);
-            }
-
+            
+            transactionEntity.Type = "Outside";
+            transactionEntity.Fee = request.Amount / 100 + (decimal)0.5;
+            transactionEntity.GrossAmount = request.Amount * (decimal)1.01 + (decimal)0.5;
+            transactionEntity.Rate = await _currencyService.GetCurrencyAsync(receiverCurrency);
+            
             return transactionEntity;
         }
 
@@ -116,12 +116,12 @@ public class TransactionService : ITransactionService
             if (request.ReceiverIban.Contains("CD"))
             {
                 await _transactionRepository.MakeTransaction(request);
+                await _transactionRepository.AddDataInDb(transactionEntity);
+                
+                return;
             }
-            else
-            {
-                await _transactionRepository.MakeTransactionWithFee(request);
-            }
-
+            
+            await _transactionRepository.MakeTransactionWithFee(request);
             await _transactionRepository.AddDataInDb(transactionEntity);
         }
 }
