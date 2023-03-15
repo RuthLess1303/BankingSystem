@@ -18,7 +18,7 @@ public class UserMap : IEntityTypeConfiguration<UserEntity>
 
         builder.HasMany(u => u.Accounts)
             .WithOne(a => a.user)
-            .HasForeignKey(a => a.UserEntityId);
+            .HasForeignKey(a => a.PrivateNumber);
 
         builder.HasMany(u => u.Cards)
             .WithOne(c => c.User)
