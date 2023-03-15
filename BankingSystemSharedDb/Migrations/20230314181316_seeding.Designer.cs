@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystemSharedDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230314083954_add_roles_table")]
-    partial class add_roles_table
+    [Migration("20230314181316_seeding")]
+    partial class seeding
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,32 +173,6 @@ namespace BankingSystemSharedDb.Migrations
                     b.ToTable("Currency");
                 });
 
-            modelBuilder.Entity("BankingSystemSharedDb.Db.Entities.OperatorEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(320)
-                        .HasColumnType("nvarchar(320)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Operator");
-                });
-
             modelBuilder.Entity("BankingSystemSharedDb.Db.Entities.RoleEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -318,16 +292,21 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -336,11 +315,6 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -360,11 +334,6 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -383,6 +352,26 @@ namespace BankingSystemSharedDb.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccessFailedCount = 0,
+                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "44e3e7dc-79c5-4f71-bf95-16b27d38e364",
+                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "operator@bank.com",
+                            EmailConfirmed = false,
+                            FirstName = "example",
+                            LastName = "exampleLastname",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAECa2TuFBt3nhV7ba4YDW1J/VOv+78CphxiRz4+EFUVtF45APHPLoa/nzqvmQ8Jkosw==",
+                            PhoneNumberConfirmed = false,
+                            PrivateNumber = "01000000003",
+                            TwoFactorEnabled = false,
+                            UserName = "operator@bank.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -467,6 +456,13 @@ namespace BankingSystemSharedDb.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 2
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>

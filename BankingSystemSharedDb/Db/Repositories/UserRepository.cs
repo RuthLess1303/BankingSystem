@@ -51,19 +51,17 @@ public class UserRepository : IUserRepository
             FirstName = request.Name,
             LastName = request.Surname,
             PrivateNumber = request.PrivateNumber,
+            UserName = request.Email,
             Email = request.Email,
             BirthDate = request.BirthDate,
             CreationDate = DateTime.Now
         };
         
-        var result = await _userManager.CreateAsync(user, request.Password);
-        
-        if (!result.Succeeded)
-        {
-            throw new Exception(result.Errors.First().Description);
-        }
+        var hasher = new PasswordHasher<UserEntity>();
+        user.PasswordHash = hasher.HashPassword(user, request.Password);
 
-        await _userManager.AddToRoleAsync(user, "user");
+        await _userManager.CreateAsync(user, request.Password);
+        await _userManager.AddToRoleAsync(user, "api-user");
     }
     
     public async Task CreateCard(CardEntity cardEntity)
