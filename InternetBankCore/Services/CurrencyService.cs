@@ -8,7 +8,7 @@ public interface ICurrencyService
 {
     Task AddInDb();
     Task<decimal> ConvertAmount(string from, string to, decimal amount);
-    Task<decimal> GetRate(string currencyCode);
+    Task<decimal> GetCurrencyAsync(string currencyCode);
 }
 
 public class CurrencyService : ICurrencyService
@@ -88,7 +88,7 @@ public class CurrencyService : ICurrencyService
         return amount;
     }
 
-    public async Task<decimal> GetRate(string currencyCode)
+    public async Task<decimal> GetCurrencyAsync(string currencyCode)
     {
         var rate = await Task.Run(() => _db.Currency
                 .OrderByDescending(c => c.Date)
