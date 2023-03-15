@@ -77,7 +77,7 @@ public class AccountValidation : IAccountValidation
             throw new Exception("Account does not exist");
         }
 
-        return account.Amount;
+        return account.Balance;
     }
     
     public async Task<AccountEntity?> GetAccountWithIban(string iban)

@@ -65,7 +65,7 @@ public class UserService : IUserService
             PrivateNumber = request.PrivateNumber,
             Iban = request.Iban,
             CurrencyCode = request.CurrencyCode,
-            Amount = request.Amount,
+            Balance = request.Amount,
             Hash = GetHash(forHash),
             CreationDate = DateTime.Now
         };

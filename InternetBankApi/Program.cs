@@ -24,6 +24,7 @@ builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
+builder.Services.AddTransient<ICardRepository, CardRepository>();
 
 AuthConfigurator.Configure(builder);
 
