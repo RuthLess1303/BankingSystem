@@ -25,21 +25,21 @@ public class OperatorController : ControllerBase
         return Ok();
     }
     
-    [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
-    [HttpPost("create-account")]
-    public async Task<IActionResult> CreateAccount(CreateAccountRequest request)
-    {
-        await _userService.CreateAccount(request);
-        
-        return Ok();
-    }
-    
-    [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
-    [HttpPost("create-card")]
-    public async Task<IActionResult> CreateCard(CreateCardRequest request)
-    {
-        await _userService.CreateCard(request);
-        
-        return Ok();
-    }
+    // [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
+    // [HttpPost("create-account")]
+    // public async Task<IActionResult> CreateAccount(CreateAccountRequest request)
+    // {
+    //     await _userService.CreateAccount(request);
+    //     
+    //     return Ok();
+    // }
+    //
+    // [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
+    // [HttpPost("create-card")]
+    // public async Task<IActionResult> CreateCard(CreateCardRequest request)
+    // {
+    //     await _userService.CreateCard(request);
+    //     
+    //     return Ok();
+    // }
 }

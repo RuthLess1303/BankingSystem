@@ -19,20 +19,17 @@ public class TransactionMap : IEntityTypeConfiguration<TransactionEntity>
         builder.Property(t => t.Rate).IsRequired();
         builder.Property(t => t.TransactionTime).IsRequired();
         
-        builder.HasOne(t => t.Aggressor)
-            .WithMany(a => a.OutgoingTransactions)
-            .HasForeignKey(t => t.AggressorIban)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(t => t.Receiver)
-            .WithMany(a => a.IncomingTransactions)
-            .HasForeignKey(t => t.ReceiverIban)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(t => t.Currency)
-            .WithMany()
-            .HasForeignKey(t => t.CurrencyCode)
-            .OnDelete(DeleteBehavior.Restrict);
+        // builder
+        //     .HasOne(t => t.Receiver)
+        //     .WithMany(a => a.IncomingTransactions)
+        //     .HasForeignKey(t => t.ReceiverIban)
+        //     .HasPrincipalKey(a => a.Iban);
+        //
+        // builder
+        //     .HasOne(t => t.Aggressor)
+        //     .WithMany(a => a.OutgoingTransactions)
+        //     .HasForeignKey(t => t.AggressorIban)
+        //     .HasPrincipalKey(a => a.Iban);
         
     }
     
