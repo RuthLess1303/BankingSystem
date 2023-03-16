@@ -15,26 +15,24 @@ public class AccountMap : IEntityTypeConfiguration<AccountEntity>
         builder.Property(a => a.Balance).IsRequired();
         builder.Property(a => a.Hash).IsRequired();
         builder.Property(a => a.CreationDate).IsRequired();
-
-        builder.HasOne(a => a.user)
-            .WithMany(u => u.Accounts)
-            .HasForeignKey(a => a.PrivateNumber);
-
-        builder.HasMany(a => a.Cards)
-            .WithOne(c => c.Account)
-            .HasForeignKey(c => c.AccountEntityId);
-
-        builder.HasOne(x => x.user)
-            .WithMany(x => x.Accounts)
-            .HasForeignKey(x => x.PrivateNumber)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasMany(x => x.IncomingTransactions)
-            .WithOne(x => x.Receiver)
-            .HasForeignKey(x => x.ReceiverIban);
         
-        builder.HasMany(x => x.OutgoingTransactions)
-            .WithOne(x => x.Aggressor)
-            .HasForeignKey(x => x.AggressorIban);
+
+        // builder.HasMany(a => a.Cards)
+        //     .WithOne(c => c.Account)
+        //     .HasForeignKey(c => c.AccountEntityId);
+        //
+        // builder.HasOne(x => x.user)
+        //     .WithMany(x => x.Accounts)
+        //     .HasForeignKey(x => x.PrivateNumber)
+        //     .HasPrincipalKey(u => u.PrivateNumber)
+        //     .OnDelete(DeleteBehavior.Cascade);
+
+        // builder.HasMany(x => x.IncomingTransactions)
+        //     .WithOne(x => x.Receiver)
+        //     .HasForeignKey(x => x.ReceiverIban);
+        //
+        // builder.HasMany(x => x.OutgoingTransactions)
+        //     .WithOne(x => x.Aggressor)
+        //     .HasForeignKey(x => x.AggressorIban);
     }
 }

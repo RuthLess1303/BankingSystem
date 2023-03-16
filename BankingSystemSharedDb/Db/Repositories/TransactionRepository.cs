@@ -42,8 +42,8 @@ public class TransactionRepository : ITransactionRepository
                 TransactionTime = DateTime.Now
             };
             
-            aggressor.OutgoingTransactions.Add(transaction);
-            receiver.IncomingTransactions.Add(transaction);
+            // aggressor.OutgoingTransactions.Add(transaction);
+            // receiver.IncomingTransactions.Add(transaction);
 
             await SaveChangesAsync();
             await AddDataInDb(transaction);
@@ -76,8 +76,8 @@ public class TransactionRepository : ITransactionRepository
                 Amount = request.Amount,
             };
             
-            aggressor.OutgoingTransactions.Add(transaction);
-            receiver.IncomingTransactions.Add(transaction);
+            // aggressor.OutgoingTransactions.Add(transaction);
+            // receiver.IncomingTransactions.Add(transaction);
 
             await AddDataInDb(transaction);
             await dbTransaction.CommitAsync();

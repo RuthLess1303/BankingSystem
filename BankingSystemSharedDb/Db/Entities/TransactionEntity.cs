@@ -12,7 +12,6 @@ public class TransactionEntity
     public string Type { get; set; }
     public decimal Rate { get; set; }
     public DateTime TransactionTime { get; set; }
-    public AccountEntity Aggressor { get; set; }
-    public AccountEntity Receiver { get; set; }
-    public CurrencyEntity Currency { get; set; }
+    // public AccountEntity Aggressor { get; set; }
+    // public AccountEntity Receiver { get; set; }
 }

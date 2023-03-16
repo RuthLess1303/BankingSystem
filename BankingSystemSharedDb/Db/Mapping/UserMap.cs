@@ -16,12 +16,12 @@ public class UserMap : IEntityTypeConfiguration<UserEntity>
         builder.Property(u => u.Email).IsRequired().HasMaxLength(320);
         builder.Property(u => u.CreationDate).IsRequired();
 
-        builder.HasMany(u => u.Accounts)
-            .WithOne(a => a.user)
-            .HasForeignKey(a => a.PrivateNumber);
-
-        builder.HasMany(u => u.Cards)
-            .WithOne(c => c.User)
-            .HasForeignKey(c => c.UserEntityId);
+        // builder.HasMany(u => u.Accounts)
+        //     .WithOne(a => a.user)
+        //     .HasForeignKey(a => a.PrivateNumber);
+        //
+        // builder.HasMany(u => u.Cards)
+        //     .WithOne(c => c.User)
+        //     .HasForeignKey(c => c.UserEntityId);
     }
 }
