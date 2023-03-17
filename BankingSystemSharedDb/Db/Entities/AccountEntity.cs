@@ -7,6 +7,5 @@ public class AccountEntity
     public string Iban { get; set; }
     public string CurrencyCode { get; set; }
     public decimal Balance { get; set; }
-    public string Hash { get; set; }
     public DateTime CreationDate { get; set; }
 }

@@ -4,6 +4,7 @@ using BankingSystemSharedDb.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystemSharedDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230317112755_entities_changed")]
+    partial class entities_changed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,10 +98,9 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Cvv")
-                        .IsRequired()
+                    b.Property<int>("Cvv")
                         .HasMaxLength(3)
-                        .HasColumnType("nchar(3)")
+                        .HasColumnType("int")
                         .IsFixedLength();
 
                     b.Property<DateTime>("ExpirationDate")
@@ -109,10 +111,9 @@ namespace BankingSystemSharedDb.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.Property<string>("Pin")
-                        .IsRequired()
+                    b.Property<int>("Pin")
                         .HasMaxLength(4)
-                        .HasColumnType("nchar(4)")
+                        .HasColumnType("int")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -352,14 +353,14 @@ namespace BankingSystemSharedDb.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "4c4738ea-0439-4d93-a896-5e805a2df5fd",
+                            ConcurrencyStamp = "8da8cce1-65da-4fc0-88ac-1eb249f41daa",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
                             FirstName = "example",
                             LastName = "exampleLastname",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEJy7TMhwmAYjsTbT9fPZ+d3XTBYeM5NHG9tdj3GoG0UqmjeOjdLztxRu2mWYjmlIqw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBKs5fCZih+IqvvBMkUIL2VEhJgxaLpG8Lohur/HWOJkty9WZREyf4TOJLbpE/F4Zw==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,

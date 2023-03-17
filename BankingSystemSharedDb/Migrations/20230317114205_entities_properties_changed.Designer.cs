@@ -4,6 +4,7 @@ using BankingSystemSharedDb.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystemSharedDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230317114205_entities_properties_changed")]
+    partial class entities_properties_changed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,10 +98,9 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Cvv")
-                        .IsRequired()
+                    b.Property<short>("Cvv")
                         .HasMaxLength(3)
-                        .HasColumnType("nchar(3)")
+                        .HasColumnType("smallint")
                         .IsFixedLength();
 
                     b.Property<DateTime>("ExpirationDate")
@@ -352,14 +354,14 @@ namespace BankingSystemSharedDb.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "4c4738ea-0439-4d93-a896-5e805a2df5fd",
+                            ConcurrencyStamp = "76d0755d-c7c5-4570-95fc-9665b5405d4b",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
                             FirstName = "example",
                             LastName = "exampleLastname",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEJy7TMhwmAYjsTbT9fPZ+d3XTBYeM5NHG9tdj3GoG0UqmjeOjdLztxRu2mWYjmlIqw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK672ot007fJjbzLKdfDME6KEGnjoIDvoFPGUiRI4j/73EPHOC6Zg/izN36jXrjYfg==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,

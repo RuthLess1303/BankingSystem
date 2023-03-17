@@ -6,7 +6,7 @@ namespace BankingSystemSharedDb.Db.Repositories;
 
 public interface IUserRepository
 {
-    AccountEntity GetAccountByCardDetails(string cardNumber, int pin);
+    AccountEntity GetAccountByCardDetails(string cardNumber, string pin);
     Task<UserEntity?> FindWithPrivateNumber(string privateNumber);
     Task<UserEntity?> FindWithId(int id);
     Task<UserEntity?> FindWithEmail(string email);
@@ -88,7 +88,7 @@ public class UserRepository : IUserRepository
         return operatorEntity;
     }
     
-    public AccountEntity GetAccountByCardDetails(string cardNumber, int pin)
+    public AccountEntity GetAccountByCardDetails(string cardNumber, string pin)
     {
         var card = _db.Card.FirstOrDefault(c => c.CardNumber == cardNumber && c.Pin == pin);
         if (card == null)

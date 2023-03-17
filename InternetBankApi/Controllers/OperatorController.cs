@@ -10,10 +10,12 @@ namespace InternetBankApi.Controllers;
 public class OperatorController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ICurrencyService _currencyService;
 
-    public OperatorController(IUserService userService)
+    public OperatorController(IUserService userService, ICurrencyService currencyService)
     {
         _userService = userService;
+        _currencyService = currencyService;
     }
     
     [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
@@ -39,6 +41,15 @@ public class OperatorController : ControllerBase
     public async Task<IActionResult> CreateCard(CreateCardRequest request)
     {
         await _userService.CreateCard(request);
+        
+        return Ok();
+    }
+    
+    [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
+    [HttpPost("add-currency-in-db")]
+    public async Task<IActionResult> AddCurrencyInDb()
+    {
+        await _currencyService.AddInDb();
         
         return Ok();
     }

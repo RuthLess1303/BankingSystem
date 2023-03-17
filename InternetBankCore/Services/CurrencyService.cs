@@ -47,12 +47,12 @@ public class CurrencyService : ICurrencyService
 
     public async Task AddInDb()
     {
-        var currencies = GetCurrencies().Result;
-        Parallel.ForEach(currencies, async currency =>
+        var currencies = await GetCurrencies();
+        foreach (var currency in currencies)
         {
             await _db.AddAsync(currency);
-        });
-
+        }
+        
         await _db.SaveChangesAsync();
     }
 
