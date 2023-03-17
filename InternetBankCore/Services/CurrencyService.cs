@@ -10,7 +10,7 @@ public interface ICurrencyService
 {
     Task AddInDb();
     Task<decimal> ConvertAmount(string from, string to, decimal amount);
-    Task<decimal> GetCurrencyAsync(string currencyCode);
+    Task<decimal> GetRateAsync(string currencyCode);
 }
 
 public class CurrencyService : ICurrencyService
@@ -102,7 +102,7 @@ public class CurrencyService : ICurrencyService
         return amount;
     }
 
-    public async Task<decimal> GetCurrencyAsync(string currencyCode)
+    public async Task<decimal> GetRateAsync(string currencyCode)
     {
         var rate = await _currencyRepository.FindCurrency(currencyCode);
         if (rate == null)

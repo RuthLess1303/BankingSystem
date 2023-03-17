@@ -47,7 +47,7 @@ public class TransactionService : ITransactionService
             AggressorIban = request.AggressorIban,
             ReceiverIban = request.ReceiverIban,
             CurrencyCode = receiverCurrency,
-            Rate = await _currencyService.GetCurrencyAsync(receiverCurrency),
+            Rate = await _currencyService.GetRateAsync(receiverCurrency),
         };
     
         if (request.ReceiverIban.Contains("CD"))
