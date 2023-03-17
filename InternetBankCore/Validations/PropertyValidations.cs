@@ -51,8 +51,12 @@ public class PropertyValidations : IPropertyValidations
 
     public async Task CheckCurrency(string currencyCode)
     {
+        if (currencyCode.ToUpper() == "GEL")
+        {
+            return;
+        }
         var currency = await _currencyRepository.FindCurrency(currencyCode);
-
+        
         if (currency == null)
         {
             throw new Exception($"Could not find currency code: {currencyCode}");

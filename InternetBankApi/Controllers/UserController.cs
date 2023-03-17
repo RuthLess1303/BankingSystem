@@ -11,13 +11,15 @@ public class UserController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
     private readonly IAccountService _accountService;
+    private readonly ICardService _cardService;
 
     public UserController(
         ITransactionService transactionService, 
-        IAccountService accountService)
+        IAccountService accountService, ICardService cardService)
     {
         _transactionService = transactionService;
         _accountService = accountService;
+        _cardService = cardService;
     }
 
     [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]
@@ -36,10 +38,18 @@ public class UserController : ControllerBase
         var account = await _accountService.SeeAccount(iban);
         var text = $"Your Balance is: {account.Item1}\n" +
                    $"Transactions\n";
-        Parallel.ForEach(account.Item2, transaction =>
+        
+        if (account.Item2 != null)
         {
-            text += $"{transaction}\n";
-        });
+            foreach (var transaction in account.Item2)
+            {
+                text += $"{_transactionService.PrintTransaction(transaction)}\n";
+            }
+
+            return text;
+        }
+
+        text += "There are not any transactions made yet";
         
         return text;
     }
@@ -49,7 +59,9 @@ public class UserController : ControllerBase
     public async Task<string> SeeCard(string iban)
     {
         var card = await _accountService.SeeCard(iban);
-        var text = $"Your Card Information: {card.Item1}\n";
+        var cardInfo = _cardService.PrintCardModelProperties(card.Item1);
+        var text = "Your Card Information" +
+                   $"{cardInfo}\n";
         if (card.Item2 == null)
         {
             return text;

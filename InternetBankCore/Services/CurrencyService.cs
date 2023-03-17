@@ -1,5 +1,7 @@
 using BankingSystemSharedDb.Db;
 using BankingSystemSharedDb.Db.Entities;
+using BankingSystemSharedDb.Db.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace InternetBankCore.Services;
@@ -14,10 +16,14 @@ public interface ICurrencyService
 public class CurrencyService : ICurrencyService
 {
     private readonly AppDbContext _db;
+    private readonly ICurrencyRepository _currencyRepository;
 
-    public CurrencyService(AppDbContext db)
+    public CurrencyService(
+        AppDbContext db, 
+        ICurrencyRepository currencyRepository)
     {
         _db = db;
+        _currencyRepository = currencyRepository;
     }
 
     private async Task<List<CurrencyEntity>> GetCurrencies()
@@ -58,9 +64,17 @@ public class CurrencyService : ICurrencyService
 
     public async Task<decimal> ConvertAmount(string from, string to, decimal amount)
     {
-        var toCurrency = await Task.Run(() => _db.Currency
-            .OrderByDescending(c => c.Date)
-            .FirstOrDefault(c => c.Code == to));
+        if (to.ToUpper() == "GEL")
+        {
+            var fromCurrencyEntity = await _currencyRepository.FindCurrency(from);
+            var rate = fromCurrencyEntity.Rate;
+            rate /= fromCurrencyEntity.Quantity;
+
+            amount *= rate;
+            
+            return amount;
+        }
+        var toCurrency = await _currencyRepository.FindCurrency(to);
         var toRate = toCurrency.Rate;
         
         if (toCurrency.Quantity != 1)
@@ -71,10 +85,10 @@ public class CurrencyService : ICurrencyService
         if (from.ToUpper() == "GEL")
         {
             amount /= toRate;
+            return amount;
         }
-        var fromCurrency = await Task.Run(() => _db.Currency
-            .OrderByDescending(c => c.Date)
-            .FirstOrDefault(c => c.Code == from));
+
+        var fromCurrency = await _currencyRepository.FindCurrency(from);
         var fromRate = fromCurrency.Rate;
         
         if (fromCurrency.Quantity != 1)
@@ -90,9 +104,11 @@ public class CurrencyService : ICurrencyService
 
     public async Task<decimal> GetCurrencyAsync(string currencyCode)
     {
-        var rate = await Task.Run(() => _db.Currency
-                .OrderByDescending(c => c.Date)
-                .FirstOrDefault(c => c.Code == currencyCode));
+        var rate = await _currencyRepository.FindCurrency(currencyCode);
+        if (rate == null)
+        {
+            return 1;
+        }
 
         return rate.Rate;
     }

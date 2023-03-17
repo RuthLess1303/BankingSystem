@@ -1,12 +1,13 @@
 using BankingSystemSharedDb.Db.Entities;
 using BankingSystemSharedDb.Requests;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingSystemSharedDb.Db.Repositories;
 
 public interface ITransactionRepository
 {
-    Task MakeTransaction(TransactionRequest request);
-    Task MakeTransactionWithFee(TransactionRequest request);
+    Task MakeTransaction(TransactionRequest request, decimal convertedAmount);
+    Task MakeTransactionWithFee(TransactionRequest request, decimal convertedAmount);
     Task AddDataInDb(TransactionEntity entity);
 }
 public class TransactionRepository : ITransactionRepository
@@ -18,24 +19,24 @@ public class TransactionRepository : ITransactionRepository
         _db = db;
     }
 
-    public async Task MakeTransaction(TransactionRequest request)
+    public async Task MakeTransaction(TransactionRequest request, decimal convertedAmount)
     {
-        var aggressor = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.AggressorIban));
-        var receiver = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.ReceiverIban));
+        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.AggressorIban);
+        var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
 
         aggressor.Balance -= request.Amount;
-        receiver.Balance += request.Amount;
+        receiver.Balance += convertedAmount;
         
         await _db.SaveChangesAsync();
     }
     
-    public async Task MakeTransactionWithFee(TransactionRequest request)
+    public async Task MakeTransactionWithFee(TransactionRequest request, decimal convertedAmount)
     {
-        var aggressor = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.AggressorIban));
-        var receiver = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.ReceiverIban));
+        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.AggressorIban);
+        var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
 
         aggressor.Balance -= request.Amount * (decimal)1.01 + (decimal)0.5;
-        receiver.Balance += request.Amount;
+        receiver.Balance += convertedAmount;
         
         await _db.SaveChangesAsync();
     }
