@@ -79,6 +79,11 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("IBAN does not contain CountryCode or BankCode");
         }
+
+        if (Regex.IsMatch(iban, @"^(?=.*[\W_]).+$"))
+        {
+            throw new Exception("IBAN should not contain Symbols");
+        }
         
         var result = validator.Validate(iban);
         
@@ -94,7 +99,7 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("CVV length must be 3");
         }
-        else if (Regex.IsMatch(cvv, @"^[a-zA-Z]+$") || Regex.IsMatch(cvv, @"^(?=.*[\W_]).+$"))
+        else if (Regex.IsMatch(cvv, @"[A-Za-z]") || Regex.IsMatch(cvv, @"^(?=.*[\W_]).+$"))
         {
             throw new Exception("CVV must contain only numbers");
         }
@@ -106,7 +111,7 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("PIN length must be 4");
         }
-        else if (Regex.IsMatch(pin, @"^[a-zA-Z]+$") || Regex.IsMatch(pin, @"^(?=.*[\W_]).+$"))
+        else if (Regex.IsMatch(pin, @"[A-Za-z]") || Regex.IsMatch(pin, @"^(?=.*[\W_]).+$"))
         {
             throw new Exception("PIN must contain only numbers");
         }
@@ -118,7 +123,7 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("Card number must be 16");
         }
-        else if (Regex.IsMatch(cardNumber, @"^[a-zA-Z]+$") || Regex.IsMatch(cardNumber, @"^(?=.*[\W_]).+$"))
+        else if (Regex.IsMatch(cardNumber, @"^(?=.*[a-zA-Z]).+$") || Regex.IsMatch(cardNumber, @"^(?=.*[\W_]).+$"))
         {
             throw new Exception("Card Number must contain only numbers");
         }
@@ -145,7 +150,7 @@ public class PropertyValidations : IPropertyValidations
 
     public bool IsCardExpired(DateTime expirationDate)
     {
-        if (expirationDate >= DateTime.Now)
+        if (expirationDate <= DateTime.Now)
         {
             return true;
         }
@@ -196,7 +201,7 @@ public class PropertyValidations : IPropertyValidations
 
     public async Task<bool> CheckPrivateNumberUsage(string privateNumber)
     {
-       var user = await _userRepository.FindWithPrivateNumber(privateNumber);
+        var user = await _userRepository.FindWithPrivateNumber(privateNumber);
        if (user != null)
        {
            return true;
@@ -207,7 +212,7 @@ public class PropertyValidations : IPropertyValidations
 
     public void CheckPrivateNumberFormat(string privateNumber)
     {
-        if (Regex.IsMatch(privateNumber, @"^[a-zA-Z]+$") || Regex.IsMatch(privateNumber, @"^(?=.*[\W_]).+$"))
+        if (Regex.IsMatch(privateNumber, @"[A-Za-z]") || Regex.IsMatch(privateNumber, @"^(?=.*[\W_]).+$"))
         {
             throw new Exception("Private Number must contain only numbers");
         }
