@@ -9,6 +9,4 @@ public class UserEntity : IdentityUser<int>
     public string PrivateNumber { get; set; }
     public DateTime BirthDate { get; set; }
     public DateTime CreationDate { get; set; }
-    public ICollection<AccountEntity> Accounts { get; set; }
-    public ICollection<CardEntity> Cards { get; set; }
 }

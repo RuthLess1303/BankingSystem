@@ -16,15 +16,17 @@ public class CardService
         _userRepository = userRepository;
         _cardValidation = cardValidation;
     }
-    
-    public async Task AuthorizeCardAsync(CardAuthorizationRequest request)
+
+    public async Task CheckCardDataAsync(CardAuthorizationRequest request)
     {
         await _cardValidation.AuthorizeCardValidationAsync(request);
+    }
 
-        var account = await _userRepository.GetAccountByCardDetails(request.CardNumber, request.PinCode);
-        if (account == null)
-        {
-            throw new ArgumentException("User account not found!", nameof(request));
-        }
+    public async Task AuthorizeCardAsync(CardAuthorizationRequest request)
+    {
+        await CheckCardDataAsync(request);
+
+        var account = _userRepository.GetAccountByCardDetails(request.CardNumber, request.PinCode);
+        if (account == null) throw new Exception("User account not found!");
     }
 }

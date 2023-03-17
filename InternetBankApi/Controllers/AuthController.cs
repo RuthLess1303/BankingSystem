@@ -14,27 +14,16 @@ public class AuthController : ControllerBase
 {
     private readonly TokenGenerator _tokenGenerator;
     private readonly IUserService _userService;
-    private readonly IUserRepository _userRepository;
     private readonly UserManager<UserEntity> _userManager;
 
     public AuthController(
         TokenGenerator tokenGenerator,
-        IUserService userService, 
-        IUserRepository userRepository,
+        IUserService userService,
         UserManager<UserEntity> userManager)
     {
         _tokenGenerator = tokenGenerator;
         _userService = userService;
-        _userRepository = userRepository;
         _userManager = userManager;
-    }
-
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
-    {
-        await _userService.Register(request);
-        
-        return Ok();
     }
 
     [HttpPost("login")]

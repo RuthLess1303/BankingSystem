@@ -9,8 +9,4 @@ public class AccountEntity
     public decimal Balance { get; set; }
     public string Hash { get; set; }
     public DateTime CreationDate { get; set; }
-    public UserEntity user { get; set; }
-    public ICollection<CardEntity> Cards { get; set; }
-    public ICollection<TransactionEntity> IncomingTransactions { get; set; }
-    public ICollection<TransactionEntity> OutgoingTransactions { get; set; }
 }
