@@ -17,17 +17,20 @@ public class TransactionService : ITransactionService
     private readonly ICurrencyService _currencyService;
     private readonly IAccountValidation _accountValidation;
     private readonly IAccountRepository _accountRepository;
+    private readonly ITransactionValidations _transactionValidations;
 
     public TransactionService(
         ITransactionRepository transactionRepository, 
         ICurrencyService currencyService, 
         IAccountValidation accountValidation, 
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository, 
+        ITransactionValidations transactionValidations)
     {
         _transactionRepository = transactionRepository;
         _currencyService = currencyService;
         _accountValidation = accountValidation;
         _accountRepository = accountRepository;
+        _transactionValidations = transactionValidations;
     }
 
     public async Task MakeTransaction(TransactionRequest request)
@@ -59,21 +62,21 @@ public class TransactionService : ITransactionService
         }
         await _transactionRepository.MakeTransactionWithFee(request, convertedAmount);
         transactionEntity.Type = "Outside";
-        transactionEntity.Fee = request.Amount / 100 + (decimal)0.5;
-        transactionEntity.GrossAmount = request.Amount * (decimal)1.01 + (decimal)0.5;
+        transactionEntity.Fee = _transactionValidations.CalculateFee(request.Amount, 1,(decimal)0.5);
+        transactionEntity.GrossAmount = _transactionValidations.CalculateGrossAmount(request.Amount,1,(decimal)0.5);
         transactionEntity.TransactionTime = DateTime.Now;
         await _transactionRepository.AddDataInDb(transactionEntity);
     }
-
-        public string PrintTransaction(TransactionEntity transaction)
-        {
-            return $"Transaction Amount: {transaction.Amount}\n" +
-                   $"Sender's Iban: {transaction.AggressorIban}\n" +
-                   $"Receiver's Iban: {transaction.ReceiverIban}\n" +
-                   $"Amount With Fee: {transaction.GrossAmount}\n" +
-                   $"Currency: {transaction.CurrencyCode}\n" +
-                   $"Currency Rate: {transaction.Rate}\n" +
-                   $"Transaction Type: {transaction.Type}\n" +
-                   $"Transaction Time: {transaction.TransactionTime}\n";
-        }
+    
+    public string PrintTransaction(TransactionEntity transaction)
+    {
+        return $"Transaction Amount: {transaction.Amount}\n" +
+               $"Sender's Iban: {transaction.AggressorIban}\n" +
+               $"Receiver's Iban: {transaction.ReceiverIban}\n" +
+               $"Amount With Fee: {transaction.GrossAmount}\n" +
+               $"Currency: {transaction.CurrencyCode}\n" +
+               $"Currency Rate: {transaction.Rate}\n" +
+               $"Transaction Type: {transaction.Type}\n" +
+               $"Transaction Time: {transaction.TransactionTime}\n";
+    }    
 }
