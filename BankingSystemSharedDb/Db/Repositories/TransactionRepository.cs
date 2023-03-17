@@ -21,8 +21,16 @@ public class TransactionRepository : ITransactionRepository
 
     public async Task MakeTransaction(TransactionRequest request)
     {
-        await using var dbTransaction = await _db.Database.BeginTransactionAsync();
-
+        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.AggressorIban);
+        if (aggressor == null)
+        {
+            throw new Exception($"Aggressor with {request.AggressorIban} does not exist");
+        }
+        var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
+        if (receiver == null)
+        {
+            throw new Exception($"Receiver with {request.ReceiverIban} does not exist");
+        }
         try
         {
             var aggressor = await GetAccount(request.AggressorIban);
@@ -58,7 +66,16 @@ public class TransactionRepository : ITransactionRepository
 
     public async Task MakeTransactionWithFee(TransactionRequest request)
     {
-        await using var dbTransaction = await _db.Database.BeginTransactionAsync();
+        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.AggressorIban);
+        if (aggressor == null)
+        {
+            throw new Exception($"Aggressor with {request.AggressorIban} does not exist");
+        }
+        var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
+        if (receiver == null)
+        {
+            throw new Exception($"Receiver with {request.ReceiverIban} does not exist");
+        }
 
         try
         {

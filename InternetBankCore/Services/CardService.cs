@@ -22,9 +22,6 @@ public class CardService
         await _cardValidation.AuthorizeCardValidationAsync(request);
 
         var account = await _userRepository.GetAccountByCardDetails(request.CardNumber, request.PinCode);
-        if (account == null)
-        {
-            throw new ArgumentException("User account not found!", nameof(request));
-        }
+        if (account == null) throw new Exception("User account not found!");
     }
 }

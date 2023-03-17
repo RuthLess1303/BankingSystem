@@ -33,11 +33,9 @@ public class CardValidation : ICardValidation
     public async Task AuthorizeCardValidationAsync(CardAuthorizationRequest request)
     {
         var card = await _cardRepository.FindCardEntityByCardNumberAsync(request.CardNumber);
-        if (card == null) throw new ArgumentException("Card does not exist!", nameof(request.CardNumber));
 
         if (card.ExpirationDate <= DateTime.UtcNow) throw new UnauthorizedAccessException("Card has expired");
 
-        var account = _userRepository.GetAccountByCardDetails(card.CardNumber, card.Pin);
-        if (account == null) throw new ArgumentException("User account not found!", nameof(request.CardNumber));
+        var account = await _userRepository.GetAccountByCardDetails(card.CardNumber, card.Pin);
     }
 }

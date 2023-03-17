@@ -19,6 +19,8 @@ public class CurrencyRepository : ICurrencyRepository
 
     public async Task<CurrencyEntity?> FindCurrency(string currencyCode)
     {
-        return await _db.Currency.FirstOrDefaultAsync(c => c.Code == currencyCode);
+        var currency = await _db.Currency.FirstOrDefaultAsync(c => c.Code == currencyCode);
+
+        return currency;
     }
 }

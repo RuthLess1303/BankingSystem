@@ -5,9 +5,9 @@ namespace BankingSystemSharedDb.Db.Repositories;
 
 public interface IAccountRepository
 {
-    Task<string> GetAccountCurrencyCode(string iban);
+    Task<string?> GetAccountCurrencyCode(string iban);
     Task<AccountEntity?> GetAccountWithIban(string iban);
-    Task<decimal> GetAccountMoney(string iban);
+    Task<decimal?> GetAccountMoney(string iban);
     Task<List<TransactionEntity>> GetAggressorTransactions(string iban);
     Task<List<TransactionEntity>> GetReceiverTransactions(string iban);
     Task<TransactionEntity?> HasTransaction(string iban);
@@ -25,41 +25,55 @@ public class AccountRepository : IAccountRepository
         _db = db;
     }
 
-    public async Task<string> GetAccountCurrencyCode(string iban)
+    public async Task<string?> GetAccountCurrencyCode(string iban)
     {
-        var account = await  _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+       
         return account?.CurrencyCode;
     }
 
     public async Task<AccountEntity?> GetAccountWithIban(string iban)
     {
-        return await  _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+
+        return account;
     }
 
-    public async Task<decimal> GetAccountMoney(string iban)
+    public async Task<decimal?> GetAccountMoney(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
-        return account?.Balance ?? 0;
+
+        return account?.Amount;
     }
 
     public async Task<List<TransactionEntity>> GetAggressorTransactions(string iban)
     {
-        return await _db.Transaction.Where(t => t.AggressorIban == iban).ToListAsync();
+        var aggressorTransactions = await _db.Transaction.Where(t => t.AggressorIban == iban).ToListAsync();
+
+        return aggressorTransactions;
     }
     
     public async Task<List<TransactionEntity>> GetReceiverTransactions(string iban)
     {
-        return await _db.Transaction.Where(t => t.ReceiverIban == iban).ToListAsync();
+        var receiverTransactions = await _db.Transaction.Where(t => t.ReceiverIban == iban).ToListAsync();
+
+        return receiverTransactions;
     }
 
     public async Task<TransactionEntity?> HasTransaction(string iban)
     {
-        return await _db.Transaction.FirstOrDefaultAsync(t => t.ReceiverIban == iban);
+        var transaction = await _db.Transaction.FirstOrDefaultAsync(t => t.ReceiverIban == iban);
+
+        return transaction;
     }
 
     public async Task<CardEntity?> GetCardWithIban(string iban)
     {
         var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.Iban == iban);
+        if (cardAccountConnection == null)
+        {
+            throw new Exception($"Account with IBAN {iban} not found.");
+        }
         var card = await _db.Card.FirstOrDefaultAsync(c => c.Id == cardAccountConnection.CardId);
         return card;
     }

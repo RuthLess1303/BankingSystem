@@ -31,17 +31,23 @@ public class UserRepository : IUserRepository
 
     public async Task<UserEntity?> FindWithPrivateNumber(string privateNumber)
     {
-        return await _db.User.FirstOrDefaultAsync(u => u.PrivateNumber == privateNumber);
+        var user = await _db.User.FirstOrDefaultAsync(u => u.PrivateNumber == privateNumber);
+
+        return user;
     }
 
     public async Task<UserEntity?> FindWithId(Guid id)
     {
-        return await _db.User.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _db.User.FirstOrDefaultAsync(u => u.Id == id);
+
+        return user;
     }
     
     public async Task<UserEntity?> FindWithEmail(string email)
     {
-        return await _db.User.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _db.User.FirstOrDefaultAsync(u => u.Email == email);
+        
+        return user;
     }
 
     public async Task Register(RegisterUserRequest request)
@@ -92,14 +98,16 @@ public class UserRepository : IUserRepository
 
     public async Task<UserEntity?> GetUserWithEmail(string email)
     {
-        var user = await Task.Run(() => _db.User.FirstOrDefault(u => u.Email == email));
+        var user = await _db.User.FirstOrDefaultAsync(u => u.Email == email);
 
         return user;
     }
     
     public async Task<UserEntity?> GetOperatorWithEmail(string email)
     {
-        return await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+        var operatorEntity = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+        return operatorEntity;
     }
     
     public async Task<AccountEntity> GetAccountByCardDetails(string cardNumber, int pin)
