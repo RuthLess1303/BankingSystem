@@ -1,6 +1,7 @@
 using BankingSystemSharedDb.Db;
 using BankingSystemSharedDb.Db.Repositories;
 using InternetBankApi.Authorisation;
+using InternetBankApi.Middlewares;
 using InternetBankCore.Services;
 using InternetBankCore.Validations;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
