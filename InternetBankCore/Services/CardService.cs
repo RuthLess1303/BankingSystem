@@ -26,7 +26,7 @@ public class CardService
     {
         await CheckCardDataAsync(request);
 
-        var account = _userRepository.GetAccountByCardDetails(request.CardNumber, request.PinCode);
+        var account = await _userRepository.GetAccountByCardDetails(request.CardNumber, request.PinCode);
         if (account == null) throw new Exception("User account not found!");
     }
 }

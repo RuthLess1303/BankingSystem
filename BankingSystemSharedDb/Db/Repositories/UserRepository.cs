@@ -1,12 +1,13 @@
 using BankingSystemSharedDb.Db.Entities;
 using BankingSystemSharedDb.Requests;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingSystemSharedDb.Db.Repositories;
 
 public interface IUserRepository
 {
-    AccountEntity GetAccountByCardDetails(string cardNumber, int pin);
+    Task<AccountEntity> GetAccountByCardDetails(string cardNumber, int pin);
     Task<UserEntity?> FindWithPrivateNumber(string privateNumber);
     Task<UserEntity?> FindWithId(int id);
     Task<UserEntity?> FindWithEmail(string email);
@@ -29,21 +30,21 @@ public class UserRepository : IUserRepository
 
     public async Task<UserEntity?> FindWithPrivateNumber(string privateNumber)
     {
-        var user = await Task.Run(() => _db.User.FirstOrDefault(u => u.PrivateNumber == privateNumber));
+        var user = await _db.User.FirstOrDefaultAsync(u => u.PrivateNumber == privateNumber);
 
         return user;
     }
 
     public async Task<UserEntity?> FindWithId(int id)
     {
-        var user = await Task.Run(() => _db.User.FirstOrDefault(u => u.Id == id));
+        var user = await _db.User.FirstOrDefaultAsync(u => u.Id == id);
 
         return user;
     }
     
     public async Task<UserEntity?> FindWithEmail(string email)
     {
-        var user = await Task.Run(() => _db.User.FirstOrDefault(u => u.Email == email));
+        var user = await _db.User.FirstOrDefaultAsync(u => u.Email == email);
         
         return user;
     }
@@ -76,33 +77,33 @@ public class UserRepository : IUserRepository
 
     public async Task<UserEntity?> GetUserWithEmail(string email)
     {
-        var user = await Task.Run(() => _db.User.FirstOrDefault(u => u.Email == email));
+        var user = await _db.User.FirstOrDefaultAsync(u => u.Email == email);
 
         return user;
     }
     
     public async Task<UserEntity?> GetOperatorWithEmail(string email)
     {
-        var operatorEntity = await Task.Run(() => _db.Users.FirstOrDefault(u => u.Email == email));
+        var operatorEntity = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
 
         return operatorEntity;
     }
     
-    public AccountEntity GetAccountByCardDetails(string cardNumber, int pin)
+    public async Task<AccountEntity> GetAccountByCardDetails(string cardNumber, int pin)
     {
-        var card = _db.Card.FirstOrDefault(c => c.CardNumber == cardNumber && c.Pin == pin);
+        var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.Pin == pin);
         if (card == null)
         {
             throw new UnauthorizedAccessException("Invalid card number or PIN code");
         }
 
-        var cardAccountConnection = _db.CardAccountConnection.FirstOrDefault(c => c.CardId == card.Id);
+        var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.CardId == card.Id);
         if (cardAccountConnection == null)
         {
             throw new Exception("No account found for the card");
         }
 
-        var account = _db.Account.FirstOrDefault(a => a.Iban == cardAccountConnection.Iban);
+        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == cardAccountConnection.Iban);
         if (account == null)
         {
             throw new Exception("No account found for the card");

@@ -1,5 +1,6 @@
 using BankingSystemSharedDb.Db.Entities;
 using BankingSystemSharedDb.Requests;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingSystemSharedDb.Db.Repositories;
 
@@ -20,8 +21,16 @@ public class TransactionRepository : ITransactionRepository
 
     public async Task MakeTransaction(TransactionRequest request)
     {
-        var aggressor = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.AggressorIban));
-        var receiver = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.ReceiverIban));
+        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.AggressorIban);
+        if (aggressor == null)
+        {
+            throw new Exception($"Aggressor with {request.AggressorIban} does not exist");
+        }
+        var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
+        if (receiver == null)
+        {
+            throw new Exception($"Receiver with {request.ReceiverIban} does not exist");
+        }
 
         aggressor.Amount -= request.Amount;
         receiver.Amount += request.Amount;
@@ -31,8 +40,16 @@ public class TransactionRepository : ITransactionRepository
     
     public async Task MakeTransactionWithFee(TransactionRequest request)
     {
-        var aggressor = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.AggressorIban));
-        var receiver = await Task.Run(() => _db.Account.FirstOrDefault(a => a.Iban == request.ReceiverIban));
+        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.AggressorIban);
+        if (aggressor == null)
+        {
+            throw new Exception($"Aggressor with {request.AggressorIban} does not exist");
+        }
+        var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
+        if (receiver == null)
+        {
+            throw new Exception($"Receiver with {request.ReceiverIban} does not exist");
+        }
 
         aggressor.Amount -= request.Amount * (decimal)1.01 + (decimal)0.5;
         receiver.Amount += request.Amount;

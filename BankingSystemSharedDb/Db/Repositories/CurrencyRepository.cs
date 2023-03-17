@@ -1,4 +1,5 @@
 using BankingSystemSharedDb.Db.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingSystemSharedDb.Db.Repositories;
 
@@ -18,7 +19,7 @@ public class CurrencyRepository : ICurrencyRepository
 
     public async Task<CurrencyEntity?> FindCurrency(string currencyCode)
     {
-        var currency = await Task.Run(() => _db.Currency.FirstOrDefault(c => c.Code == currencyCode));
+        var currency = await _db.Currency.FirstOrDefaultAsync(c => c.Code == currencyCode);
 
         return currency;
     }
