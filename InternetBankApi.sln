@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternetBankApi", "Internet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSystemSharedDb", "BankingSystemSharedDb\BankingSystemSharedDb.csproj", "{7D9E0775-37B7-424F-8AF7-63A5633F3872}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSystemTest", "BankingSystemTest\BankingSystemTest.csproj", "{861212C8-C01A-4102-AD40-2AE727F13982}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{7D9E0775-37B7-424F-8AF7-63A5633F3872}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9E0775-37B7-424F-8AF7-63A5633F3872}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9E0775-37B7-424F-8AF7-63A5633F3872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{861212C8-C01A-4102-AD40-2AE727F13982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{861212C8-C01A-4102-AD40-2AE727F13982}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{861212C8-C01A-4102-AD40-2AE727F13982}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{861212C8-C01A-4102-AD40-2AE727F13982}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
