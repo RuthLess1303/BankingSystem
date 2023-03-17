@@ -9,4 +9,9 @@ public class CardEntity
     public ushort Pin { get; set; }
     public DateTime ExpirationDate { get; set; }
     public DateTime CreationDate { get; set; }
+    // public Guid UserEntityId { get; set; }
+    // public UserEntity User { get; set; }
+    //
+    // public Guid AccountEntityId { get; set; }
+    // public AccountEntity Account { get; set; }
 }

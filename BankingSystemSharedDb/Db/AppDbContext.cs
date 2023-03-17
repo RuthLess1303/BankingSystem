@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BankingSystemSharedDb.Db;
 
-public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
+public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
 {
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
     {
@@ -32,15 +32,15 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         
         builder.Entity<RoleEntity>().HasData(new[]
         {
-            new RoleEntity { Id = 1, Name = "api-user", NormalizedName = "API-USER"},
-            new RoleEntity { Id = 2, Name = "api-operator", NormalizedName = "API-OPERATOR"}
+            new RoleEntity {  Id = Guid.NewGuid(),  Name = "api-user", NormalizedName = "API-USER"},
+            new RoleEntity {  Id = Guid.NewGuid(),  Name = "api-operator", NormalizedName = "API-OPERATOR"}
         });
         
         var userName = "operator@bank.com";
         var password = "abc123";
         var operatorUser = new UserEntity
         {
-            Id = 1,
+            Id = Guid.NewGuid(),
             Email = userName,
             UserName = userName,
             FirstName = "example",
@@ -52,9 +52,9 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         operatorUser.PasswordHash = hasher.HashPassword(operatorUser, password);
         builder.Entity<UserEntity>().HasData(operatorUser);
         
-        builder.Entity<IdentityUserRole<int>>().HasData(new []
+        builder.Entity<IdentityUserRole<Guid>>().HasData(new []
         {
-            new IdentityUserRole<int> { UserId = 1, RoleId = 2 }
+            new IdentityUserRole<Guid> { UserId = operatorUser.Id, RoleId = Guid.NewGuid() }
         });
     }
 }

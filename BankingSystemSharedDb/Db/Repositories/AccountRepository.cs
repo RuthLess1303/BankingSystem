@@ -12,7 +12,8 @@ public interface IAccountRepository
     Task<List<TransactionEntity>> GetReceiverTransactions(string iban);
     Task<TransactionEntity?> HasTransaction(string iban);
     Task<CardEntity?> GetCardWithIban(string iban);
-    Task Create(AccountEntity accountEntity);
+    // Task Create(AccountEntity accountEntity);
+    // Task<UserEntity> GetUserByIban(string iban);
 }
 
 public class AccountRepository : IAccountRepository
@@ -27,7 +28,7 @@ public class AccountRepository : IAccountRepository
     public async Task<string?> GetAccountCurrencyCode(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
-        
+       
         return account?.CurrencyCode;
     }
 
@@ -41,6 +42,7 @@ public class AccountRepository : IAccountRepository
     public async Task<decimal?> GetAccountMoney(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+
         return account?.Amount;
     }
 
@@ -76,10 +78,30 @@ public class AccountRepository : IAccountRepository
         return card;
     }
 
-    public async Task Create(AccountEntity accountEntity)
-    {
-        await _db.AddAsync(accountEntity);
-        await _db.SaveChangesAsync();
-    }
-    
+    // public async Task Create(AccountEntity accountEntity)
+    // {
+    //     try
+    //     {
+    //         await _db.AddAsync(accountEntity);
+    //         await _db.SaveChangesAsync();
+    //
+    //         // Add the account to the user's collection
+    //         var user = await GetUserByIban(accountEntity.Iban);
+    //         user.Accounts.Add(accountEntity);
+    //         await _db.SaveChangesAsync();
+    //     }
+    //     catch (DbUpdateException ex)
+    //     {
+    //         var message = $"An error occurred while adding account with IBAN {accountEntity.Iban}.";
+    //         throw new Exception(message, ex);
+    //     }
+    // }
+    //
+    // public async Task<UserEntity> GetUserByIban(string iban)
+    // {
+    //     var user = await _db.Users.Include(u => u.Accounts)
+    //         .Where(u => u.Accounts.Any(a => a.Iban == iban))
+    //         .FirstOrDefaultAsync();
+    //     return user;
+    // }
 }
