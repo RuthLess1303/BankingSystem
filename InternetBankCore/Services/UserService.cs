@@ -11,8 +11,8 @@ namespace InternetBankCore.Services;
 public interface IUserService
 {
     Task Register(RegisterUserRequest request);
-    // Task CreateAccount(CreateAccountRequest request);
-    // Task CreateCard(CreateCardRequest request);
+    Task CreateAccount(CreateAccountRequest request);
+    Task CreateCard(CreateCardRequest request);
     Task<UserEntity> Login(LoginRequest request);
 }
 
@@ -116,19 +116,6 @@ public class UserService : IUserService
         await _userRepository.CreateCard(cardEntity);
     }
     
-    private string GetHash(string input)
-    {
-        using (SHA256 sha256Hash = SHA256.Create())
-        {
-            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                builder.Append(bytes[i].ToString("x2"));
-            }
-            return builder.ToString();
-        }
-    }
 
     public async Task<UserEntity> Login(LoginRequest request)
     {
