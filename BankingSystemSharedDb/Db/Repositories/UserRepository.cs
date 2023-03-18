@@ -7,12 +7,13 @@ namespace BankingSystemSharedDb.Db.Repositories;
 
 public interface IUserRepository
 {
-    AccountEntity GetAccountByCardDetails(string cardNumber, string pin);
+    Task<AccountEntity> GetAccountByCardDetails(string cardNumber, int pin);
+    // Task<UserEntity> GetUserByCardDetails(string cardNumber, int pin);
     Task<UserEntity?> FindWithPrivateNumber(string privateNumber);
-    Task<UserEntity?> FindWithId(int id);
+    Task<UserEntity?> FindWithId(Guid id);
     Task<UserEntity?> FindWithEmail(string email);
     Task Register(RegisterUserRequest request);
-    Task CreateCard(CardEntity cardEntity);
+    // Task CreateCard(CardEntity cardEntity);
     Task<UserEntity?> GetUserWithEmail(string email);
     Task<UserEntity?> GetOperatorWithEmail(string email);
 }
@@ -35,7 +36,7 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<UserEntity?> FindWithId(int id)
+    public async Task<UserEntity?> FindWithId(Guid id)
     {
         var user = await _db.User.FirstOrDefaultAsync(u => u.Id == id);
 
@@ -74,6 +75,31 @@ public class UserRepository : IUserRepository
         await _db.AddAsync(cardEntity);
         await _db.SaveChangesAsync();
     }
+    
+    // public async Task CreateCard(CardEntity cardEntity)
+    // {
+    //     await _db.AddAsync(cardEntity);
+    //     await _db.SaveChangesAsync();
+    //
+    //     await using var transaction = await _db.Database.BeginTransactionAsync();
+    //
+    //     try
+    //     {
+    //         var user = await GetUserByCardDetails(cardEntity.CardNumber, cardEntity.Pin);
+    //         var account = await GetAccountByCardDetails(cardEntity.CardNumber, cardEntity.Pin);
+    //
+    //         account.Cards.Add(cardEntity);
+    //         user.Cards.Add(cardEntity);
+    //
+    //         await _db.SaveChangesAsync();
+    //         await transaction.CommitAsync();
+    //     }
+    //     catch
+    //     {
+    //         await transaction.RollbackAsync();
+    //         throw;
+    //     }
+    // }
 
     public async Task<UserEntity?> GetUserWithEmail(string email)
     {
@@ -84,31 +110,60 @@ public class UserRepository : IUserRepository
     
     public async Task<UserEntity?> GetOperatorWithEmail(string email)
     {
-        var operatorEntity = await Task.Run(() => _db.Users.FirstOrDefault(u => u.Email == email));
+        var operatorEntity = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
 
         return operatorEntity;
     }
     
-    public AccountEntity GetAccountByCardDetails(string cardNumber, string pin)
+    public async Task<AccountEntity> GetAccountByCardDetails(string cardNumber, int pin)
     {
-        var card = _db.Card.FirstOrDefault(c => c.CardNumber == cardNumber && c.Pin == pin);
+        var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.Pin == pin);
         if (card == null)
         {
             throw new UnauthorizedAccessException("Invalid card number or PIN code");
         }
 
-        var cardAccountConnection = _db.CardAccountConnection.FirstOrDefault(c => c.CardId == card.Id);
+        var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.CardId == card.Id);
         if (cardAccountConnection == null)
         {
             throw new Exception("No account found for the card");
         }
 
-        var account = _db.Account.FirstOrDefault(a => a.Iban == cardAccountConnection.Iban);
+        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == cardAccountConnection.Iban);
         if (account == null)
         {
             throw new Exception("No account found for the card");
         }
 
-        return account;
+        return operatorEntity;
     }
+    
+    // public async Task<UserEntity> GetUserByCardDetails(string cardNumber, int pin)
+    // {
+    //     var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.Pin == pin);
+    //     if (card == null)
+    //     {
+    //         throw new UnauthorizedAccessException("Invalid card number or PIN code");
+    //     }
+    //
+    //     var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.CardId == card.Id);
+    //     if (cardAccountConnection == null)
+    //     {
+    //         throw new Exception("No account found for the card");
+    //     }
+    //
+    //     var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == cardAccountConnection.Iban);
+    //     if (account == null)
+    //     {
+    //         throw new Exception("No account found for the card");
+    //     }
+    //
+    //     var user = await _db.User.FirstOrDefaultAsync(u => u.Id == account.user.Id);
+    //     if (user == null)
+    //     {
+    //         throw new Exception("No user found for the account");
+    //     }
+    //
+    //     return user;
+    // }
 }

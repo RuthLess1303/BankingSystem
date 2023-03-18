@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BankingSystemSharedDb.Db.Entities;
 
-public class UserEntity : IdentityUser<int>
+public class UserEntity : IdentityUser<Guid>
 {
+    public Guid Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string PrivateNumber { get; set; }

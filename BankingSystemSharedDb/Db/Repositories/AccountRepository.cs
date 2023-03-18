@@ -5,9 +5,9 @@ namespace BankingSystemSharedDb.Db.Repositories;
 
 public interface IAccountRepository
 {
-    Task<string> GetAccountCurrencyCode(string iban);
+    Task<string?> GetAccountCurrencyCode(string iban);
     Task<AccountEntity?> GetAccountWithIban(string iban);
-    Task<decimal> GetAccountMoney(string iban);
+    Task<decimal?> GetAccountMoney(string iban);
     Task<List<TransactionEntity>> GetAggressorTransactions(string iban);
     Task<List<TransactionEntity>> GetReceiverTransactions(string iban);
     Task<TransactionEntity?> HasTransaction(string iban);
@@ -24,7 +24,7 @@ public class AccountRepository : IAccountRepository
         _db = db;
     }
 
-    public async Task<string> GetAccountCurrencyCode(string iban)
+    public async Task<string?> GetAccountCurrencyCode(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
         var currencyCode = account.CurrencyCode;
@@ -39,11 +39,11 @@ public class AccountRepository : IAccountRepository
         return account;
     }
 
-    public async Task<decimal> GetAccountMoney(string iban)
+    public async Task<decimal?> GetAccountMoney(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
         var amount = account.Balance;
-
+        
         return amount;
     }
 
@@ -71,15 +71,46 @@ public class AccountRepository : IAccountRepository
     public async Task<CardEntity?> GetCardWithIban(string iban)
     {
         var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.Iban == iban);
+        if (cardAccountConnection == null)
+        {
+            throw new Exception($"Account with IBAN {iban} not found.");
+        }
         var card = await _db.Card.FirstOrDefaultAsync(c => c.Id == cardAccountConnection.CardId);
 
         return card;
     }
-
+    
     public async Task Create(AccountEntity accountEntity)
     {
         await _db.AddAsync(accountEntity);
         await _db.SaveChangesAsync();
     }
     
+
+    // public async Task Create(AccountEntity accountEntity)
+    // {
+    //     try
+    //     {
+    //         await _db.AddAsync(accountEntity);
+    //         await _db.SaveChangesAsync();
+    //
+    //         // Add the account to the user's collection
+    //         var user = await GetUserByIban(accountEntity.Iban);
+    //         user.Accounts.Add(accountEntity);
+    //         await _db.SaveChangesAsync();
+    //     }
+    //     catch (DbUpdateException ex)
+    //     {
+    //         var message = $"An error occurred while adding account with IBAN {accountEntity.Iban}.";
+    //         throw new Exception(message, ex);
+    //     }
+    // }
+    //
+    // public async Task<UserEntity> GetUserByIban(string iban)
+    // {
+    //     var user = await _db.Users.Include(u => u.Accounts)
+    //         .Where(u => u.Accounts.Any(a => a.Iban == iban))
+    //         .FirstOrDefaultAsync();
+    //     return user;
+    // }
 }

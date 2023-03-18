@@ -2,6 +2,6 @@
 
 namespace BankingSystemSharedDb.Db.Entities;
 
-public class RoleEntity : IdentityRole<int>
+public class RoleEntity : IdentityRole<Guid>
 {
 }
