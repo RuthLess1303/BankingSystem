@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingApi", "ReportingAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingCore", "ReportingCore\ReportingCore.csproj", "{A80ABD4F-9619-4EF1-994C-64042AC42B17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmCore", "AtmCore\AtmCore.csproj", "{589F5957-EBA4-4A7C-AFA0-AD1FDCDC137A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmApi", "AtmApi\AtmApi.csproj", "{A1850DB3-715A-4280-8480-B9A7EEC8A2B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +46,13 @@ Global
 		{A80ABD4F-9619-4EF1-994C-64042AC42B17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A80ABD4F-9619-4EF1-994C-64042AC42B17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A80ABD4F-9619-4EF1-994C-64042AC42B17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{589F5957-EBA4-4A7C-AFA0-AD1FDCDC137A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{589F5957-EBA4-4A7C-AFA0-AD1FDCDC137A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{589F5957-EBA4-4A7C-AFA0-AD1FDCDC137A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{589F5957-EBA4-4A7C-AFA0-AD1FDCDC137A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1850DB3-715A-4280-8480-B9A7EEC8A2B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1850DB3-715A-4280-8480-B9A7EEC8A2B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1850DB3-715A-4280-8480-B9A7EEC8A2B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1850DB3-715A-4280-8480-B9A7EEC8A2B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
