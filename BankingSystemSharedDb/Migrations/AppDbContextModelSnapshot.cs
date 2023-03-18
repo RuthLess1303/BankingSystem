@@ -28,7 +28,7 @@ namespace BankingSystemSharedDb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreationDate")
@@ -39,10 +39,6 @@ namespace BankingSystemSharedDb.Migrations
                         .HasMaxLength(3)
                         .HasColumnType("nchar(3)")
                         .IsFixedLength();
-
-                    b.Property<string>("Hash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Iban")
                         .IsRequired()
@@ -74,10 +70,6 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Hash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Iban")
                         .IsRequired()
                         .HasMaxLength(36)
@@ -103,9 +95,10 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Cvv")
+                    b.Property<string>("Cvv")
+                        .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("int")
+                        .HasColumnType("nchar(3)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("ExpirationDate")
@@ -116,9 +109,10 @@ namespace BankingSystemSharedDb.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.Property<int>("Pin")
+                    b.Property<string>("Pin")
+                        .IsRequired()
                         .HasMaxLength(4)
-                        .HasColumnType("int")
+                        .HasColumnType("nchar(4)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -358,14 +352,14 @@ namespace BankingSystemSharedDb.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "29627d51-565f-46f1-8320-c9e8b1b95d81",
+                            ConcurrencyStamp = "4c4738ea-0439-4d93-a896-5e805a2df5fd",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
                             FirstName = "example",
                             LastName = "exampleLastname",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAELiHwZvieAqP0TmvCl1f97/1NRKSCwrH6kmi58WyaZvlhdde9fWC+EwUGM20GvWEXw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJy7TMhwmAYjsTbT9fPZ+d3XTBYeM5NHG9tdj3GoG0UqmjeOjdLztxRu2mWYjmlIqw==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,

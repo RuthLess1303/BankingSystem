@@ -12,8 +12,7 @@ public interface IAccountRepository
     Task<List<TransactionEntity>> GetReceiverTransactions(string iban);
     Task<TransactionEntity?> HasTransaction(string iban);
     Task<CardEntity?> GetCardWithIban(string iban);
-    // Task Create(AccountEntity accountEntity);
-    // Task<UserEntity> GetUserByIban(string iban);
+    Task Create(AccountEntity accountEntity);
 }
 
 public class AccountRepository : IAccountRepository
@@ -28,8 +27,9 @@ public class AccountRepository : IAccountRepository
     public async Task<string?> GetAccountCurrencyCode(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
-       
-        return account?.CurrencyCode;
+        var currencyCode = account.CurrencyCode;
+
+        return currencyCode;
     }
 
     public async Task<AccountEntity?> GetAccountWithIban(string iban)
@@ -42,8 +42,9 @@ public class AccountRepository : IAccountRepository
     public async Task<decimal?> GetAccountMoney(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
-
-        return account?.Amount;
+        var amount = account.Balance;
+        
+        return amount;
     }
 
     public async Task<List<TransactionEntity>> GetAggressorTransactions(string iban)
@@ -75,8 +76,16 @@ public class AccountRepository : IAccountRepository
             throw new Exception($"Account with IBAN {iban} not found.");
         }
         var card = await _db.Card.FirstOrDefaultAsync(c => c.Id == cardAccountConnection.CardId);
+
         return card;
     }
+    
+    public async Task Create(AccountEntity accountEntity)
+    {
+        await _db.AddAsync(accountEntity);
+        await _db.SaveChangesAsync();
+    }
+    
 
     // public async Task Create(AccountEntity accountEntity)
     // {

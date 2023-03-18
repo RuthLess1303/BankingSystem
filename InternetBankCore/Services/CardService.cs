@@ -1,27 +1,19 @@
-﻿using BankingSystemSharedDb.Db.Repositories;
-using BankingSystemSharedDb.Requests;
-using InternetBankCore.Validations;
+using BankingSystemSharedDb.Db.Models;
 
 namespace InternetBankCore.Services;
 
-public class CardService
+public interface ICardService
 {
-    private readonly ICardValidation _cardValidation;
-    private readonly IUserRepository _userRepository;
+    string PrintCardModelProperties(CardModel model);
+}
 
-    public CardService(
-        IUserRepository userRepository,
-        ICardValidation cardValidation)
+public class CardService : ICardService
+{
+    public string PrintCardModelProperties(CardModel model)
     {
-        _userRepository = userRepository;
-        _cardValidation = cardValidation;
-    }
-    
-    public async Task AuthorizeCardAsync(CardAuthorizationRequest request)
-    {
-        await _cardValidation.AuthorizeCardValidationAsync(request);
-
-        var account = await _userRepository.GetAccountByCardDetails(request.CardNumber, request.PinCode);
-        if (account == null) throw new Exception("User account not found!");
+        return $"Card Number: {model.CardNumber}\n" +
+               $"Name on Card: {model.NameOnCard}\n" +
+               $"Cvv: {model.Cvv}\n" +
+               $"Expiration Date: {model.ExpirationDate}\n";
     }
 }

@@ -15,16 +15,5 @@ public class CardMap : IEntityTypeConfiguration<CardEntity>
         builder.Property(c => c.Pin).IsRequired().HasMaxLength(4).IsFixedLength();
         builder.Property(c => c.ExpirationDate).IsRequired();
         builder.Property(c => c.CreationDate).IsRequired();
-
-        // builder.HasOne(x => x.User)
-        //     .WithMany(x => x.Cards)
-        //     .HasForeignKey(x => x.UserEntityId)
-        //     .HasPrincipalKey(x => x.Id)
-        //     .OnDelete(DeleteBehavior.Cascade);
-        //
-        // builder.HasOne(x => x.Account)
-        //     .WithMany(x => x.Cards)
-        //     .HasForeignKey(x => x.AccountEntityId)
-        //     .OnDelete(DeleteBehavior.Cascade);
     }
 }

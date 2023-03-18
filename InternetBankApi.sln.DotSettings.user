@@ -1,0 +1,18 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4c31cb5d_002Dc870_002D4deb_002D9d90_002D1b1f022b2fcd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="IbanFormatValidationCheck" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::73A34B46-EE0B-4DDA-BB29-76241D8B4AB1::net7.0::InternetBankTest.Tests.Test1&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=54090a8d_002D9c90_002D466f_002D9d70_002De1f6cb43a355/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="CheckIncorrectNameOrSurnameFormatDetection" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::861212C8-C01A-4102-AD40-2AE727F13982::net7.0::InternetBankTest.PropertyValidationsTests&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::861212C8-C01A-4102-AD40-2AE727F13982::net7.0::InternetBankTest.TransactionValidationsTests.CheckGrossAmountCalculation&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::861212C8-C01A-4102-AD40-2AE727F13982::net7.0::InternetBankTest.TransactionValidationsTests.CheckFeeCalculation&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=550c93e3_002Df216_002D47ac_002D8328_002Df1a1987c001b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::861212C8-C01A-4102-AD40-2AE727F13982::net7.0::InternetBankTest.Tests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -69,6 +69,12 @@ public class UserRepository : IUserRepository
         await _userManager.CreateAsync(user, request.Password);
         await _userManager.AddToRoleAsync(user, "api-user");
     }
+
+    public async Task CreateCard(CardEntity cardEntity)
+    {
+        await _db.AddAsync(cardEntity);
+        await _db.SaveChangesAsync();
+    }
     
     // public async Task CreateCard(CardEntity cardEntity)
     // {
@@ -94,7 +100,6 @@ public class UserRepository : IUserRepository
     //         throw;
     //     }
     // }
-
 
     public async Task<UserEntity?> GetUserWithEmail(string email)
     {
@@ -130,7 +135,7 @@ public class UserRepository : IUserRepository
             throw new Exception("No account found for the card");
         }
 
-        return account;
+        return operatorEntity;
     }
     
     // public async Task<UserEntity> GetUserByCardDetails(string cardNumber, int pin)

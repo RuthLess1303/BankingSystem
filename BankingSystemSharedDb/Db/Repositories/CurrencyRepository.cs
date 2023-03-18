@@ -19,8 +19,18 @@ public class CurrencyRepository : ICurrencyRepository
 
     public async Task<CurrencyEntity?> FindCurrency(string currencyCode)
     {
-        var currency = await _db.Currency.FirstOrDefaultAsync(c => c.Code == currencyCode);
-
+        if (currencyCode.ToUpper() == "GEL")
+        {
+            return null;
+        }
+        var currency = await _db.Currency
+            .OrderByDescending(c => c.Date)
+            .FirstOrDefaultAsync(c => c.Code == currencyCode);
+        if (currency == null)
+        {
+            throw new Exception("Could not find currency");
+        }
+       
         return currency;
     }
 }

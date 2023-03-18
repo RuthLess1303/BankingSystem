@@ -1,6 +1,7 @@
 using BankingSystemSharedDb.Db;
 using BankingSystemSharedDb.Db.Repositories;
 using InternetBankApi.Authorisation;
+using InternetBankApi.Middlewares;
 using InternetBankCore.Services;
 using InternetBankCore.Validations;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,8 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 builder.Services.AddTransient<ICardRepository, CardRepository>();
+builder.Services.AddTransient<ICardService, CardService>();
+builder.Services.AddTransient<ITransactionValidations, TransactionValidations>();
 
 AuthConfigurator.Configure(builder);
 
@@ -73,6 +76,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
