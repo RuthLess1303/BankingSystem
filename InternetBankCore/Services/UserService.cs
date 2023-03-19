@@ -119,7 +119,6 @@ public class UserService : IUserService
 
     public async Task<UserEntity> Login(LoginRequest request)
     {
-        // var user = await _userManager.FindByEmailAsync(request.Email);
         var user = await _userRepository.FindWithEmail(request.Email);
         
         var checkPassword = await _userManager.CheckPasswordAsync(user, request.Password);
@@ -146,47 +145,4 @@ public class UserService : IUserService
             return builder.ToString();
         }
     }
-    
-    // public async Task CreateAccount(CreateAccountRequest request)
-    // {
-    //     await _propertyValidations.CheckPrivateNumberUsage(request.PrivateNumber);
-    //     _propertyValidations.CheckIbanFormat(request.Iban);
-    //     await _propertyValidations.CheckIbanUsage(request.Iban);
-    //     await _propertyValidations.CheckCurrency(request.CurrencyCode);
-    //     var forHash = request.Iban + request.Amount.ToString() + DateTime.Now.ToString();
-    //     
-    //     var accountEntity = new AccountEntity
-    //     {
-    //         Id = Guid.NewGuid(),
-    //         PrivateNumber = request.PrivateNumber,
-    //         Iban = request.Iban,
-    //         CurrencyCode = request.CurrencyCode,
-    //         Balance = request.Amount,
-    //         Hash = GetHash(forHash),
-    //         CreationDate = DateTime.Now
-    //     };
-    //
-    //     await _accountRepository.Create(accountEntity);
-    // }
-    
-    // public async Task CreateCard(CreateCardRequest request)
-    // {
-    //     if (request.ExpirationDate <= DateTime.Now || request.ExpirationDate.Year <= DateTime.Now.Year)
-    //     {
-    //         throw new Exception("Expiration date must be more than 1 year apart");
-    //     }
-    //
-    //     var cardEntity = new CardEntity
-    //     {
-    //         Id = Guid.NewGuid(),
-    //         CardNumber = request.CardNumber,
-    //         NameOnCard = request.NameOnCard,
-    //         Cvv = request.Cvv,
-    //         Pin = request.Pin,
-    //         ExpirationDate = request.ExpirationDate,
-    //         CreationDate = DateTime.Now
-    //     };
-    //
-    //     await _userRepository.CreateCard(cardEntity);
-    // }
 }
