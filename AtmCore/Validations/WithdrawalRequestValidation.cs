@@ -38,8 +38,4 @@ public class WithdrawalRequestValidation
     {
         return !string.IsNullOrWhiteSpace(pinCode) && pinCode.Length == 4 && pinCode.All(char.IsDigit);
     }
-    // public bool ValidatePinCode(int pinCode)
-    // {
-    //     return pinCode is >= 1000 and <= 9999;
-    // }
 }
