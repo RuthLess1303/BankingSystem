@@ -1,19 +1,13 @@
 using AtmCore.Repositories;
-using AtmCore.Services;
 using BankingSystemSharedDb.Db;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(c =>
     c.UseSqlServer(builder.Configuration["AppDbContext"]));
 
-builder.Services.AddTransient<WithdrawalService>();
-builder.Services.AddTransient<PinService>();
-builder.Services.AddTransient<BalanceService>();
-builder.Services.AddTransient<CardAuthService>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IPinRepository, PinRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
