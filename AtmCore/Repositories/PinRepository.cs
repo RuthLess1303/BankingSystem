@@ -20,7 +20,6 @@ public class PinRepository : IPinRepository
     public async Task ChangePinInDb(CardEntity card, string newPin)
     {
         card.Pin = newPin;
-        _db.Card.Update(card);
         await _db.SaveChangesAsync();
     }
 }
