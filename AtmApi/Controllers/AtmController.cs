@@ -21,25 +21,22 @@ public class AtmController : Controller
         _balanceService = balanceService;
         _pinService = pinService;
     }
-
-    [Route("withdrawal")]
-    [HttpPost]
-    public async Task<OkResult> Withdrawal([FromBody] WithdrawalRequest request)
+    
+    [HttpPost("withdraw")]
+    public async Task<OkResult> Withdraw([FromBody] WithdrawalRequest request)
     {
         await _withdrawalService.Withdraw(request);
         return Ok();
     }
-
-    [Route("balance")]
-    [HttpPost]
+    
+    [HttpPost("see-balance")]
     public async Task<OkObjectResult> SeeBalance([FromBody] WithdrawalRequest request)
     {
         var balance = await _balanceService.SeeBalance(request);
         return Ok(balance);
     }
-
-    [Route("pin")]
-    [HttpPut]
+    
+    [HttpPost("change-pin")]
     public async Task<OkResult> ChangePin([FromBody] WithdrawalRequest request, string newPin)
     {
         await _pinService.ChangeCardPin(request, newPin);
