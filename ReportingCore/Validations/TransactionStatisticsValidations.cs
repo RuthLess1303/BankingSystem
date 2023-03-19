@@ -49,26 +49,26 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
             .Where(t => t.CurrencyCode.ToLower() == "gel")
             .SumAsync(t => t.Fee);
 
-        var otherInnerTransactions = transactions.Item1
-            .Where(t => t.CurrencyCode.ToLower() != "gel");
-        var otherOutsideTransactions =  transactions.Item2
-            .Where(t => t.CurrencyCode.ToLower() == "gel");
+        var otherInnerTransactions = await transactions.Item1
+            .Where(t => t.CurrencyCode.ToLower() != "gel")
+            .ToListAsync();
+        var otherOutsideTransactions = await transactions.Item2
+            .Where(t => t.CurrencyCode.ToLower() == "gel")
+            .ToListAsync();
 
-        await Parallel.ForEachAsync(otherInnerTransactions, async (innerTransaction, ct) =>
+        foreach (var innerTransaction in otherInnerTransactions)
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(innerTransaction.AggressorIban);
-            var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "Gel", innerTransaction.Amount);
-
+            var convertedAmount = await _currencyService.ConvertAmount(innerTransaction.CurrencyCode, "Gel", innerTransaction.Amount);
+                
             gelInnerIncome += convertedAmount;
-        });
+        }
         
-        await Parallel.ForEachAsync(otherOutsideTransactions, async (outsideTransaction, ct) =>
+        foreach (var outsideTransaction in otherOutsideTransactions)
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(outsideTransaction.AggressorIban);
-            var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "Gel", outsideTransaction.Amount);
-
+            var convertedAmount = await _currencyService.ConvertAmount(outsideTransaction.CurrencyCode, "Gel", outsideTransaction.Amount);
+        
             gelOutsideIncome += convertedAmount;
-        });
+        }
         
         var gelTotalIncome = gelInnerIncome + gelOutsideIncome;
         return (gelInnerIncome, gelOutsideIncome, gelTotalIncome);
@@ -94,26 +94,26 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
             .Where(t => t.CurrencyCode.ToLower() == "gel")
             .SumAsync(t => t.Fee);
 
-        var otherInnerTransactions = transactions.Item1
-            .Where(t => t.CurrencyCode.ToLower() != "gel");
-        var otherOutsideTransactions =  transactions.Item2
-            .Where(t => t.CurrencyCode.ToLower() == "gel");
+        var otherInnerTransactions = await transactions.Item1
+            .Where(t => t.CurrencyCode.ToLower() != "gel")
+            .ToListAsync();
+        var otherOutsideTransactions =  await transactions.Item2
+            .Where(t => t.CurrencyCode.ToLower() == "gel")
+            .ToListAsync();
 
-        await Parallel.ForEachAsync(otherInnerTransactions, async (innerTransaction, ct) =>
+        foreach (var innerTransaction in otherInnerTransactions)
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(innerTransaction.AggressorIban);
-            var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "Gel", innerTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmount(innerTransaction.CurrencyCode, "Gel", innerTransaction.Amount);
 
             gelInnerIncome += convertedAmount;
-        });
-        
-        await Parallel.ForEachAsync(otherOutsideTransactions, async (outsideTransaction, ct) =>
+        }
+
+        foreach (var outsideTransaction in otherOutsideTransactions)
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(outsideTransaction.AggressorIban);
-            var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "Gel", outsideTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmount(outsideTransaction.CurrencyCode, "Gel", outsideTransaction.Amount);
 
             gelOutsideIncome += convertedAmount;
-        });
+        }
         
         var gelTotalIncome = gelInnerIncome + gelOutsideIncome;
         return (gelInnerIncome, gelOutsideIncome, gelTotalIncome);
@@ -154,19 +154,23 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
         var gelAmount = await transactions
             .Where(t => t.CurrencyCode.ToLower() == "gel")
             .SumAsync(t => t.Amount);
-        var otherTransactions = transactions
-            .Where(t => t.CurrencyCode.ToLower() != "gel");
-        var transactionsList = await transactions.ToListAsync();
-        
-        await Parallel.ForEachAsync(otherTransactions, async (otherTransaction, ct) =>
+        var otherTransactions = await transactions
+            .Where(t => t.CurrencyCode.ToLower() != "gel")
+            .ToListAsync();
+
+        foreach (var otherTransaction in otherTransactions)
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(otherTransaction.AggressorIban);
-            var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "Gel", otherTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmount(otherTransaction.CurrencyCode, "Gel", otherTransaction.Fee);
 
             gelAmount += convertedAmount;
-        });
+        }
 
-        return gelAmount / transactionsList.Count;
+        if (gelAmount == 0)
+        {
+            return 0;
+        }
+        
+        return gelAmount / otherTransactions.Count;
     }
     
     private async Task<decimal> AvgIncomeFromTransactionUsd()
@@ -175,19 +179,22 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
         var usdAmount = await transactions
             .Where(t => t.CurrencyCode.ToLower() == "usd")
             .SumAsync(t => t.Amount);
-        var otherTransactions = transactions
-            .Where(t => t.CurrencyCode.ToLower() != "usd");
-        var transactionsList = await transactions.ToListAsync();
+        var otherTransactions = await transactions
+            .Where(t => t.CurrencyCode.ToLower() != "usd")
+            .ToListAsync();
         
-        await Parallel.ForEachAsync(otherTransactions, async (otherTransaction, ct) =>
+        foreach (var otherTransaction in otherTransactions)
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(otherTransaction.AggressorIban);
-            var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "usd", otherTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmount(otherTransaction.CurrencyCode, "usd", otherTransaction.Fee);
 
             usdAmount += convertedAmount;
-        });
+        }
 
-        return usdAmount / transactionsList.Count;
+        if (usdAmount == 0)
+        {
+            return 0;
+        }
+        return usdAmount / otherTransactions.Count;
     }
     
     private async Task<decimal> AvgIncomeFromTransactionEur()
@@ -196,18 +203,22 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
         var eurAmount = await transactions
             .Where(t => t.CurrencyCode.ToLower() == "eur")
             .SumAsync(t => t.Amount);
-        var otherTransactions = transactions
-            .Where(t => t.CurrencyCode.ToLower() != "eur");
-        var transactionsList = await transactions.ToListAsync();
+        var otherTransactions = await transactions
+            .Where(t => t.CurrencyCode.ToLower() != "eur")
+            .ToListAsync();
         
-        await Parallel.ForEachAsync(otherTransactions, async (otherTransaction, ct) =>
+        foreach (var otherTransaction in otherTransactions)
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(otherTransaction.AggressorIban);
-            var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "eur", otherTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmount(otherTransaction.CurrencyCode, "eur", otherTransaction.Fee);
 
             eurAmount += convertedAmount;
-        });
+        }
 
-        return eurAmount / transactionsList.Count;
+        if (eurAmount == 0)
+        {
+            return 0;
+        }
+
+        return eurAmount / otherTransactions.Count;
     }
 }
