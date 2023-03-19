@@ -8,41 +8,38 @@ namespace AtmApi.Controllers;
 [Route("api/atm")]
 public class AtmController : Controller
 {
-    private readonly BalanceService _balanceService;
-    private readonly PinService _pinService;
-    private readonly WithdrawalService _withdrawalService;
+    private readonly IBalanceService _balanceService;
+    private readonly IPinService _pinService;
+    private readonly IWithdrawalService _withdrawalService;
 
     public AtmController(
-        WithdrawalService withdrawalService,
-        BalanceService balanceService,
-        PinService pinService)
+        IWithdrawalService withdrawalService,
+        IBalanceService balanceService,
+        IPinService pinService)
     {
         _withdrawalService = withdrawalService;
         _balanceService = balanceService;
         _pinService = pinService;
     }
-
-    [Route("withdrawal")]
-    [HttpPost]
-    public async Task<OkResult> Withdrawal([FromBody] WithdrawalRequest request)
+    
+    [HttpPost("withdraw")]
+    public async Task<OkResult> Withdraw([FromBody]WithdrawalRequest request)
     {
         await _withdrawalService.Withdraw(request);
         return Ok();
     }
-
-    [Route("balance")]
-    [HttpPost]
-    public async Task<OkObjectResult> SeeBalance([FromBody] WithdrawalRequest request)
+    
+    [HttpPost("see-balance")]
+    public async Task<OkObjectResult> SeeBalance([FromBody]AuthorizeCardRequest request)
     {
         var balance = await _balanceService.SeeBalance(request);
         return Ok(balance);
     }
-
-    [Route("pin")]
-    [HttpPut]
-    public async Task<OkResult> ChangePin([FromBody] WithdrawalRequest request, string newPin)
+    
+    [HttpPost("change-pin")]
+    public async Task<OkResult> ChangePin([FromBody]ChangePinRequest request)
     {
-        await _pinService.ChangeCardPin(request, newPin);
+        await _pinService.ChangeCardPin(request);
         return Ok();
     }
 }

@@ -5,34 +5,39 @@ using BankingSystemSharedDb.Db.Entities;
 
 namespace AtmCore.Services;
 
-public class CardAuthService
+public interface ICardAuthService
+{
+    Task<AccountEntity> GetAuthorizedAccountAsync(string cardNumber, string pin);
+}
+
+public class CardAuthService : ICardAuthService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly ICardRepository _cardRepository;
-    private readonly WithdrawalRequestValidation _requestValidation;
+    private readonly IWithdrawalRequestValidation _requestValidation;
 
     public CardAuthService(
         IAccountRepository accountRepository,
         ICardRepository cardRepository,
-        WithdrawalRequestValidation requestValidation)
+        IWithdrawalRequestValidation requestValidation)
     {
         _accountRepository = accountRepository;
         _cardRepository = cardRepository;
         _requestValidation = requestValidation;
     }
 
-    public async Task<AccountEntity> GetAuthorizedAccountAsync(WithdrawalRequest request)
+    public async Task<AccountEntity> GetAuthorizedAccountAsync(string cardNumber, string pin)
     {
-        _requestValidation.ValidatePinCode(request.PinCode);
-        _requestValidation.ValidateCreditCardNumber(request.CardNumber);
-        _requestValidation.ValidateAmount(request.Amount);
-        var card = await _cardRepository.FindCardEntityByCardNumberAsync(request.CardNumber);
-        if (card == null) throw new ArgumentException("Card does not exist!", nameof(request.CardNumber));
+        _requestValidation.ValidatePinCode(pin);
+        _requestValidation.ValidateCreditCardNumber(cardNumber);
+
+        var card = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
+        if (card == null) throw new Exception("Incorrect credentials");
 
         if (card.ExpirationDate <= DateTime.UtcNow) throw new UnauthorizedAccessException("Card has expired");
 
-        var account = _accountRepository.GetAccountByCardDetails(request.CardNumber, request.PinCode);
+        var account = await _accountRepository.GetAccountByCardDetails(cardNumber, pin);
 
-        return account.Result;
+        return account;
     }
 }
