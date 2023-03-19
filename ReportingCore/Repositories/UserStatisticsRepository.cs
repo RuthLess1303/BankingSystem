@@ -5,9 +5,9 @@ namespace ReportingCore.Repositories;
 
 public interface IUserStatisticsRepository
 {
-    Task<long> TotalRegisteredUsersCurrentYear();
-    Task<long> TotalRegisteredUsersForLastYear();
-    Task<long> TotalRegisteredUsersForLast30Days();
+    long TotalRegisteredUsersCurrentYear();
+    long TotalRegisteredUsersForLastYear();
+    long TotalRegisteredUsersForLast30Days();
 }
 
 public class UserStatisticsRepository : IUserStatisticsRepository
@@ -19,24 +19,27 @@ public class UserStatisticsRepository : IUserStatisticsRepository
         _db = db;
     }
 
-    public async Task<long> TotalRegisteredUsersCurrentYear()
+    public long TotalRegisteredUsersCurrentYear()
     {
-        var users = await _db.User.Where(u => u.CreationDate.Year == DateTime.Now.Year).ToListAsync();
-
-        return users.Count;
+        var users = _db.User
+            .Where(u => u.CreationDate.Year == DateTime.Now.Year);
+        
+        return users.Count();
     }
 
-    public async Task<long> TotalRegisteredUsersForLastYear()
+    public long TotalRegisteredUsersForLastYear()
     {
-        var users = await _db.User.Where(u => u.CreationDate >= DateTime.Now.AddYears(-1)).ToListAsync();
+        var users = _db.User
+            .Where(u => u.CreationDate >= DateTime.Now.AddYears(-1));
         
-        return users.Count;
+        return users.Count();
     }
     
-    public async Task<long> TotalRegisteredUsersForLast30Days()
+    public long TotalRegisteredUsersForLast30Days()
     {
-        var users = await _db.User.Where(u => u.CreationDate >= DateTime.Now.AddDays(-30)).ToListAsync();
+        var users = _db.User
+            .Where(u => u.CreationDate >= DateTime.Now.AddDays(-30));
         
-        return users.Count;
+        return users.Count();
     }
 }
