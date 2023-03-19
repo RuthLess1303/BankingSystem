@@ -85,32 +85,4 @@ public class AccountRepository : IAccountRepository
         await _db.AddAsync(accountEntity);
         await _db.SaveChangesAsync();
     }
-    
-
-    // public async Task Create(AccountEntity accountEntity)
-    // {
-    //     try
-    //     {
-    //         await _db.AddAsync(accountEntity);
-    //         await _db.SaveChangesAsync();
-    //
-    //         // Add the account to the user's collection
-    //         var user = await GetUserByIban(accountEntity.Iban);
-    //         user.Accounts.Add(accountEntity);
-    //         await _db.SaveChangesAsync();
-    //     }
-    //     catch (DbUpdateException ex)
-    //     {
-    //         var message = $"An error occurred while adding account with IBAN {accountEntity.Iban}.";
-    //         throw new Exception(message, ex);
-    //     }
-    // }
-    //
-    // public async Task<UserEntity> GetUserByIban(string iban)
-    // {
-    //     var user = await _db.Users.Include(u => u.Accounts)
-    //         .Where(u => u.Accounts.Any(a => a.Iban == iban))
-    //         .FirstOrDefaultAsync();
-    //     return user;
-    // }
 }

@@ -1,6 +1,7 @@
 using BankingSystemSharedDb.Db.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using ReportingCore.Repositories;
 using ReportingCore.Validations;
 
 namespace ReportingApi.Services;
@@ -81,7 +82,7 @@ public class TransactionStatisticsService : ITransactionStatisticsService
     
     public async Task<(decimal, decimal, decimal)> GetTransactionIncomeByYear(int year)
     {
-        var income = await _transactionStatisticsValidations.TotalIncomeFromTransactionsByMonth(year);
+        var income = await _transactionStatisticsValidations.TotalIncomeFromTransactionsByYear(year);
 
         return income;
     }
@@ -107,7 +108,7 @@ public class TransactionStatisticsService : ITransactionStatisticsService
 
         foreach (var transaction in transactions)
         {
-            text += $"Day {transaction.Key}: {transaction.Value}";
+            text += $"Day {transaction.Key}: {transaction.Value}\n";
         }
         
         return text;

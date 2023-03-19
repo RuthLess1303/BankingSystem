@@ -1,7 +1,8 @@
+using BankingSystemSharedDb.Db;
 using BankingSystemSharedDb.Db.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace BankingSystemSharedDb.Db.Repositories;
+namespace ReportingCore.Repositories;
 
 public interface ITransactionStatisticsRepository
 {
