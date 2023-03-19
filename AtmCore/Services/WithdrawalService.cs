@@ -7,6 +7,8 @@ namespace AtmCore.Services;
 public interface IWithdrawalService
 {
     Task Withdraw(WithdrawalRequest request);
+    decimal CalculateFee(decimal amount);
+    decimal CalculateWithdrawAmount(decimal amount, decimal fee);
 }
 
 public class WithdrawalService : IWithdrawalService
@@ -33,8 +35,8 @@ public class WithdrawalService : IWithdrawalService
             throw new ArgumentException("Amount must be greater than zero.", nameof(request.CardNumber));
 
         // Calculate the withdrawal fee
-        var fee = request.Amount * 0.02m;
-        var withdrawAmount = request.Amount + fee;
+        var fee = CalculateFee(request.Amount);
+        var withdrawAmount = CalculateWithdrawAmount(request.Amount, fee);
 
         if (account.Balance < withdrawAmount) throw new InvalidOperationException("Insufficient funds.");
 
@@ -73,5 +75,15 @@ public class WithdrawalService : IWithdrawalService
         };
 
         await _transactionRepository.AddTransactionInDb(withdrawal);
+    }
+
+    public decimal CalculateFee(decimal amount)
+    {
+        return amount * 0.02m;
+    }
+
+    public decimal CalculateWithdrawAmount(decimal amount, decimal fee)
+    {
+        return amount + fee;
     }
 }
