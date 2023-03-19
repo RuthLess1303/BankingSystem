@@ -40,7 +40,7 @@ public class WithdrawalService : IWithdrawalService
 
         // Check if the withdrawal amount exceeds the daily limit
         // const decimal dailyLimit = 10000m;
-        var dailyLimit = account.CurrencyCode switch
+        var dailyLimit = account.CurrencyCode.ToUpper() switch
         {
             "GEL" => 10000,
             "USD" => 4000,

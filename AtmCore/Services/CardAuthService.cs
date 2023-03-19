@@ -30,14 +30,14 @@ public class CardAuthService : ICardAuthService
     {
         _requestValidation.ValidatePinCode(pin);
         _requestValidation.ValidateCreditCardNumber(cardNumber);
-        
+
         var card = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
         if (card == null) throw new Exception("Incorrect credentials");
 
         if (card.ExpirationDate <= DateTime.UtcNow) throw new UnauthorizedAccessException("Card has expired");
 
-        var account = _accountRepository.GetAccountByCardDetails(cardNumber, pin);
+        var account = await _accountRepository.GetAccountByCardDetails(cardNumber, pin);
 
-        return account.Result;
+        return account;
     }
 }
