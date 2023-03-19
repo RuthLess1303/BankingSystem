@@ -1,5 +1,6 @@
 using BankingSystemSharedDb.Db.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using ReportingCore.Repositories;
 
 namespace ReportingApi.Controllers;
 

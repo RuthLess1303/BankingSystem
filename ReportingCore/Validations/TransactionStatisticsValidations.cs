@@ -2,6 +2,7 @@ using BankingSystemSharedDb.Db.Entities;
 using BankingSystemSharedDb.Db.Repositories;
 using InternetBankCore.Services;
 using Microsoft.EntityFrameworkCore;
+using ReportingCore.Repositories;
 
 namespace ReportingCore.Validations;
 

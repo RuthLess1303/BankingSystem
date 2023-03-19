@@ -1,6 +1,7 @@
 using BankingSystemSharedDb.Db.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using ReportingCore.Repositories;
 using ReportingCore.Validations;
 
 namespace ReportingApi.Services;

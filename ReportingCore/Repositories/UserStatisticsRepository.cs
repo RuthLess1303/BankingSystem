@@ -1,6 +1,7 @@
+using BankingSystemSharedDb.Db;
 using Microsoft.EntityFrameworkCore;
 
-namespace BankingSystemSharedDb.Db.Repositories;
+namespace ReportingCore.Repositories;
 
 public interface IUserStatisticsRepository
 {
