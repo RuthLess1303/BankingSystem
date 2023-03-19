@@ -1,3 +1,4 @@
+using AtmApi.Middlewares;
 using AtmCore.Repositories;
 using AtmCore.Services;
 using AtmCore.Validations;
@@ -34,6 +35,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
