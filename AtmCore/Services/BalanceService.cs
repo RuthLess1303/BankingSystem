@@ -3,14 +3,19 @@ using AtmCore.Requests;
 
 namespace AtmCore.Services;
 
-public class BalanceService
+public interface IBalanceService
+{
+    Task<decimal> SeeBalance(WithdrawalRequest request);
+}
+
+public class BalanceService : IBalanceService
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly CardAuthService _cardAuthService;
+    private readonly ICardAuthService _cardAuthService;
 
     public BalanceService(
         IAccountRepository accountRepository,
-        CardAuthService cardAuthService)
+        ICardAuthService cardAuthService)
     {
         _accountRepository = accountRepository;
         _cardAuthService = cardAuthService;

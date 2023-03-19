@@ -5,16 +5,21 @@ using BankingSystemSharedDb.Db.Entities;
 
 namespace AtmCore.Services;
 
-public class CardAuthService
+public interface ICardAuthService
+{
+    Task<AccountEntity> GetAuthorizedAccountAsync(WithdrawalRequest request);
+}
+
+public class CardAuthService : ICardAuthService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly ICardRepository _cardRepository;
-    private readonly WithdrawalRequestValidation _requestValidation;
+    private readonly IWithdrawalRequestValidation _requestValidation;
 
     public CardAuthService(
         IAccountRepository accountRepository,
         ICardRepository cardRepository,
-        WithdrawalRequestValidation requestValidation)
+        IWithdrawalRequestValidation requestValidation)
     {
         _accountRepository = accountRepository;
         _cardRepository = cardRepository;

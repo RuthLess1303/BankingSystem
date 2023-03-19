@@ -3,15 +3,20 @@ using AtmCore.Requests;
 
 namespace AtmCore.Services;
 
-public class PinService
+public interface IPinService
 {
-    private readonly CardAuthService _cardAuthService;
+    Task ChangeCardPin(WithdrawalRequest request, string newPin);
+}
+
+public class PinService : IPinService
+{
+    private readonly ICardAuthService _cardAuthService;
     private readonly ICardRepository _cardRepository;
     private readonly IPinRepository _pinRepository;
 
     public PinService(
         ICardRepository cardRepository,
-        CardAuthService cardAuthService,
+        ICardAuthService cardAuthService,
         IPinRepository pinRepository)
     {
         _cardRepository = cardRepository;

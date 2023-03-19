@@ -4,13 +4,18 @@ using BankingSystemSharedDb.Db.Entities;
 
 namespace AtmCore.Services;
 
-public class WithdrawalService
+public interface IWithdrawalService
 {
-    private readonly CardAuthService _cardAuthService;
+    Task Withdraw(WithdrawalRequest request);
+}
+
+public class WithdrawalService : IWithdrawalService
+{
+    private readonly ICardAuthService _cardAuthService;
     private readonly ITransactionRepository _transactionRepository;
 
     public WithdrawalService(
-        CardAuthService cardAuthService,
+        ICardAuthService cardAuthService,
         ITransactionRepository transactionRepository)
     {
         _cardAuthService = cardAuthService;

@@ -8,14 +8,14 @@ namespace AtmApi.Controllers;
 [Route("api/atm")]
 public class AtmController : Controller
 {
-    private readonly BalanceService _balanceService;
-    private readonly PinService _pinService;
-    private readonly WithdrawalService _withdrawalService;
+    private readonly IBalanceService _balanceService;
+    private readonly IPinService _pinService;
+    private readonly IWithdrawalService _withdrawalService;
 
     public AtmController(
-        WithdrawalService withdrawalService,
-        BalanceService balanceService,
-        PinService pinService)
+        IWithdrawalService withdrawalService,
+        IBalanceService balanceService,
+        IPinService pinService)
     {
         _withdrawalService = withdrawalService;
         _balanceService = balanceService;
