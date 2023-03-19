@@ -5,7 +5,7 @@ namespace AtmCore.Services;
 
 public interface IBalanceService
 {
-    Task<decimal> SeeBalance(WithdrawalRequest request);
+    Task<decimal> SeeBalance(AuthorizeCardRequest request);
 }
 
 public class BalanceService : IBalanceService
@@ -21,9 +21,9 @@ public class BalanceService : IBalanceService
         _cardAuthService = cardAuthService;
     }
 
-    public async Task<decimal> SeeBalance(WithdrawalRequest request)
+    public async Task<decimal> SeeBalance(AuthorizeCardRequest request)
     {
-        var account = _cardAuthService.GetAuthorizedAccountAsync(request).Result;
+        var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode);
         var balance = await _accountRepository.GetAccountMoney(account.Iban);
         return balance;
     }

@@ -7,7 +7,7 @@ namespace AtmCore.Services;
 
 public interface ICardAuthService
 {
-    Task<AccountEntity> GetAuthorizedAccountAsync(WithdrawalRequest request);
+    Task<AccountEntity> GetAuthorizedAccountAsync(string cardNumber, string pin);
 }
 
 public class CardAuthService : ICardAuthService
@@ -26,17 +26,17 @@ public class CardAuthService : ICardAuthService
         _requestValidation = requestValidation;
     }
 
-    public async Task<AccountEntity> GetAuthorizedAccountAsync(WithdrawalRequest request)
+    public async Task<AccountEntity> GetAuthorizedAccountAsync(string cardNumber, string pin)
     {
-        _requestValidation.ValidatePinCode(request.PinCode);
-        _requestValidation.ValidateCreditCardNumber(request.CardNumber);
-        _requestValidation.ValidateAmount(request.Amount);
-        var card = await _cardRepository.FindCardEntityByCardNumberAsync(request.CardNumber);
-        if (card == null) throw new ArgumentException("Card does not exist!", nameof(request.CardNumber));
+        _requestValidation.ValidatePinCode(pin);
+        _requestValidation.ValidateCreditCardNumber(cardNumber);
+        
+        var card = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
+        if (card == null) throw new ArgumentException("Card does not exist!", nameof(cardNumber));
 
         if (card.ExpirationDate <= DateTime.UtcNow) throw new UnauthorizedAccessException("Card has expired");
 
-        var account = _accountRepository.GetAccountByCardDetails(request.CardNumber, request.PinCode);
+        var account = _accountRepository.GetAccountByCardDetails(cardNumber, pin);
 
         return account.Result;
     }

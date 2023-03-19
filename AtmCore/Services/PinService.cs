@@ -5,7 +5,7 @@ namespace AtmCore.Services;
 
 public interface IPinService
 {
-    Task ChangeCardPin(WithdrawalRequest request, string newPin);
+    Task ChangeCardPin(ChangePinRequest request);
 }
 
 public class PinService : IPinService
@@ -24,9 +24,9 @@ public class PinService : IPinService
         _pinRepository = pinRepository;
     }
 
-    public async Task ChangeCardPin(WithdrawalRequest request, string newPin)
+    public async Task ChangeCardPin(ChangePinRequest request)
     {
-        var account = await _cardAuthService.GetAuthorizedAccountAsync(request);
+        var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode);
         if (account == null)
             throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
         // Get the card associated with the provided card number
@@ -38,6 +38,6 @@ public class PinService : IPinService
         if (request.PinCode != card.Pin) throw new ArgumentException("Invalid PIN code.", nameof(request.PinCode));
 
         // Change the PIN for the card
-        await _pinRepository.ChangePinInDb(card, newPin);
+        await _pinRepository.ChangePinInDb(card, request.NewPin);
     }
 }

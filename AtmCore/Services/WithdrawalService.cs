@@ -24,7 +24,7 @@ public class WithdrawalService : IWithdrawalService
 
     public async Task Withdraw(WithdrawalRequest request)
     {
-        var account = _cardAuthService.GetAuthorizedAccountAsync(request).Result;
+        var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode);
         if (account == null)
             throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
 

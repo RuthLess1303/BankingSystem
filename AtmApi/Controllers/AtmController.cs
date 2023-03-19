@@ -23,23 +23,23 @@ public class AtmController : Controller
     }
     
     [HttpPost("withdraw")]
-    public async Task<OkResult> Withdraw([FromBody] WithdrawalRequest request)
+    public async Task<OkResult> Withdraw([FromBody]WithdrawalRequest request)
     {
         await _withdrawalService.Withdraw(request);
         return Ok();
     }
     
     [HttpPost("see-balance")]
-    public async Task<OkObjectResult> SeeBalance([FromBody] WithdrawalRequest request)
+    public async Task<OkObjectResult> SeeBalance([FromBody]AuthorizeCardRequest request)
     {
         var balance = await _balanceService.SeeBalance(request);
         return Ok(balance);
     }
     
     [HttpPost("change-pin")]
-    public async Task<OkResult> ChangePin([FromBody] WithdrawalRequest request, string newPin)
+    public async Task<OkResult> ChangePin([FromBody]ChangePinRequest request)
     {
-        await _pinService.ChangeCardPin(request, newPin);
+        await _pinService.ChangeCardPin(request);
         return Ok();
     }
 }
