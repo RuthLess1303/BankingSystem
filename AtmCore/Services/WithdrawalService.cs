@@ -4,13 +4,20 @@ using BankingSystemSharedDb.Db.Entities;
 
 namespace AtmCore.Services;
 
-public class WithdrawalService
+public interface IWithdrawalService
 {
-    private readonly CardAuthService _cardAuthService;
+    Task Withdraw(WithdrawalRequest request);
+    decimal CalculateFee(decimal amount);
+    decimal CalculateWithdrawAmount(decimal amount, decimal fee);
+}
+
+public class WithdrawalService : IWithdrawalService
+{
+    private readonly ICardAuthService _cardAuthService;
     private readonly ITransactionRepository _transactionRepository;
 
     public WithdrawalService(
-        CardAuthService cardAuthService,
+        ICardAuthService cardAuthService,
         ITransactionRepository transactionRepository)
     {
         _cardAuthService = cardAuthService;
@@ -19,7 +26,7 @@ public class WithdrawalService
 
     public async Task Withdraw(WithdrawalRequest request)
     {
-        var account =await _cardAuthService.GetAuthorizedAccountAsync(request);
+        var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode);
         if (account == null)
             throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
 
@@ -28,14 +35,14 @@ public class WithdrawalService
             throw new ArgumentException("Amount must be greater than zero.", nameof(request.CardNumber));
 
         // Calculate the withdrawal fee
-        var fee = request.Amount * 0.02m;
-        var withdrawAmount = request.Amount + fee;
+        var fee = CalculateFee(request.Amount);
+        var withdrawAmount = CalculateWithdrawAmount(request.Amount, fee);
 
         if (account.Balance < withdrawAmount) throw new InvalidOperationException("Insufficient funds.");
 
         // Check if the withdrawal amount exceeds the daily limit
         // const decimal dailyLimit = 10000m;
-        var dailyLimit = account.CurrencyCode switch
+        var dailyLimit = account.CurrencyCode.ToUpper() switch
         {
             "GEL" => 10000,
             "USD" => 4000,
@@ -68,5 +75,15 @@ public class WithdrawalService
         };
 
         await _transactionRepository.AddTransactionInDb(withdrawal);
+    }
+
+    public decimal CalculateFee(decimal amount)
+    {
+        return amount * 0.02m;
+    }
+
+    public decimal CalculateWithdrawAmount(decimal amount, decimal fee)
+    {
+        return amount + fee;
     }
 }

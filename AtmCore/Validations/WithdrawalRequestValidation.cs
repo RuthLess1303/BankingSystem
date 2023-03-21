@@ -1,6 +1,13 @@
 ﻿namespace AtmCore.Validations;
 
-public class WithdrawalRequestValidation
+public interface IWithdrawalRequestValidation
+{
+    bool ValidateCreditCardNumber(string cardNumber);
+    bool ValidateAmount(decimal amount);
+    bool ValidatePinCode(string pinCode);
+}
+
+public class WithdrawalRequestValidation : IWithdrawalRequestValidation
 {
     public bool ValidateCreditCardNumber(string cardNumber)
     {
@@ -44,5 +51,4 @@ public class WithdrawalRequestValidation
     {
         return !string.IsNullOrWhiteSpace(pinCode) && pinCode.Length == 4 && pinCode.All(char.IsDigit);
     }
-    
 }

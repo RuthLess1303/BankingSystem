@@ -3,15 +3,20 @@ using AtmCore.Requests;
 
 namespace AtmCore.Services;
 
-public class PinService
+public interface IPinService
 {
-    private readonly CardAuthService _cardAuthService;
+    Task ChangeCardPin(ChangePinRequest request);
+}
+
+public class PinService : IPinService
+{
+    private readonly ICardAuthService _cardAuthService;
     private readonly ICardRepository _cardRepository;
     private readonly IPinRepository _pinRepository;
 
     public PinService(
         ICardRepository cardRepository,
-        CardAuthService cardAuthService,
+        ICardAuthService cardAuthService,
         IPinRepository pinRepository)
     {
         _cardRepository = cardRepository;
@@ -19,9 +24,9 @@ public class PinService
         _pinRepository = pinRepository;
     }
 
-    public async Task ChangeCardPin(WithdrawalRequest request, string newPin)
+    public async Task ChangeCardPin(ChangePinRequest request)
     {
-        var account = await _cardAuthService.GetAuthorizedAccountAsync(request);
+        var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode);
         if (account == null)
             throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
         // Get the card associated with the provided card number
@@ -33,6 +38,6 @@ public class PinService
         if (request.PinCode != card.Pin) throw new ArgumentException("Invalid PIN code.", nameof(request.PinCode));
 
         // Change the PIN for the card
-        await _pinRepository.ChangePinInDb(card, newPin);
+        await _pinRepository.ChangePinInDb(card, request.NewPin);
     }
 }

@@ -66,13 +66,13 @@ public class TransactionStatisticsController : ControllerBase
     }
 
     [HttpGet("avg-income-for-transaction-in-gel-usd-eur")]
-    public async Task<(JObject, string)> GetAvgIncomeInGelUsdEur()
+    public async Task<string> GetAvgIncomeInGelUsdEur()
     {
         var avgIncome = await _transactionStatisticsService.GetAvgIncome();
         var text = $"Avg income in Gel: {avgIncome["Gel"]}\n" +
                    $"Avg income in Usd: {avgIncome["Usd"]}\n" +
                    $"Avg income in Eur: {avgIncome["Eur"]}\n";
 
-        return (avgIncome, text);
+        return text;
     }
 }

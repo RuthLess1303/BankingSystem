@@ -5,6 +5,7 @@ using InternetBankCore.Validations;
 using Microsoft.EntityFrameworkCore;
 using ReportingApi.Middlewares;
 using ReportingApi.Services;
+using ReportingCore.Repositories;
 using ReportingCore.Validations;
 
 var builder = WebApplication.CreateBuilder(args);

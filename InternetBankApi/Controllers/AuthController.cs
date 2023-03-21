@@ -30,7 +30,6 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody]LoginRequest request)
     {
         var user = await _userService.Login(request);
-        // var user = await _userManager.FindByEmailAsync(request.Email);
         var u = await _userManager.GetRolesAsync(user);
         foreach (var role in u)
         {

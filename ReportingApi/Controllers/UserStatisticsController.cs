@@ -1,5 +1,6 @@
 using BankingSystemSharedDb.Db.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using ReportingCore.Repositories;
 
 namespace ReportingApi.Controllers;
 
@@ -15,25 +16,25 @@ public class UserStatisticsController : ControllerBase
     }
 
     [HttpGet("total-users-registered-in-current-year")]
-    public async Task<string> TotalUsersRegisteredCurrentYear()
+    public string TotalUsersRegisteredCurrentYear()
     {
-        var users = await _userStatisticsRepository.TotalRegisteredUsersCurrentYear();
+        var users = _userStatisticsRepository.TotalRegisteredUsersCurrentYear();
 
         return $"Total Users Registered In This Year: {users}";
     }
     
     [HttpGet("total-users-registered-in-last-year")]
-    public async Task<string> TotalUsersRegisteredLastYear()
+    public string TotalUsersRegisteredLastYear()
     {
-        var users = await _userStatisticsRepository.TotalRegisteredUsersForLastYear();
+        var users = _userStatisticsRepository.TotalRegisteredUsersForLastYear();
 
         return $"Total Users Registered Last Year: {users}";
     }
     
     [HttpGet("total-users-registered-in-last-30-days")]
-    public async Task<string> TotalUsersRegisteredLast30Days()
+    public string TotalUsersRegisteredLast30Days()
     {
-        var users = await _userStatisticsRepository.TotalRegisteredUsersForLast30Days();
+        var users = _userStatisticsRepository.TotalRegisteredUsersForLast30Days();
 
         return $"Total Users Registered In Last 30 Days: {users}";
     }
