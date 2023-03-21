@@ -1,4 +1,4 @@
-﻿using AtmCore.Repositories;
+using AtmCore.Repositories;
 using AtmCore.Requests;
 
 namespace AtmCore.Services;
@@ -24,6 +24,7 @@ public class BalanceService : IBalanceService
     public async Task<decimal> SeeBalance(AuthorizeCardRequest request)
     {
         var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode);
+        
         var balance = await _accountRepository.GetAccountMoney(account.Iban);
         return balance;
     }
