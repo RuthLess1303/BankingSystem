@@ -18,7 +18,7 @@ public class BalanceService
 
     public async Task<decimal> SeeBalance(WithdrawalRequest request)
     {
-        var account = _cardAuthService.GetAuthorizedAccountAsync(request).Result;
+        var account = await _cardAuthService.GetAuthorizedAccountAsync(request);
         var balance = await _accountRepository.GetAccountMoney(account.Iban);
         return balance;
     }

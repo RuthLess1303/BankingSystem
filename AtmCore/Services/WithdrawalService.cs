@@ -19,7 +19,7 @@ public class WithdrawalService
 
     public async Task Withdraw(WithdrawalRequest request)
     {
-        var account = _cardAuthService.GetAuthorizedAccountAsync(request).Result;
+        var account =await _cardAuthService.GetAuthorizedAccountAsync(request);
         if (account == null)
             throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
 

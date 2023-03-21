@@ -6,6 +6,12 @@ public class WithdrawalRequestValidation
     {
         if (string.IsNullOrWhiteSpace(cardNumber)) return false;
 
+        // Remove any non-digit characters from the card number
+        cardNumber = new string(cardNumber.Where(char.IsDigit).ToArray());
+        
+        // The card number must be between 13 and 19 digits long
+        if (cardNumber.Length is < 13 or > 19) return false;
+        
         var reversedCardNumber = cardNumber.Reverse();
         int sum = 0, i = 0;
 
@@ -38,8 +44,5 @@ public class WithdrawalRequestValidation
     {
         return !string.IsNullOrWhiteSpace(pinCode) && pinCode.Length == 4 && pinCode.All(char.IsDigit);
     }
-    // public bool ValidatePinCode(int pinCode)
-    // {
-    //     return pinCode is >= 1000 and <= 9999;
-    // }
+    
 }
