@@ -1,10 +1,9 @@
 using InternetBank.Core.Api.Authorisation;
 using InternetBank.Core.Api.Middlewares;
+using InternetBank.Core.Services;
+using InternetBank.Core.Validations;
 using InternetBank.Db.Db;
 using InternetBank.Db.Db.Repositories;
-using InternetBankApi.Authorisation;
-using InternetBankCore.Services;
-using InternetBankCore.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 

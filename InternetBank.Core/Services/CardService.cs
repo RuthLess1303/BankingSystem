@@ -1,6 +1,6 @@
 using InternetBank.Db.Db.Models;
 
-namespace InternetBankCore.Services;
+namespace InternetBank.Core.Services;
 
 public interface ICardService
 {

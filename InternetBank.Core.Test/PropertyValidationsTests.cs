@@ -1,5 +1,5 @@
+using InternetBank.Core.Validations;
 using InternetBank.Db.Db.Repositories;
-using InternetBankCore.Validations;
 using Moq;
 
 namespace InternetBank.Core.Test;

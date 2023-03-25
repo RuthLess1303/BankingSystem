@@ -1,4 +1,4 @@
-namespace InternetBankCore.Validations;
+namespace InternetBank.Core.Validations;
 
 public interface ITransactionValidations
 {

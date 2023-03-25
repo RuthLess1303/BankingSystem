@@ -1,9 +1,8 @@
-using System.Text;
 using System.Text.RegularExpressions;
 using IbanNet;
 using InternetBank.Db.Db.Repositories;
 
-namespace InternetBankCore.Validations;
+namespace InternetBank.Core.Validations;
 
 public interface IPropertyValidations
 {

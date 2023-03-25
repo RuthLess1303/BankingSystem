@@ -2,7 +2,6 @@
 using System.Text;
 using InternetBank.Db.Db;
 using InternetBank.Db.Db.Entities;
-using InternetBankApi.Authorisation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;

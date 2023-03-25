@@ -1,12 +1,12 @@
 using System.Security.Cryptography;
 using System.Text;
+using InternetBank.Core.Validations;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Repositories;
 using InternetBank.Db.Requests;
-using InternetBankCore.Validations;
 using Microsoft.AspNetCore.Identity;
 
-namespace InternetBankCore.Services;
+namespace InternetBank.Core.Services;
 
 public interface IUserService
 {

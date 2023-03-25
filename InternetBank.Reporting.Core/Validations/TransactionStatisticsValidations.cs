@@ -1,6 +1,6 @@
+using InternetBank.Core.Services;
 using InternetBank.Db.Db.Repositories;
 using InternetBank.Reporting.Core.Repositories;
-using InternetBankCore.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternetBank.Reporting.Core.Validations;

@@ -1,4 +1,4 @@
-﻿namespace InternetBankApi.Authorisation;
+﻿namespace InternetBank.Core.Api.Authorisation;
 
 public interface IAuthService
 {

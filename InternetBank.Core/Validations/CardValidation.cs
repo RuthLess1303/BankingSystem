@@ -1,6 +1,6 @@
 using InternetBank.Db.Requests;
 
-namespace InternetBankCore.Validations;
+namespace InternetBank.Core.Validations;
 
 public interface ICardValidation
 {

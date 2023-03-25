@@ -2,7 +2,7 @@ using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Repositories;
 using InternetBank.Db.Requests;
 
-namespace InternetBankCore.Validations;
+namespace InternetBank.Core.Validations;
 
 public interface IAccountValidation
 {

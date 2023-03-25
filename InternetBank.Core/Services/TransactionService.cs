@@ -1,9 +1,9 @@
+using InternetBank.Core.Validations;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Repositories;
 using InternetBank.Db.Requests;
-using InternetBankCore.Validations;
 
-namespace InternetBankCore.Services;
+namespace InternetBank.Core.Services;
 
 public interface ITransactionService
 {

@@ -1,11 +1,11 @@
+using InternetBank.Core.Services;
+using InternetBank.Core.Validations;
 using InternetBank.Db.Db;
 using InternetBank.Db.Db.Repositories;
 using InternetBank.Reporting.Api.Middlewares;
 using InternetBank.Reporting.Api.Services;
 using InternetBank.Reporting.Core.Repositories;
 using InternetBank.Reporting.Core.Validations;
-using InternetBankCore.Services;
-using InternetBankCore.Validations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

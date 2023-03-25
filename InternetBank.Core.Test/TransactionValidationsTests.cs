@@ -1,4 +1,4 @@
-using InternetBankCore.Validations;
+using InternetBank.Core.Validations;
 
 namespace InternetBank.Core.Test;
 
