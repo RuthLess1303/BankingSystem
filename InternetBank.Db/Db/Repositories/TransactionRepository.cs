@@ -21,7 +21,7 @@ public class TransactionRepository : ITransactionRepository
 
     public async Task MakeTransaction(TransactionRequest request, decimal convertedAmount)
     {
-        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.AggressorIban);
+        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.SenderIban);
         var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
 
         aggressor.Balance -= request.Amount;
@@ -32,7 +32,7 @@ public class TransactionRepository : ITransactionRepository
     
     public async Task MakeTransactionWithFee(TransactionRequest request, decimal convertedAmount)
     {
-        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.AggressorIban);
+        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.SenderIban);
         var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
 
         aggressor.Balance -= request.Amount * (decimal)1.01 + (decimal)0.5;

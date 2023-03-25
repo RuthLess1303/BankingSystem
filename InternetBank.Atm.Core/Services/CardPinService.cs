@@ -3,18 +3,18 @@ using InternetBank.Atm.Core.Requests;
 
 namespace InternetBank.Atm.Core.Services;
 
-public interface IPinService
+public interface ICardPinService
 {
     Task ChangeCardPin(ChangePinRequest request);
 }
 
-public class PinService : IPinService
+public class CardCardPinService  : ICardPinService
 {
     private readonly ICardAuthService _cardAuthService;
     private readonly ICardRepository _cardRepository;
     private readonly IPinRepository _pinRepository;
 
-    public PinService(
+    public CardCardPinService(
         ICardRepository cardRepository,
         ICardAuthService cardAuthService,
         IPinRepository pinRepository)

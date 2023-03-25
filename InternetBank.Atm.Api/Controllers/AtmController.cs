@@ -9,17 +9,17 @@ namespace InternetBank.Atm.Api.Controllers;
 public class AtmController : Controller
 {
     private readonly IBalanceService _balanceService;
-    private readonly IPinService _pinService;
+    private readonly ICardPinService _cardPinService;
     private readonly IWithdrawalService _withdrawalService;
 
     public AtmController(
         IWithdrawalService withdrawalService,
         IBalanceService balanceService,
-        IPinService pinService)
+        ICardPinService cardPinService)
     {
         _withdrawalService = withdrawalService;
         _balanceService = balanceService;
-        _pinService = pinService;
+        _cardPinService = cardPinService;
     }
     
     [HttpPost("withdraw")]
@@ -39,7 +39,7 @@ public class AtmController : Controller
     [HttpPost("change-pin")]
     public async Task<OkResult> ChangePin([FromBody]ChangePinRequest request)
     {
-        await _pinService.ChangeCardPin(request);
+        await _cardPinService.ChangeCardPin(request);
         return Ok();
     }
 }

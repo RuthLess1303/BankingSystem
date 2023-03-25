@@ -129,7 +129,7 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
         
         await Parallel.ForEachAsync(otherTransactions, async (otherTransaction, ct) =>
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(otherTransaction.AggressorIban);
+            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(otherTransaction.SenderIban);
             var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "Gel", otherTransaction.Amount);
 
             gelAmount += convertedAmount;

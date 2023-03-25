@@ -105,7 +105,7 @@ public class AccountRepositoryTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _accountRepository.GetAccountMoney(account.Iban);
+        var result = await _accountRepository.GetAccountBalance(account.Iban);
 
         // Assert
         Assert.That(result, Is.EqualTo(account.Balance));
@@ -118,6 +118,6 @@ public class AccountRepositoryTests
         const string invalidIban = "invalid_iban";
 
         // Act and Assert
-        Assert.ThrowsAsync<Exception>(() => _accountRepository.GetAccountMoney(invalidIban));
+        Assert.ThrowsAsync<ArgumentException>(() => _accountRepository.GetAccountBalance(invalidIban));
     }
 }

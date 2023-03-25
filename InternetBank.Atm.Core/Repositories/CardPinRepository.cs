@@ -8,11 +8,11 @@ public interface IPinRepository
     Task ChangePinInDb(CardEntity card, string newPin);
 }
 
-public class PinRepository : IPinRepository
+public class CardPinRepository : IPinRepository
 {
     private readonly AppDbContext _db;
 
-    public PinRepository(AppDbContext db)
+    public CardPinRepository(AppDbContext db)
     {
         _db = db;
     }

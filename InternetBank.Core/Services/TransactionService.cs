@@ -35,16 +35,16 @@ public class TransactionService : ITransactionService
 
     public async Task MakeTransaction(TransactionRequest request)
     {
-        await _accountValidation.AccountWithIbanExists(request.AggressorIban);
-        await _accountValidation.HasSufficientBalance(request.AggressorIban, request.Amount);
+        await _accountValidation.AccountWithIbanExists(request.SenderIban);
+        await _accountValidation.HasSufficientBalance(request.SenderIban, request.Amount);
         await _accountValidation.AccountWithIbanExists(request.ReceiverIban);
-        var aggressorCurrency = await _accountRepository.GetAccountCurrencyCode(request.AggressorIban);
+        var aggressorCurrency = await _accountRepository.GetAccountCurrencyCode(request.SenderIban);
         var receiverCurrency = await _accountRepository.GetAccountCurrencyCode(request.ReceiverIban);
         var convertedAmount = await _currencyService.ConvertAmount(aggressorCurrency, receiverCurrency, request.Amount);
         var transactionEntity = new TransactionEntity
         {
             Amount = convertedAmount,
-            AggressorIban = request.AggressorIban,
+            SenderIban = request.SenderIban,
             ReceiverIban = request.ReceiverIban,
             CurrencyCode = receiverCurrency,
             Rate = await _currencyService.GetRateAsync(receiverCurrency),
@@ -71,7 +71,7 @@ public class TransactionService : ITransactionService
     public string PrintTransaction(TransactionEntity transaction)
     {
         return $"Transaction Amount: {transaction.Amount}\n" +
-               $"Sender's Iban: {transaction.AggressorIban}\n" +
+               $"Sender's Iban: {transaction.SenderIban}\n" +
                $"Receiver's Iban: {transaction.ReceiverIban}\n" +
                $"Amount With Fee: {transaction.GrossAmount}\n" +
                $"Currency: {transaction.CurrencyCode}\n" +

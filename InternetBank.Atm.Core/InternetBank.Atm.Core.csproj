@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\InternetBank.Core\InternetBank.Core.csproj"/>
+        <ProjectReference Include="..\InternetBank.Core\InternetBank.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

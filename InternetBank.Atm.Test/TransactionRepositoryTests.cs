@@ -36,10 +36,34 @@ public class TransactionRepositoryTests
     {
         // Arrange
         const string iban = "TESTIBAN";
+        var account = new AccountEntity
+        {
+            Id = Guid.NewGuid(),
+            Iban = iban,
+            Balance = 1000,
+            CurrencyCode = "Usd",
+            CreationDate = DateTime.UtcNow.AddDays(-80),
+            PrivateNumber = "1234567890",
+        };
+        
+        var user = new UserEntity
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "John",
+            LastName = "Doe",
+            PrivateNumber = "1234567890",
+            BirthDate = new DateTime(1990, 1, 1),
+            CreationDate = DateTime.UtcNow.AddDays(-900),
+            Email = "John@Mail.com"
+        };
+        await _dbContext.User.AddAsync(user);
+        await _dbContext.Account.AddAsync(account);
+        await _dbContext.SaveChangesAsync();
+        
         var transaction1 = new TransactionEntity
         {
             Id = 1,
-            AggressorIban = "SENDERIBAN1",
+            SenderIban = "SENDERIBAN1",
             ReceiverIban = iban,
             Type = "ATM",
             Amount = 50,
@@ -49,7 +73,7 @@ public class TransactionRepositoryTests
         var transaction2 = new TransactionEntity
         {
             Id = 2,
-            AggressorIban = "SENDERIBAN2",
+            SenderIban = "SENDERIBAN2",
             ReceiverIban = iban,
             Type = "ATM",
             Amount = 100,
@@ -60,7 +84,7 @@ public class TransactionRepositoryTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _transactionRepository.GetWithdrawalsInLast24HoursAsync(iban);
+        var result = await _transactionRepository.GetWithdrawalAmountInLast24HoursAsync(iban);
 
         // Assert
         Assert.That(result, Is.EqualTo(50));
@@ -73,7 +97,7 @@ public class TransactionRepositoryTests
         var transaction = new TransactionEntity
         {
             Id = 1,
-            AggressorIban = "SENDERIBAN",
+            SenderIban = "SENDERIBAN",
             ReceiverIban = "RECEIVERIBAN",
             Type = "TRANSFER",
             Amount = 500,

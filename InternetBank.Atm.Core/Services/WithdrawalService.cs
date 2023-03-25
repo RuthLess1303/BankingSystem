@@ -7,14 +7,18 @@ namespace InternetBank.Atm.Core.Services;
 public interface IWithdrawalService
 {
     Task Withdraw(WithdrawalRequest request);
-    decimal CalculateFee(decimal amount);
-    decimal CalculateWithdrawAmount(decimal amount, decimal fee);
+    // decimal CalculateFee(decimal amount);
+    // decimal CalculateWithdrawAmount(decimal amount, decimal fee);
 }
 
 public class WithdrawalService : IWithdrawalService
 {
     private readonly ICardAuthService _cardAuthService;
     private readonly ITransactionRepository _transactionRepository;
+    private const decimal WithdrawalFeePercentage = 0.02m;
+    private const decimal DailyLimitInGel = 10000;
+    private const decimal DailyLimitInUsd = 4000;
+    private const decimal DailyLimitInEur = 3500;
 
     public WithdrawalService(
         ICardAuthService cardAuthService,
@@ -26,17 +30,15 @@ public class WithdrawalService : IWithdrawalService
 
     public async Task Withdraw(WithdrawalRequest request)
     {
-        var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode);
-        if (account == null)
-            throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
-
-
+        var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode) 
+                      ?? throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
+        
         if (request.Amount <= 0)
             throw new ArgumentException("Amount must be greater than zero.", nameof(request.CardNumber));
 
         // Calculate the withdrawal fee
-        var fee = CalculateFee(request.Amount);
-        var withdrawAmount = CalculateWithdrawAmount(request.Amount, fee);
+        var fee = request.Amount * WithdrawalFeePercentage;
+        var withdrawAmount = request.Amount + fee;
 
         if (account.Balance < withdrawAmount) throw new InvalidOperationException("Insufficient funds.");
 
@@ -44,13 +46,13 @@ public class WithdrawalService : IWithdrawalService
         // const decimal dailyLimit = 10000m;
         var dailyLimit = account.CurrencyCode.ToUpper() switch
         {
-            "GEL" => 10000,
-            "USD" => 4000,
-            "EUR" => 3500,
+            "GEL" => DailyLimitInGel,
+            "USD" => DailyLimitInUsd,
+            "EUR" => DailyLimitInEur,
             _ => throw new Exception("Unsupported currency.")
         };
 
-        var withdrawalsInLast24Hours = await _transactionRepository.GetWithdrawalsInLast24HoursAsync(account.Iban);
+        var withdrawalsInLast24Hours = await _transactionRepository.GetWithdrawalAmountInLast24HoursAsync(account.Iban);
 
         var totalWithdrawals = withdrawalsInLast24Hours + request.Amount;
 
@@ -63,7 +65,7 @@ public class WithdrawalService : IWithdrawalService
         // Add a withdrawal record
         var withdrawal = new TransactionEntity
         {
-            AggressorIban = account.Iban,
+            SenderIban = account.Iban,
             ReceiverIban = account.Iban,
             Amount = request.Amount,
             Fee = fee,
@@ -77,13 +79,13 @@ public class WithdrawalService : IWithdrawalService
         await _transactionRepository.AddTransactionInDb(withdrawal);
     }
 
-    public decimal CalculateFee(decimal amount)
-    {
-        return amount * 0.02m;
-    }
-
-    public decimal CalculateWithdrawAmount(decimal amount, decimal fee)
-    {
-        return amount + fee;
-    }
+    // public decimal CalculateFee(decimal amount)
+    // {
+    //     return amount * WithdrawalFeePercentage;
+    // }
+    //
+    // public decimal CalculateWithdrawAmount(decimal amount, decimal fee)
+    // {
+    //     return amount + fee;
+    // }
 }

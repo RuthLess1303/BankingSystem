@@ -49,7 +49,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<List<TransactionEntity>> GetAggressorTransactions(string iban)
     {
-        var aggressorTransactions = await _db.Transaction.Where(t => t.AggressorIban == iban).ToListAsync();
+        var aggressorTransactions = await _db.Transaction.Where(t => t.SenderIban == iban).ToListAsync();
 
         return aggressorTransactions;
     }

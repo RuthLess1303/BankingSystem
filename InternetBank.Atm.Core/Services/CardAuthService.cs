@@ -31,7 +31,6 @@ public class CardAuthService : ICardAuthService
         _requestValidation.ValidateCreditCardNumber(cardNumber);
 
         var card = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
-        if (card == null) throw new ArgumentException("Incorrect credentials");
 
         if (card.ExpirationDate <= DateTime.UtcNow) throw new UnauthorizedAccessException("Card has expired");
 

@@ -24,8 +24,12 @@ public class BalanceService : IBalanceService
     public async Task<decimal> SeeBalance(AuthorizeCardRequest request)
     {
         var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode);
+        if (account == null)
+        {
+            throw new ArgumentException($"Invalid card number or PIN code");
+        }
         
-        var balance = await _accountRepository.GetAccountMoney(account.Iban);
+        var balance = await _accountRepository.GetAccountBalance(account.Iban);
         return balance;
     }
 }

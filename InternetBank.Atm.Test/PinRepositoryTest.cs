@@ -19,7 +19,7 @@ public class PinRepositoryTests
             .Options;
 
         _dbContext = new AppDbContext(options);
-        _pinRepository = new PinRepository(_dbContext);
+        _pinRepository = new CardPinRepository(_dbContext);
     }
 
     [TearDown]

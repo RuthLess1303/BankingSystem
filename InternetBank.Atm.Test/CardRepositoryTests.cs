@@ -55,15 +55,14 @@ public class CardRepositoryTests
     }
 
     [Test]
-    public async Task FindCardEntityByCardNumberAsync_WhenCardDoesNotExist_ReturnsNull()
+    public Task FindCardEntityByCardNumberAsync_WhenCardDoesNotExist_ReturnsNull()
     {
         // Arrange
         const string cardNumber = "1234567890123456";
-
-        // Act
-        var result = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
-
+        
         // Assert
-        Assert.That(result, Is.Null);
+        Assert.ThrowsAsync<ArgumentException>(() => _cardRepository.FindCardEntityByCardNumberAsync(cardNumber),
+            $"Card with number {cardNumber} does not exist");
+        return Task.CompletedTask;
     }
 }

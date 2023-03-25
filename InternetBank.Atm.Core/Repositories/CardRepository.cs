@@ -21,6 +21,10 @@ public class CardRepository : ICardRepository
     public async Task<CardEntity> FindCardEntityByCardNumberAsync(string cardNumber)
     {
         var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+        if (card == null)
+        {
+            throw new ArgumentException($"Card with number {cardNumber} does not exist");
+        }
         return card;
     }
 }

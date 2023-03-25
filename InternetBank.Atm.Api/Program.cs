@@ -13,10 +13,10 @@ builder.Services.AddDbContext<AppDbContext>(c =>
 
 builder.Services.AddTransient<IBalanceService, BalanceService>();
 builder.Services.AddTransient<ICardAuthService, CardAuthService>();
-builder.Services.AddTransient<IPinService, PinService>();
+builder.Services.AddTransient<ICardPinService, CardCardPinService>();
 builder.Services.AddTransient<IWithdrawalService, WithdrawalService>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
-builder.Services.AddTransient<IPinRepository, PinRepository>();
+builder.Services.AddTransient<IPinRepository, CardPinRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 builder.Services.AddTransient<ICardRepository, CardRepository>();
 builder.Services.AddTransient<IWithdrawalRequestValidation, WithdrawalRequestValidation>();
