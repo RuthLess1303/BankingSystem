@@ -14,7 +14,6 @@ public interface IAccountValidation
     Task<AccountEntity?> GetAccountWithIban(string iban);
     Task<bool> HasTransaction(string iban);
     Task<List<TransactionEntity>> GetTransactionsWithIban(string iban);
-    Task<CardEntity> GetCardWithIban(string iban);
 }
 
 public class AccountValidation : IAccountValidation
@@ -114,16 +113,5 @@ public class AccountValidation : IAccountValidation
         allTransactions.AddRange(transactionsAsReceiver);
 
         return allTransactions;
-    }
-
-    public async Task<CardEntity> GetCardWithIban(string iban)
-    {
-        var card = await _accountRepository.GetCardWithIban(iban);
-        if (card == null)
-        {
-            throw new Exception("There are 0 cards registered under provided Iban");
-        }
-
-        return card;
     }
 }

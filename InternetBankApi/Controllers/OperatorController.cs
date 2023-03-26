@@ -11,11 +11,19 @@ public class OperatorController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly ICurrencyService _currencyService;
+    private readonly IAccountService _accountService;
+    private readonly ICardService _cardService;
 
-    public OperatorController(IUserService userService, ICurrencyService currencyService)
+    public OperatorController(
+        IUserService userService, 
+        ICurrencyService currencyService, 
+        IAccountService accountService, 
+        ICardService cardService)
     {
         _userService = userService;
         _currencyService = currencyService;
+        _accountService = accountService;
+        _cardService = cardService;
     }
     
     [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
@@ -31,7 +39,7 @@ public class OperatorController : ControllerBase
     [HttpPost("create-account")]
     public async Task<IActionResult> CreateAccount(CreateAccountRequest request)
     {
-        await _userService.CreateAccount(request);
+        await _accountService.CreateAccount(request);
         
         return Ok();
     }
@@ -40,7 +48,7 @@ public class OperatorController : ControllerBase
     [HttpPost("create-card")]
     public async Task<IActionResult> CreateCard(CreateCardRequest request)
     {
-        await _userService.CreateCard(request);
+        await _cardService.CreateCard(request);
         
         return Ok();
     }
