@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>InternetBank.Reporting.Core</AssemblyName>
+        <RootNamespace>InternetBank.Reporting.Core</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\InternetBank.Db\InternetBank.Db.csproj"/>
+        <ProjectReference Include="..\InternetBank.Core\InternetBank.Core.csproj"/>
+    </ItemGroup>
+
+</Project>
