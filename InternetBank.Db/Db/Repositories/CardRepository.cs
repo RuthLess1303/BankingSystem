@@ -7,7 +7,7 @@ public interface ICardRepository
 {
     Task<CardEntity> FindCardEntityByCardNumberAsync(string cardNumber);
     Task LinkWithAccount(string iban, Guid cardId);
-    Task IsCardNumberInUse(string cardNumber);
+    Task CardNumberUsage(string cardNumber);
     Task<CardEntity?> GetCardWithIban(string iban);
 }
 
@@ -29,7 +29,7 @@ public class CardRepository : ICardRepository
         return card;
     }
 
-    public async Task IsCardNumberInUse(string cardNumber)
+    public async Task CardNumberUsage(string cardNumber)
     {
         var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
 
