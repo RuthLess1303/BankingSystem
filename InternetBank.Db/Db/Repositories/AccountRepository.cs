@@ -11,7 +11,6 @@ public interface IAccountRepository
     Task<List<TransactionEntity>> GetAggressorTransactions(string iban);
     Task<List<TransactionEntity>> GetReceiverTransactions(string iban);
     Task<TransactionEntity?> HasTransaction(string iban);
-    Task<CardEntity?> GetCardWithIban(string iban);
     Task Create(AccountEntity accountEntity);
 }
 
@@ -68,18 +67,6 @@ public class AccountRepository : IAccountRepository
         return transaction;
     }
 
-    public async Task<CardEntity?> GetCardWithIban(string iban)
-    {
-        var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.Iban == iban);
-        if (cardAccountConnection == null)
-        {
-            throw new Exception($"Account with IBAN {iban} not found.");
-        }
-        var card = await _db.Card.FirstOrDefaultAsync(c => c.Id == cardAccountConnection.CardId);
-
-        return card;
-    }
-    
     public async Task Create(AccountEntity accountEntity)
     {
         await _db.AddAsync(accountEntity);
