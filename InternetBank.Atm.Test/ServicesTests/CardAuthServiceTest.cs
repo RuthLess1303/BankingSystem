@@ -59,7 +59,7 @@ public class CardAuthServiceTests
         {
             Id = Guid.NewGuid(),
             CardNumber = "4111111111111111",
-            NameOnCard = "John Doe",
+            CardHolderName = "John Doe",
             Cvv = "123",
             Pin = "1234",
             ExpirationDate = DateTime.UtcNow.AddYears(1),
@@ -92,7 +92,7 @@ public class CardAuthServiceTests
         {
             Id = Guid.NewGuid(),
             CardNumber = "4111111111111111",
-            NameOnCard = "John Doe",
+            CardHolderName = "John Doe",
             Cvv = "123",
             Pin = "1234",
             ExpirationDate = DateTime.UtcNow.AddDays(-1),

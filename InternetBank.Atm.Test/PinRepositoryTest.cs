@@ -37,7 +37,7 @@ public class PinRepositoryTests
         {
             CardNumber = "1234567890123456",
             Cvv = "123",
-            NameOnCard = "John Doe",
+            CardHolderName = "John Doe",
             ExpirationDate = new DateTime(2025, 12, 31),
             CreationDate = DateTime.UtcNow,
             Pin = "1234"

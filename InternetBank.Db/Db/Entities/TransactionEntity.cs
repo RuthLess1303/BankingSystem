@@ -11,5 +11,5 @@ public class TransactionEntity
     public decimal Fee { get; set; }
     public string Type { get; set; }
     public decimal Rate { get; set; }
-    public DateTime TransactionTime { get; set; }
+    public DateTimeOffset TransactionTime { get; set; }
 }

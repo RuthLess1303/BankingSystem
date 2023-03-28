@@ -21,7 +21,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<AccountEntity> GetAccountByCardDetails(string cardNumber, string pin)
     {
-        var card = await _db.Card.SingleOrDefaultAsync(c => c.CardNumber == cardNumber && c.Pin == pin);
+        var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.Pin == pin);
         if (card == null) throw new UnauthorizedAccessException("Invalid card number or PIN code");
 
         var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.CardId == card.Id);

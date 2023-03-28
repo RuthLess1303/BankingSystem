@@ -38,9 +38,9 @@ public class TransactionService : ITransactionService
         await _accountValidation.AccountWithIbanExists(request.SenderIban);
         await _accountValidation.HasSufficientBalance(request.SenderIban, request.Amount);
         await _accountValidation.AccountWithIbanExists(request.ReceiverIban);
-        var aggressorCurrency = await _accountRepository.GetAccountCurrencyCode(request.SenderIban);
+        var senderCurrency = await _accountRepository.GetAccountCurrencyCode(request.SenderIban);
         var receiverCurrency = await _accountRepository.GetAccountCurrencyCode(request.ReceiverIban);
-        var convertedAmount = await _currencyService.ConvertAmount(aggressorCurrency, receiverCurrency, request.Amount);
+        var convertedAmount = await _currencyService.ConvertAmount(senderCurrency, receiverCurrency, request.Amount);
         var transactionEntity = new TransactionEntity
         {
             Amount = convertedAmount,

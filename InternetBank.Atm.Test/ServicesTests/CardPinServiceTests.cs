@@ -6,124 +6,127 @@ using InternetBank.Db.Db;
 using InternetBank.Db.Db.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace InternetBank.Atm.Test.ServicesTests
+namespace InternetBank.Atm.Test.ServicesTests;
+
+[TestFixture]
+public class CardCardPinServiceTests
 {
-    [TestFixture]
-    public class CardCardPinServiceTests
+    private AppDbContext _dbContext;
+    private ICardAuthService _cardAuthService;
+    private ICardRepository _cardRepository;
+    private IPinRepository _pinRepository;
+    private ICardPinService _cardPinService;
+    
+    [SetUp]
+    public void Setup()
     {
-        private AppDbContext _dbContext;
-        private ICardAuthService _cardAuthService;
-        private ICardRepository _cardRepository;
-        private IPinRepository _pinRepository;
-        private ICardPinService _cardPinService;
+        // Create an in-memory database context
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseInMemoryDatabase("TestDb")
+            .Options;
+        _dbContext = new AppDbContext(options);
 
-        [SetUp]
-        public void Setup()
+        // Initialize repositories and services using the in-memory database context
+        _cardRepository = new CardRepository(_dbContext);
+        _cardAuthService = new CardAuthService(new AccountRepository(_dbContext), _cardRepository,
+            new WithdrawalRequestValidation());
+        _pinRepository = new CardPinRepository(_dbContext);
+        _cardPinService = new CardCardPinService(_cardRepository, _cardAuthService, _pinRepository);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _dbContext.Database.EnsureDeleted();
+        // Dispose the in-memory database context after each test
+        _dbContext.Dispose();
+    }
+    
+    [Test]
+    public async Task ChangeCardPin_ValidRequest_ChangesPin()
+    {
+        // Arrange
+        const string cardNumber = "1234567890123456";
+        const string pin = "1234";
+        const string newPin = "4321";
+
+        // Add a card entity to the in-memory database
+        var card = new CardEntity
         {
-            // Create an in-memory database context
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDb")
-                .Options;
-            _dbContext = new AppDbContext(options);
+            Id = Guid.NewGuid(),
+            CardNumber = cardNumber,
+            CardHolderName = "John Doe",
+            Cvv = "123",
+            Pin = pin,
+            ExpirationDate = DateTime.UtcNow.AddYears(1),
+            CreationDate = DateTime.UtcNow.AddYears(-6)
+        };
 
-            // Initialize repositories and services using the in-memory database context
-            _cardRepository = new CardRepository(_dbContext);
-            _cardAuthService = new CardAuthService(new AccountRepository(_dbContext), _cardRepository, new WithdrawalRequestValidation());
-            _pinRepository = new CardPinRepository(_dbContext);
-            _cardPinService = new CardCardPinService(_cardRepository, _cardAuthService, _pinRepository);
-        }
-
-        [TearDown]
-        public void TearDown()
+        var account = new AccountEntity
         {
-            // Dispose the in-memory database context after each test
-            _dbContext.Dispose();
-        }
+            Id = Guid.NewGuid(),
+            Iban = "NL91ABNA0417164300",
+            Balance = 1000.00m,
+            CurrencyCode = "Usd",
+            PrivateNumber = "1234567890",
+            CreationDate = DateTime.UtcNow.AddYears(-6)
+        };
 
-        [Test]
-        public async Task ChangeCardPin_ValidRequest_ChangesPin()
+        var connection = new CardAccountConnectionEntity
         {
-            // Arrange
-            const string cardNumber = "1234567890123456";
-            const string pin = "1234";
-            const string newPin = "4321";
+            Id = 1,
+            CardId = card.Id,
+            Iban = account.Iban,
+            CreationDate = DateTime.UtcNow
+        };
+        _dbContext.Card.Add(card);
+        _dbContext.Account.Add(account);
+        _dbContext.CardAccountConnection.Add(connection);
+        await _dbContext.SaveChangesAsync();
 
-            // Add a card entity to the in-memory database
-            var card = new CardEntity
-            {
-                Id = Guid.NewGuid(),
-                CardNumber = "1234567890123456",
-                NameOnCard = "John Doe",
-                Cvv = "123",
-                Pin = "1234",
-                ExpirationDate = DateTime.UtcNow.AddYears(1),
-                CreationDate = DateTime.UtcNow
-            };
+        // Create a change PIN request
+        var request = new ChangePinRequest { CardNumber = cardNumber, PinCode = pin, NewPin = newPin };
 
-            var account = new AccountEntity
-            {
-                Iban = "NL91ABNA0417164300",
-                Balance = 1000.00m,
-                CurrencyCode = "Usd",
-                PrivateNumber = "1234567890"
-            };
+        // Act
+        await _cardPinService.ChangeCardPin(request);
 
-            var connection = new CardAccountConnectionEntity
-            {
-                Id = 1,
-                CardId = card.Id,
-                Iban = account.Iban,
-                CreationDate = DateTime.UtcNow
-            };
-            _dbContext.Card.Add(card);
-            _dbContext.Account.Add(account);
-            _dbContext.CardAccountConnection.Add(connection);
-            await _dbContext.SaveChangesAsync();        
-            
-            // Create a change PIN request
-            var request = new ChangePinRequest { CardNumber = cardNumber, PinCode = pin, NewPin = newPin };
+        // Assert
+        // Check that the PIN was changed in the in-memory database
+        var updatedCard = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
+        Assert.That(updatedCard.Pin, Is.EqualTo(newPin));
+    }
 
-            // Act
-            await _cardPinService.ChangeCardPin(request);
+    [Test]
+    public async Task ChangeCardPin_InvalidRequest_ThrowsException()
+    {
+        // Arrange
+        const string cardNumber = "1234567890123456";
+        const string pin = "1234";
+        const string newPin = "4321";
 
-            // Assert
-            // Check that the PIN was changed in the in-memory database
-            var updatedCard = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
-            Assert.That(updatedCard.Pin, Is.EqualTo(newPin));
-        }
-
-        [Test]
-        public async Task ChangeCardPin_InvalidRequest_ThrowsException()
+        // Add a card entity to the in-memory database
+        var card = new CardEntity
         {
-            // Arrange
-            const string cardNumber = "1234567890123456";
-            const string pin = "1234";
-            const string newPin = "4321";
+            Id = Guid.NewGuid(),
+            CardNumber = "1234567890123456",
+            CardHolderName = "John Doe",
+            Cvv = "123",
+            Pin = "1234",
+            ExpirationDate = DateTime.UtcNow.AddYears(1),
+            CreationDate = DateTime.UtcNow
+        };
+        _dbContext.Card.Add(card);
+        await _dbContext.SaveChangesAsync();
 
-            // Add a card entity to the in-memory database
-            var card = new CardEntity
-            {
-                Id = Guid.NewGuid(),
-                CardNumber = "1234567890123456",
-                NameOnCard = "John Doe",
-                Cvv = "123",
-                Pin = "1234",
-                ExpirationDate = DateTime.UtcNow.AddYears(1),
-                CreationDate = DateTime.UtcNow
-            };
-            _dbContext.Card.Add(card);
-            await _dbContext.SaveChangesAsync();
+        // Create a change PIN request with invalid PIN
+        var request = new ChangePinRequest { CardNumber = cardNumber, PinCode = "0000", NewPin = newPin };
 
-            // Create a change PIN request with invalid PIN
-            var request = new ChangePinRequest { CardNumber = cardNumber, PinCode = "0000", NewPin = newPin };
+        // Assert
+        // Check that the method throws an exception
+        Assert.ThrowsAsync<UnauthorizedAccessException>(() => _cardPinService.ChangeCardPin(request));
 
-            // Assert
-            // Check that the method throws an exception
-            Assert.ThrowsAsync<UnauthorizedAccessException>(() => _cardPinService.ChangeCardPin(request));
-
-            // Check that the PIN was not changed in the in-memory database
-            var updatedCard = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
-            Assert.That(updatedCard.Pin, Is.EqualTo(pin));
-        }
+        // Check that the PIN was not changed in the in-memory database
+        var updatedCard = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
+        Assert.That(updatedCard.Pin, Is.EqualTo(pin));
     }
 }

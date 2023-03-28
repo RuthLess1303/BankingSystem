@@ -38,7 +38,7 @@ public class CardRepositoryTests
         {
             CardNumber = cardNumber,
             Cvv = "123",
-            NameOnCard = "John Doe",
+            CardHolderName = "John Doe",
             ExpirationDate = new DateTime(2025, 12, 31),
             CreationDate = DateTime.UtcNow,
             Pin = "012"

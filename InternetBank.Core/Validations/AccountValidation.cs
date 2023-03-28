@@ -7,7 +7,7 @@ namespace InternetBank.Core.Validations;
 public interface IAccountValidation
 {
     Task OnCreate(CreateAccountRequest request);
-    Task AccountWithIbanExists(string iban);
+    Task<bool> AccountWithIbanExists(string iban);
     Task<bool> IsCurrencySame(string aggressorIban, string receiverIban);
     Task HasSufficientBalance(string iban, decimal amount);
     Task<decimal> GetAmountWithIban(string iban);
@@ -38,13 +38,15 @@ public class AccountValidation : IAccountValidation
         await _propertyValidations.CheckPrivateNumberUsage(request.PrivateNumber);
     }
     
-    public async Task AccountWithIbanExists(string iban)
+    public async Task<bool> AccountWithIbanExists(string iban)
     {
         var account = await _accountRepository.GetAccountWithIban(iban);
         if (account == null)
         {
             throw new Exception("Account does not exist");
         }
+
+        return true;
     }
 
     public async Task<bool> IsCurrencySame(string aggressorIban, string receiverIban)

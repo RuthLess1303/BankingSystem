@@ -7,8 +7,6 @@ namespace InternetBank.Atm.Core.Services;
 public interface IWithdrawalService
 {
     Task Withdraw(WithdrawalRequest request);
-    // decimal CalculateFee(decimal amount);
-    // decimal CalculateWithdrawAmount(decimal amount, decimal fee);
 }
 
 public class WithdrawalService : IWithdrawalService
@@ -78,14 +76,4 @@ public class WithdrawalService : IWithdrawalService
 
         await _transactionRepository.AddTransactionInDb(withdrawal);
     }
-
-    // public decimal CalculateFee(decimal amount)
-    // {
-    //     return amount * WithdrawalFeePercentage;
-    // }
-    //
-    // public decimal CalculateWithdrawAmount(decimal amount, decimal fee)
-    // {
-    //     return amount + fee;
-    // }
 }

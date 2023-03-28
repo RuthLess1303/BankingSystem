@@ -43,7 +43,7 @@ public class AccountService : IAccountService
         var cardModel = new CardModel
         {
             CardNumber = card.CardNumber,
-            NameOnCard = card.NameOnCard,
+            NameOnCard = card.CardHolderName,
             Cvv = card.Cvv,
             ExpirationDate = card.ExpirationDate
         };

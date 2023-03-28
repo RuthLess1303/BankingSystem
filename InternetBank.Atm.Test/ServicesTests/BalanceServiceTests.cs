@@ -62,7 +62,7 @@ public class BalanceServiceTests
         {
             Id = Guid.NewGuid(),
             CardNumber = "1111222233334444",
-            NameOnCard = "John Doe",
+            CardHolderName = "John Doe",
             Cvv = "123",
             Pin = "1234",
             ExpirationDate = DateTime.UtcNow.AddYears(1),

@@ -41,7 +41,7 @@ public class AccountRepositoryTests
             Pin = "1234",
             CreationDate = DateTime.Now,
             Cvv = "561",
-            NameOnCard = "Nick"
+            CardHolderName = "Nick"
         };
         var account = new AccountEntity
         {

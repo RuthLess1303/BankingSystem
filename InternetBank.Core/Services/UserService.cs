@@ -105,7 +105,7 @@ public class UserService : IUserService
         {
             Id = Guid.NewGuid(),
             CardNumber = request.CardNumber,
-            NameOnCard = request.NameOnCard,
+            CardHolderName = request.NameOnCard,
             Cvv = request.Cvv,
             Pin = request.Pin,
             ExpirationDate = request.ExpirationDate,
