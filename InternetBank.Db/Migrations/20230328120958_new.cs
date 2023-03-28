@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace BankingSystemSharedDb.Migrations
+namespace InternetBank.Db.Migrations
 {
     /// <inheritdoc />
-    public partial class seeding : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,8 +21,7 @@ namespace BankingSystemSharedDb.Migrations
                     PrivateNumber = table.Column<string>(type: "nchar(11)", fixedLength: true, maxLength: 11, nullable: false),
                     Iban = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     CurrencyCode = table.Column<string>(type: "nchar(3)", fixedLength: true, maxLength: 3, nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Hash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -82,9 +81,9 @@ namespace BankingSystemSharedDb.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CardNumber = table.Column<string>(type: "nchar(16)", fixedLength: true, maxLength: 16, nullable: false),
-                    NameOnCard = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    Cvv = table.Column<int>(type: "int", fixedLength: true, maxLength: 3, nullable: false),
-                    Pin = table.Column<int>(type: "int", fixedLength: true, maxLength: 4, nullable: false),
+                    CardHolderName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Cvv = table.Column<string>(type: "nchar(3)", fixedLength: true, maxLength: 3, nullable: false),
+                    Pin = table.Column<string>(type: "nchar(4)", fixedLength: true, maxLength: 4, nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -101,7 +100,6 @@ namespace BankingSystemSharedDb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Iban = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    Hash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -139,13 +137,13 @@ namespace BankingSystemSharedDb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     GrossAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AggressorIban = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    SenderIban = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     ReceiverIban = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     CurrencyCode = table.Column<string>(type: "nchar(3)", fixedLength: true, maxLength: 3, nullable: false),
                     Fee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TransactionTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TransactionTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,14 +261,14 @@ namespace BankingSystemSharedDb.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, "user", null },
-                    { 2, null, "operator", null }
+                    { 1, null, "api-user", "API-USER" },
+                    { 2, null, "api-operator", "API-OPERATOR" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "44e3e7dc-79c5-4f71-bf95-16b27d38e364", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, null, null, "AQAAAAIAAYagAAAAECa2TuFBt3nhV7ba4YDW1J/VOv+78CphxiRz4+EFUVtF45APHPLoa/nzqvmQ8Jkosw==", null, false, "01000000003", null, false, "operator@bank.com" });
+                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3667582c-1d93-4407-992a-8b4c494cdd7e", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, null, null, "AQAAAAIAAYagAAAAEOQt3gCUA9Si19OsVM++0a+49vBER1LbflHAKf5OmCgeA3emR87Q9cPxnYGPofp9Rw==", null, false, "01000000003", null, false, "operator@bank.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
