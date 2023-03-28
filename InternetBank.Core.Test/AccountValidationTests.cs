@@ -6,6 +6,7 @@ using InternetBank.Db.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ICardRepository = InternetBank.Atm.Core.Repositories.ICardRepository;
 
 namespace InternetBank.Core.Test;
 
@@ -15,6 +16,7 @@ public class AccountValidationTests
     private IAccountValidation _accountValidation;
     private IPropertyValidations _propertyValidations;
     private IAccountRepository _accountRepository;
+    private CardRepository _cardRepository;
     private DbContextOptions<AppDbContext> _options;
     private AppDbContext _dbContext;
     
@@ -40,6 +42,7 @@ public class AccountValidationTests
         );
         _accountRepository = new AccountRepository(_dbContext);
         _accountValidation = new AccountValidation(_propertyValidations, _accountRepository);
+        _cardRepository = new CardRepository(_dbContext);
     }
 
     [TearDown]
@@ -367,7 +370,7 @@ public class AccountValidationTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _accountRepository.GetCardWithIban(iban);
+        var result = await _cardRepository.GetCardWithIban(iban);
 
         // Assert
         Assert.That(result, Is.Not.Null);

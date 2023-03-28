@@ -1,6 +1,5 @@
 using InternetBank.Core.Validations;
 using InternetBank.Db.Db.Entities;
-using InternetBank.Db.Db.Models;
 using InternetBank.Db.Db.Repositories;
 using InternetBank.Db.Requests;
 
@@ -17,18 +16,15 @@ public class AccountService : IAccountService
     private readonly IAccountValidation _accountValidation;
     private readonly IPropertyValidations _propertyValidations;
     private readonly IAccountRepository _accountRepository;
-    private readonly ICardValidation _cardValidation;
 
     public AccountService(
         IAccountValidation accountValidation, 
         IPropertyValidations propertyValidations, 
-        IAccountRepository accountRepository, 
-        ICardValidation cardValidation)
+        IAccountRepository accountRepository)
     {
         _accountValidation = accountValidation;
         _propertyValidations = propertyValidations;
         _accountRepository = accountRepository;
-        _cardValidation = cardValidation;
     }
     
     public async Task CreateAccount(CreateAccountRequest request)

@@ -11,7 +11,7 @@ public interface IAccountValidation
     Task<bool> IsCurrencySame(string aggressorIban, string receiverIban);
     Task HasSufficientBalance(string iban, decimal amount);
     Task<decimal> GetAmountWithIban(string iban);
-    Task<AccountEntity?> GetAccountWithIban(string iban);
+    Task<AccountEntity> GetAccountWithIban(string iban);
     Task<bool> HasTransaction(string iban);
     Task<List<TransactionEntity>> GetTransactionsWithIban(string iban);
 }
@@ -81,7 +81,7 @@ public class AccountValidation : IAccountValidation
         return account.Balance;
     }
     
-    public async Task<AccountEntity?> GetAccountWithIban(string iban)
+    public async Task<AccountEntity> GetAccountWithIban(string iban)
     {
         var account = await _accountRepository.GetAccountWithIban(iban);
         if (account == null)

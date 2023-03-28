@@ -14,6 +14,7 @@ public interface IUserRepository
     Task Register(RegisterUserRequest request);
     Task<UserEntity?> GetUserWithEmail(string email);
     Task<UserEntity?> GetOperatorWithEmail(string email);
+    Task<UserEntity> GetUserWithIban(string iban);
 }
 
 public class UserRepository : IUserRepository
@@ -88,5 +89,20 @@ public class UserRepository : IUserRepository
 
         return operatorEntity;
     }
-    
+
+    public async Task<UserEntity> GetUserWithIban(string iban)
+    {
+        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+        if (account == null)
+        {
+            throw new Exception("Account with provided Iban does not exist");
+        }
+        var user = await _db.User.FirstOrDefaultAsync(u => u.PrivateNumber == account.PrivateNumber);
+        if (user == null)
+        {
+            throw new Exception("User with provided Iban does not exist");
+        }
+
+        return user;
+    }
 }

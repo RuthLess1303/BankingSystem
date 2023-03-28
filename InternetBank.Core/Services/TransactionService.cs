@@ -16,30 +16,34 @@ public class TransactionService : ITransactionService
     private readonly ITransactionRepository _transactionRepository;
     private readonly ICurrencyService _currencyService;
     private readonly IAccountValidation _accountValidation;
-    private readonly IAccountRepository _accountRepository;
     private readonly ITransactionValidations _transactionValidations;
+    private readonly IUserRepository _userRepository;
 
     public TransactionService(
         ITransactionRepository transactionRepository, 
         ICurrencyService currencyService, 
-        IAccountValidation accountValidation, 
-        IAccountRepository accountRepository, 
-        ITransactionValidations transactionValidations)
+        IAccountValidation accountValidation,
+        ITransactionValidations transactionValidations, 
+        IUserRepository userRepository)
     {
         _transactionRepository = transactionRepository;
         _currencyService = currencyService;
         _accountValidation = accountValidation;
-        _accountRepository = accountRepository;
         _transactionValidations = transactionValidations;
+        _userRepository = userRepository;
     }
 
     public async Task MakeTransaction(TransactionRequest request)
     {
-        await _accountValidation.AccountWithIbanExists(request.SenderIban);
-        await _accountValidation.HasSufficientBalance(request.SenderIban, request.Amount);
-        await _accountValidation.AccountWithIbanExists(request.ReceiverIban);
-        var senderCurrency = await _accountRepository.GetAccountCurrencyCode(request.SenderIban);
-        var receiverCurrency = await _accountRepository.GetAccountCurrencyCode(request.ReceiverIban);
+        var senderAccount = await _accountValidation.GetAccountWithIban(request.SenderIban);
+        var receiverAccount = await _accountValidation.GetAccountWithIban(request.ReceiverIban);
+        if (request.Amount > senderAccount.Balance)
+        {
+            throw new Exception("Insufficient funds");
+        }
+        
+        var senderCurrency = senderAccount.CurrencyCode;
+        var receiverCurrency = receiverAccount.CurrencyCode;
         var convertedAmount = await _currencyService.ConvertAmount(senderCurrency, receiverCurrency, request.Amount);
         var transactionEntity = new TransactionEntity
         {
@@ -49,8 +53,10 @@ public class TransactionService : ITransactionService
             CurrencyCode = receiverCurrency,
             Rate = await _currencyService.GetRateAsync(receiverCurrency),
         };
-    
-        if (request.ReceiverIban.Contains("CD"))
+        var senderUser = await _userRepository.GetUserWithIban(request.SenderIban);
+        var receiverUser = await _userRepository.GetUserWithIban(request.ReceiverIban);
+
+        if (senderUser.Id == receiverUser.Id)
         {
             await _transactionRepository.MakeTransaction(request, convertedAmount);
             transactionEntity.Type = "Inner";
@@ -60,10 +66,18 @@ public class TransactionService : ITransactionService
             await _transactionRepository.AddDataInDb(transactionEntity);
             return;
         }
+
+        var fee = _transactionValidations.CalculateFee(request.Amount, 1, (decimal)0.5);
+        var grossAmount = request.Amount + fee;
+        if (grossAmount > senderAccount.Balance)
+        {
+            throw new Exception("Insufficient funds");
+        }
+        
         await _transactionRepository.MakeTransactionWithFee(request, convertedAmount);
         transactionEntity.Type = "Outside";
-        transactionEntity.Fee = _transactionValidations.CalculateFee(request.Amount, 1,(decimal)0.5);
-        transactionEntity.GrossAmount = _transactionValidations.CalculateGrossAmount(request.Amount,1,(decimal)0.5);
+        transactionEntity.Fee = fee;
+        transactionEntity.GrossAmount = grossAmount;
         transactionEntity.TransactionTime = DateTime.Now;
         await _transactionRepository.AddDataInDb(transactionEntity);
     }
