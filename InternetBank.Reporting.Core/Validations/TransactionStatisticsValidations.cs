@@ -97,7 +97,7 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
             .Where(t => t.CurrencyCode.ToLower() != "gel")
             .ToListAsync();
         var otherOutsideTransactions =  await transactions.Item2
-            .Where(t => t.CurrencyCode.ToLower() == "gel")
+            .Where(t => t.CurrencyCode.ToLower() != "gel")
             .ToListAsync();
 
         foreach (var innerTransaction in otherInnerTransactions)

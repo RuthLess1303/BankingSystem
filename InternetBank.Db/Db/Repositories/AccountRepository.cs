@@ -5,10 +5,10 @@ namespace InternetBank.Db.Db.Repositories;
 
 public interface IAccountRepository
 {
-    Task<string?> GetAccountCurrencyCode(string iban);
+    Task<string> GetAccountCurrencyCode(string iban);
     Task<AccountEntity?> GetAccountWithIban(string iban);
-    Task<decimal?> GetAccountMoney(string iban);
-    Task<List<TransactionEntity>> GetAggressorTransactions(string iban);
+    Task<decimal> GetBalance(string iban);
+    Task<List<TransactionEntity>> GetSenderTransactions(string iban);
     Task<List<TransactionEntity>> GetReceiverTransactions(string iban);
     Task<TransactionEntity?> HasTransaction(string iban);
     Task Create(AccountEntity accountEntity);
@@ -23,9 +23,14 @@ public class AccountRepository : IAccountRepository
         _db = db;
     }
 
-    public async Task<string?> GetAccountCurrencyCode(string iban)
+    public async Task<string> GetAccountCurrencyCode(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+        if (account == null)
+        {
+            throw new Exception("Could not find account with provided Iban");
+        }
+        
         var currencyCode = account.CurrencyCode;
 
         return currencyCode;
@@ -38,15 +43,19 @@ public class AccountRepository : IAccountRepository
         return account;
     }
 
-    public async Task<decimal?> GetAccountMoney(string iban)
+    public async Task<decimal> GetBalance(string iban)
     {
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+        if (account == null)
+        {
+            throw new Exception("Could not find account with provided Iban");
+        }
         var amount = account.Balance;
         
         return amount;
     }
 
-    public async Task<List<TransactionEntity>> GetAggressorTransactions(string iban)
+    public async Task<List<TransactionEntity>> GetSenderTransactions(string iban)
     {
         var aggressorTransactions = await _db.Transaction.Where(t => t.SenderIban == iban).ToListAsync();
 

@@ -125,7 +125,7 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("Card Number must contain only numbers");
         }
-        await _cardRepository.IsCardNumberInUse(cardNumber);
+        await _cardRepository.CardNumberUsage(cardNumber);
 
         var sum = 0;
         Parallel.For(cardNumber.Length - 1, -1, i =>

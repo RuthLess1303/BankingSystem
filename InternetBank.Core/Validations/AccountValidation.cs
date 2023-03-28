@@ -63,7 +63,7 @@ public class AccountValidation : IAccountValidation
 
     public async Task HasSufficientBalance(string iban, decimal amount)
     {
-        var accountMoney = await _accountRepository.GetAccountMoney(iban);
+        var accountMoney = await _accountRepository.GetBalance(iban);
         if (accountMoney < amount)
         {
             throw new Exception("Insufficient balance");
@@ -108,7 +108,7 @@ public class AccountValidation : IAccountValidation
     {
         var allTransactions = new List<TransactionEntity>();
         
-        var transactionsAsAggressor = await _accountRepository.GetAggressorTransactions(iban);
+        var transactionsAsAggressor = await _accountRepository.GetSenderTransactions(iban);
         var transactionsAsReceiver = await _accountRepository.GetReceiverTransactions(iban);
         
         allTransactions.AddRange(transactionsAsAggressor);
