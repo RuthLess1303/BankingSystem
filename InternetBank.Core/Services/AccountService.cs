@@ -68,28 +68,4 @@ public class AccountService : IAccountService
         var transactions = await _accountValidation.GetTransactionsWithIban(iban);
         return (balance, transactions);
     }
-    public async Task<(CardModel, string?)> SeeCard(string iban)
-    {
-        var card = await _cardValidation.GetCardWithIban(iban);
-        var isCardExpired = _propertyValidations.IsCardExpired(card.ExpirationDate);
-        var cardModel = new CardModel
-        {
-            CardNumber = card.CardNumber,
-            CardHolderName = card.CardHolderName,
-            Cvv = card.Cvv,
-            ExpirationDate = card.ExpirationDate
-        };
-
-        if (isCardExpired)
-        {
-            return (cardModel, "Card is Expired");
-        }
-
-        if (DateTime.Now.Year == card.ExpirationDate.Year && card.ExpirationDate.Month-DateTime.Now.Month <= 3)
-        {
-            return (cardModel, $"Card will expire in: {card.ExpirationDate.Month - DateTime.Now.Month} month");
-        }
-
-        return (cardModel, null);
-    }
 }
