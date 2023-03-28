@@ -43,7 +43,6 @@ public class WithdrawalServiceTests
         // Arrange
         var user = new UserEntity
         {
-            Id = Guid.NewGuid(),
             UserName = "john.doe@example.com",
             Email = "john.doe@example.com",
             FirstName = "John",

@@ -38,7 +38,7 @@ namespace InternetBank.Core.Test.ServicesTests
                 new PropertyValidations(
                     new CurrencyRepository(_dbContext),
                     new UserRepository(_dbContext, new UserManager<UserEntity>(
-                        new UserStore<UserEntity, IdentityRole<Guid>, AppDbContext, Guid>(_dbContext),
+                        new UserStore<UserEntity, IdentityRole<int>, AppDbContext, int>(_dbContext),
                         null, null, null, null, null, null, null, null)),
                     new AccountRepository(_dbContext),
                     new CardRepository(_dbContext)

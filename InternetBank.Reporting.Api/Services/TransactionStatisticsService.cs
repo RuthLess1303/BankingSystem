@@ -14,7 +14,7 @@ public interface ITransactionStatisticsService
     Task<string> PrintQuantityOfTransactionsByDaysForLastMonth();
     Task<(decimal, decimal, decimal)> GetTransactionIncomeByYear(int year);
     Task<decimal> TotalDepositFromAtm();
-    Task<Dictionary<int, long>> QuantityOfTransactionsByDaysForLastMonth();
+    Task<Dictionary<int, long>?> QuantityOfTransactionsByDaysForLastMonth();
 }
 
 public class TransactionStatisticsService : ITransactionStatisticsService
@@ -93,7 +93,7 @@ public class TransactionStatisticsService : ITransactionStatisticsService
         return totalDeposit;
     }
 
-    public async Task<Dictionary<int, long>> QuantityOfTransactionsByDaysForLastMonth()
+    public async Task<Dictionary<int, long>?> QuantityOfTransactionsByDaysForLastMonth()
     {
         var transactions = await _transactionStatisticsRepository.TotalQuantitiesBasedOnDays();
         
@@ -104,6 +104,10 @@ public class TransactionStatisticsService : ITransactionStatisticsService
     {
         var transactions = await QuantityOfTransactionsByDaysForLastMonth();
         var text = "";
+        if (transactions == null)
+        {
+            throw new Exception("Transactions doesn't exist");
+        }
 
         foreach (var transaction in transactions)
         {

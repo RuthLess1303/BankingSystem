@@ -2,6 +2,6 @@
 
 namespace InternetBank.Db.Db.Entities;
 
-public class RoleEntity : IdentityRole<Guid>
+public class RoleEntity : IdentityRole<int>
 {
 }

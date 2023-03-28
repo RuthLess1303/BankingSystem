@@ -48,7 +48,6 @@ public class TransactionRepositoryTests
         
         var user = new UserEntity
         {
-            Id = Guid.NewGuid(),
             FirstName = "John",
             LastName = "Doe",
             PrivateNumber = "1234567890",

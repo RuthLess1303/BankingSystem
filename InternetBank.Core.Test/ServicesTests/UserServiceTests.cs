@@ -186,7 +186,7 @@ public class UserServiceTests
 
 
         // Set up the user manager
-        var userStore = new UserStore<UserEntity, IdentityRole<Guid>, AppDbContext, Guid>(_dbContext);
+        var userStore = new UserStore<UserEntity, IdentityRole<int>, AppDbContext, int>(_dbContext);
         var passwordHasher = new PasswordHasher<UserEntity>();
         var userValidators = new List<IUserValidator<UserEntity>>();
         var passwordValidators = new List<IPasswordValidator<UserEntity>>();
