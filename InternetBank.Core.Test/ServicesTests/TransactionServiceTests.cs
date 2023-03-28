@@ -48,13 +48,13 @@ namespace InternetBank.Core.Test.ServicesTests
             
             _accountRepository = new AccountRepository(_dbContext);
             _transactionValidations = new TransactionValidations();
-            _transactionService = new TransactionService(
-                new TransactionRepository(_dbContext),
-                _currencyService,
-                _accountValidation,
-                new AccountRepository(_dbContext),
-                _transactionValidations
-            );
+            // _transactionService = new TransactionService(
+            //     new TransactionRepository(_dbContext),
+            //     _currencyService,
+            //     _accountValidation,
+            //     new AccountRepository(_dbContext),
+            //     _transactionValidations
+            // );
         }
 
         [TearDown]

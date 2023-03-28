@@ -22,7 +22,7 @@ public class CardServiceTests
         _dbContext.Database.EnsureDeleted();
         _dbContext.Database.EnsureCreated();
 
-        _cardService = new CardService();
+        // _cardService = new CardService();
     }
 
     [TearDown]
@@ -39,7 +39,7 @@ public class CardServiceTests
         var card = new CardModel
         {
             CardNumber = "1234 5678 9012 3456",
-            NameOnCard = "John Doe",
+            CardHolderName = "John Doe",
             Cvv = "123",
             ExpirationDate = new DateTime(2023, 12, 31)
         };

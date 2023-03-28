@@ -8,6 +8,7 @@ public interface ICardRepository
     Task<CardEntity> FindCardEntityByCardNumberAsync(string cardNumber);
     Task LinkWithAccount(string iban, Guid cardId);
     Task IsCardNumberInUse(string cardNumber);
+    Task<CardEntity?> GetCardWithIban(string iban);
 }
 
 public class CardRepository : ICardRepository
@@ -52,5 +53,17 @@ public class CardRepository : ICardRepository
 
         await _db.AddAsync(cardAccountConnectionEntity);
         await _db.SaveChangesAsync();
+    }
+    
+    public async Task<CardEntity?> GetCardWithIban(string iban)
+    {
+        var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.Iban == iban);
+        if (cardAccountConnection == null)
+        {
+            throw new Exception($"Account with IBAN {iban} not found.");
+        }
+        var card = await _db.Card.FirstOrDefaultAsync(c => c.Id == cardAccountConnection.CardId);
+
+        return card;
     }
 }

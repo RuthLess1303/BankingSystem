@@ -63,7 +63,7 @@ public class AccountServiceTests
             new CardRepository(_dbContext)
         );
         var accountValidation = new AccountValidation(propertyValidations, new AccountRepository(_dbContext));
-        _accountService = new AccountService(accountValidation, propertyValidations);
+        // _accountService = new AccountService(accountValidation, propertyValidations);
     }
 
     [TearDown]

@@ -11,10 +11,9 @@ public interface IAccountValidation
     Task<bool> IsCurrencySame(string aggressorIban, string receiverIban);
     Task HasSufficientBalance(string iban, decimal amount);
     Task<decimal> GetAmountWithIban(string iban);
-    Task<AccountEntity?> GetAccountWithIban(string iban);
+    Task<AccountEntity> GetAccountWithIban(string iban);
     Task<bool> HasTransaction(string iban);
     Task<List<TransactionEntity>> GetTransactionsWithIban(string iban);
-    Task<CardEntity> GetCardWithIban(string iban);
 }
 
 public class AccountValidation : IAccountValidation
@@ -82,7 +81,7 @@ public class AccountValidation : IAccountValidation
         return account.Balance;
     }
     
-    public async Task<AccountEntity?> GetAccountWithIban(string iban)
+    public async Task<AccountEntity> GetAccountWithIban(string iban)
     {
         var account = await _accountRepository.GetAccountWithIban(iban);
         if (account == null)
@@ -116,16 +115,5 @@ public class AccountValidation : IAccountValidation
         allTransactions.AddRange(transactionsAsReceiver);
 
         return allTransactions;
-    }
-
-    public async Task<CardEntity> GetCardWithIban(string iban)
-    {
-        var card = await _accountRepository.GetCardWithIban(iban);
-        if (card == null)
-        {
-            throw new Exception("There are 0 cards registered under provided Iban");
-        }
-
-        return card;
     }
 }

@@ -58,7 +58,7 @@ public class UserController : ControllerBase
     [HttpPost("see-card")]
     public async Task<string> SeeCard(string iban)
     {
-        var card = await _accountService.SeeCard(iban);
+        var card = await _cardService.SeeCard(iban);
         var cardInfo = _cardService.PrintCardModelProperties(card.Item1);
         var text = "Your Card Information" +
                    $"{cardInfo}\n";
