@@ -1,14 +1,8 @@
-<<<<<<< HEAD:InternetBankCore/Services/AccountService.cs
-using BankingSystemSharedDb.Db.Entities;
-using BankingSystemSharedDb.Db.Models;
-using BankingSystemSharedDb.Db.Repositories;
-using BankingSystemSharedDb.Requests;
-using InternetBankCore.Validations;
-=======
 using InternetBank.Core.Validations;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Models;
->>>>>>> 8aea98499f6e1072c2bed6b80e900095f37d6c23:InternetBank.Core/Services/AccountService.cs
+using InternetBank.Db.Db.Repositories;
+using InternetBank.Db.Requests;
 
 namespace InternetBank.Core.Services;
 
@@ -23,15 +17,18 @@ public class AccountService : IAccountService
     private readonly IAccountValidation _accountValidation;
     private readonly IPropertyValidations _propertyValidations;
     private readonly IAccountRepository _accountRepository;
+    private readonly ICardValidation _cardValidation;
 
     public AccountService(
         IAccountValidation accountValidation, 
         IPropertyValidations propertyValidations, 
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository, 
+        ICardValidation cardValidation)
     {
         _accountValidation = accountValidation;
         _propertyValidations = propertyValidations;
         _accountRepository = accountRepository;
+        _cardValidation = cardValidation;
     }
     
     public async Task CreateAccount(CreateAccountRequest request)
@@ -71,17 +68,14 @@ public class AccountService : IAccountService
         var transactions = await _accountValidation.GetTransactionsWithIban(iban);
         return (balance, transactions);
     }
-<<<<<<< HEAD:InternetBankCore/Services/AccountService.cs
-=======
-
     public async Task<(CardModel, string?)> SeeCard(string iban)
     {
-        var card = await _accountValidation.GetCardWithIban(iban);
+        var card = await _cardValidation.GetCardWithIban(iban);
         var isCardExpired = _propertyValidations.IsCardExpired(card.ExpirationDate);
         var cardModel = new CardModel
         {
             CardNumber = card.CardNumber,
-            NameOnCard = card.CardHolderName,
+            CardHolderName = card.CardHolderName,
             Cvv = card.Cvv,
             ExpirationDate = card.ExpirationDate
         };
@@ -98,5 +92,4 @@ public class AccountService : IAccountService
 
         return (cardModel, null);
     }
->>>>>>> 8aea98499f6e1072c2bed6b80e900095f37d6c23:InternetBank.Core/Services/AccountService.cs
 }

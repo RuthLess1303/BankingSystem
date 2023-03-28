@@ -1,10 +1,6 @@
-<<<<<<< HEAD:InternetBankCore/Validations/CardValidation.cs
-using BankingSystemSharedDb.Db.Entities;
-using BankingSystemSharedDb.Db.Repositories;
-using BankingSystemSharedDb.Requests;
-=======
+using InternetBank.Db.Db.Entities;
+using InternetBank.Db.Db.Repositories;
 using InternetBank.Db.Requests;
->>>>>>> 8aea98499f6e1072c2bed6b80e900095f37d6c23:InternetBank.Core/Validations/CardValidation.cs
 
 namespace InternetBank.Core.Validations;
 

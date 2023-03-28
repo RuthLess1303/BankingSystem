@@ -1,12 +1,8 @@
-<<<<<<< HEAD:InternetBankCore/Services/CardService.cs
-using BankingSystemSharedDb.Db.Entities;
-using BankingSystemSharedDb.Db.Models;
-using BankingSystemSharedDb.Db.Repositories;
-using BankingSystemSharedDb.Requests;
-using InternetBankCore.Validations;
-=======
+using InternetBank.Core.Validations;
+using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Models;
->>>>>>> 8aea98499f6e1072c2bed6b80e900095f37d6c23:InternetBank.Core/Services/CardService.cs
+using InternetBank.Db.Db.Repositories;
+using InternetBank.Db.Requests;
 
 namespace InternetBank.Core.Services;
 
@@ -61,7 +57,7 @@ public class CardService : ICardService
         {
             Id = Guid.NewGuid(),
             CardNumber = request.CardNumber,
-            NameOnCard = request.NameOnCard,
+            CardHolderName = request.NameOnCard,
             Cvv = request.Cvv,
             Pin = request.Pin,
             ExpirationDate = request.ExpirationDate,
@@ -75,7 +71,7 @@ public class CardService : ICardService
     public string PrintCardModelProperties(CardModel model)
     {
         return $"Card Number: {model.CardNumber}\n" +
-               $"Name on Card: {model.NameOnCard}\n" +
+               $"Name on Card: {model.CardHolderName}\n" +
                $"Cvv: {model.Cvv}\n" +
                $"Expiration Date: {model.ExpirationDate}\n";
     }
@@ -87,7 +83,7 @@ public class CardService : ICardService
         var cardModel = new CardModel
         {
             CardNumber = card.CardNumber,
-            NameOnCard = card.NameOnCard,
+            CardHolderName = card.CardHolderName,
             Cvv = card.Cvv,
             ExpirationDate = card.ExpirationDate
         };

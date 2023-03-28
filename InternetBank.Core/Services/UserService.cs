@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
 using InternetBank.Core.Validations;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Repositories;
@@ -19,15 +17,21 @@ public class UserService : IUserService
     private readonly IPropertyValidations _propertyValidations;
     private readonly IUserRepository _userRepository;
     private readonly UserManager<UserEntity> _userManager;
+    private readonly IAccountRepository _accountRepository;
+    private readonly ICardRepository _cardRepository;
 
     public UserService(
         IPropertyValidations propertyValidations, 
         IUserRepository userRepository,
-        UserManager<UserEntity> userManager)
+        UserManager<UserEntity> userManager, 
+        IAccountRepository accountRepository, 
+        ICardRepository cardRepository)
     {
         _propertyValidations = propertyValidations;
         _userRepository = userRepository;
         _userManager = userManager;
+        _accountRepository = accountRepository;
+        _cardRepository = cardRepository;
     }
 
     public async Task Register(RegisterUserRequest request)
@@ -35,9 +39,7 @@ public class UserService : IUserService
         await UserDataCheck(request);
         await _userRepository.Register(request);
     }
-
-<<<<<<< HEAD:InternetBankCore/Services/UserService.cs
-=======
+    
     public async Task CreateAccount(CreateAccountRequest request)
     {
         _propertyValidations.CheckPrivateNumberFormat(request.PrivateNumber);
@@ -96,8 +98,6 @@ public class UserService : IUserService
         await _userRepository.CreateCard(cardEntity);
     }
     
-
->>>>>>> 8aea98499f6e1072c2bed6b80e900095f37d6c23:InternetBank.Core/Services/UserService.cs
     public async Task<UserEntity> Login(LoginRequest request)
     {
         var user = await _userRepository.FindWithEmail(request.Email);
