@@ -17,7 +17,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
     public DbSet<CardAccountConnectionEntity> CardAccountConnection { get; set; }
     public DbSet<TransactionEntity> Transaction { get; set; }
     public DbSet<CurrencyEntity> Currency { get; set; }
-    public DbSet<RoleEntity> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
