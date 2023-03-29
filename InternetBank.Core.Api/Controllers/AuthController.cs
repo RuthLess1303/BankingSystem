@@ -16,17 +16,15 @@ public class AuthController : ControllerBase
     private readonly TokenGenerator _tokenGenerator;
     private readonly IUserService _userService;
     private readonly UserManager<UserEntity> _userManager;
-    private AppDbContext _db;
 
     public AuthController(
         TokenGenerator tokenGenerator,
         IUserService userService,
-        UserManager<UserEntity> userManager, AppDbContext db)
+        UserManager<UserEntity> userManager)
     {
         _tokenGenerator = tokenGenerator;
         _userService = userService;
         _userManager = userManager;
-        _db = db;
     }
 
     [HttpPost("login")]
