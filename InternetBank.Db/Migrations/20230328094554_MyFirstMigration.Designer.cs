@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BankingSystemSharedDb.Migrations
+namespace InternetBank.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230314200028_role_names_changed")]
-    partial class role_names_changed
+    [Migration("20230328094554_MyFirstMigration")]
+    partial class MyFirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,7 @@ namespace BankingSystemSharedDb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreationDate")
@@ -42,10 +42,6 @@ namespace BankingSystemSharedDb.Migrations
                         .HasMaxLength(3)
                         .HasColumnType("nchar(3)")
                         .IsFixedLength();
-
-                    b.Property<string>("Hash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Iban")
                         .IsRequired()
@@ -77,10 +73,6 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Hash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Iban")
                         .IsRequired()
                         .HasMaxLength(36)
@@ -97,6 +89,11 @@ namespace BankingSystemSharedDb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CardHolderName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
                     b.Property<string>("CardNumber")
                         .IsRequired()
                         .HasMaxLength(16)
@@ -106,22 +103,19 @@ namespace BankingSystemSharedDb.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Cvv")
+                    b.Property<string>("Cvv")
+                        .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("int")
+                        .HasColumnType("nchar(3)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("NameOnCard")
+                    b.Property<string>("Pin")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<int>("Pin")
                         .HasMaxLength(4)
-                        .HasColumnType("int")
+                        .HasColumnType("nchar(4)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -206,12 +200,14 @@ namespace BankingSystemSharedDb.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "ApiUser"
+                            Name = "api-user",
+                            NormalizedName = "API-USER"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "ApiOperator"
+                            Name = "api-operator",
+                            NormalizedName = "API-OPERATOR"
                         });
                 });
 
@@ -222,11 +218,6 @@ namespace BankingSystemSharedDb.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("AggressorIban")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -251,8 +242,13 @@ namespace BankingSystemSharedDb.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<DateTime>("TransactionTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("SenderIban")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTimeOffset>("TransactionTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -359,14 +355,14 @@ namespace BankingSystemSharedDb.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "3b8203c1-5ea3-4c93-b49b-ea9733fcfab0",
+                            ConcurrencyStamp = "38686ee4-1202-4279-bee4-33f9b51f43f4",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
                             FirstName = "example",
                             LastName = "exampleLastname",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEFSwTE3yItsB+S3Ia0q4pT+A/ZAOLAfqe1xuXroqMw5oMuwnCoLCv2iPfV+LSGuXCQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOEdEISYsZU6xc6WiZRgAh+mjzBdapHhTtsrzuY/i4XOUcsCB3EvJkRN+YGvmnD3rA==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,

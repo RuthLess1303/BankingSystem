@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BankingSystemSharedDb.Migrations
+namespace InternetBank.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -86,6 +86,11 @@ namespace BankingSystemSharedDb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CardHolderName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
                     b.Property<string>("CardNumber")
                         .IsRequired()
                         .HasMaxLength(16)
@@ -103,11 +108,6 @@ namespace BankingSystemSharedDb.Migrations
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("NameOnCard")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("Pin")
                         .IsRequired()
@@ -216,11 +216,6 @@ namespace BankingSystemSharedDb.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("AggressorIban")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
@@ -244,8 +239,13 @@ namespace BankingSystemSharedDb.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<DateTime>("TransactionTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("SenderIban")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTimeOffset>("TransactionTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -352,14 +352,14 @@ namespace BankingSystemSharedDb.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "6a143114-c9b2-4105-9d88-cdea08fd6451",
+                            ConcurrencyStamp = "38686ee4-1202-4279-bee4-33f9b51f43f4",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
                             FirstName = "example",
                             LastName = "exampleLastname",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEOWMWxdfuMTlw13mhOVytGohIQz56h93shnpizfGNRJMrP84ImASFAtKJqKiN3+z4A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOEdEISYsZU6xc6WiZRgAh+mjzBdapHhTtsrzuY/i4XOUcsCB3EvJkRN+YGvmnD3rA==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,
