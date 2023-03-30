@@ -7,6 +7,7 @@ using InternetBank.Db.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace InternetBank.Core.Test.ServicesTests
 {
@@ -34,12 +35,21 @@ namespace InternetBank.Core.Test.ServicesTests
 
             _transactionRepository = new TransactionRepository(_dbContext);
             _currencyService = new CurrencyService(_dbContext,new CurrencyRepository(_dbContext));
+            
+            var userStore = new UserStore<UserEntity, IdentityRole<int>, AppDbContext, int>(_dbContext);
+            var passwordHasher = new PasswordHasher<UserEntity>();
+            var userValidators = new List<IUserValidator<UserEntity>>();
+            var passwordValidators = new List<IPasswordValidator<UserEntity>>();
+            var keyNormalizer = new UpperInvariantLookupNormalizer();
+            var errors = new IdentityErrorDescriber();
+            var userRepository = new UserRepository(_dbContext, new UserManager<UserEntity>(
+                userStore,
+                null, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, null, null));
+            
             _accountValidation = new AccountValidation(
                 new PropertyValidations(
                     new CurrencyRepository(_dbContext),
-                    new UserRepository(_dbContext, new UserManager<UserEntity>(
-                        new UserStore<UserEntity, IdentityRole<int>, AppDbContext, int>(_dbContext),
-                        null, null, null, null, null, null, null, null)),
+                    userRepository,
                     new AccountRepository(_dbContext),
                     new CardRepository(_dbContext)
                 ),
@@ -48,13 +58,13 @@ namespace InternetBank.Core.Test.ServicesTests
             
             _accountRepository = new AccountRepository(_dbContext);
             _transactionValidations = new TransactionValidations();
-            // _transactionService = new TransactionService(
-            //     new TransactionRepository(_dbContext),
-            //     _currencyService,
-            //     _accountValidation,
-            //     new AccountRepository(_dbContext),
-            //     _transactionValidations
-            // );
+            _transactionService = new TransactionService(
+                new TransactionRepository(_dbContext),
+                _currencyService,
+                _accountValidation,
+                _transactionValidations,
+                userRepository
+            );
         }
 
         [TearDown]
@@ -68,6 +78,26 @@ namespace InternetBank.Core.Test.ServicesTests
         public async Task MakeTransaction_WhenTransactionIsSuccessful_ShouldAddTransactionToDatabase()
         {
             // Arrange
+            var user1 = new UserEntity
+            {
+                UserName = "john.doe@example.com",
+                Email = "john.doe@example.com",
+                FirstName = "John",
+                LastName = "Doe",
+                PrivateNumber = "1234567890",
+                BirthDate = new DateTime(1990, 1, 1),
+                CreationDate = DateTime.UtcNow,
+            };
+            var user2 = new UserEntity
+            {
+                UserName = "john.doe@example.com",
+                Email = "john.doe@example.com",
+                FirstName = "Nikol",
+                LastName = "Doe",
+                PrivateNumber = "9876543210",
+                BirthDate = new DateTime(1999, 1, 9),
+                CreationDate = DateTime.UtcNow,
+            };
             var senderAccount = new AccountEntity
             {
                 Id = Guid.NewGuid(),
@@ -101,8 +131,8 @@ namespace InternetBank.Core.Test.ServicesTests
                 ValidFromDate = DateTime.UtcNow.AddDays(-1)
             };
             _dbContext.Currency.Add(currency);
-            
-            _dbContext.Account.AddRange(senderAccount, receiverAccount);
+            await _dbContext.User.AddRangeAsync(user1,user2);
+            await _dbContext.Account.AddRangeAsync(senderAccount, receiverAccount);
             await _dbContext.SaveChangesAsync();
 
             var transactionRequest = new TransactionRequest

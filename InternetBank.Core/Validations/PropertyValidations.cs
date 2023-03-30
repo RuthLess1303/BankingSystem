@@ -6,7 +6,7 @@ namespace InternetBank.Core.Validations;
 
 public interface IPropertyValidations
 {
-    bool CheckAmount(decimal amount);
+    bool IsAmountValid(decimal amount);
     Task CheckCurrency(string currencyCode);
     void CheckIbanFormat(string iban);
     Task CheckCardNumberFormat(string cardNumber);
@@ -42,7 +42,7 @@ public class PropertyValidations : IPropertyValidations
         _cardRepository = cardRepository;
     }
 
-    public bool CheckAmount(decimal amount)
+    public bool IsAmountValid(decimal amount)
     {
         return amount >= 0;
     }
@@ -63,8 +63,6 @@ public class PropertyValidations : IPropertyValidations
     
     public void CheckIbanFormat(string iban)
     {
-        var validator = new IbanValidator();
-        
         iban = iban?.ToUpper().Replace(" ", "").Replace("-", "") ?? throw new InvalidOperationException("Iban is null!");
         if (iban.Length < 15 || iban.Length > 36)
         {
@@ -82,7 +80,7 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("IBAN should not contain Symbols");
         }
-        
+        var validator = new IbanValidator();
         var result = validator.Validate(iban);
         
         if (!result.IsValid)
@@ -97,7 +95,8 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("CVV length must be 3");
         }
-        else if (Regex.IsMatch(cvv, @"[A-Za-z]") || Regex.IsMatch(cvv, @"^(?=.*[\W_]).+$"))
+
+        if (Regex.IsMatch(cvv, @"[A-Za-z]") || Regex.IsMatch(cvv, @"^(?=.*[\W_]).+$"))
         {
             throw new Exception("CVV must contain only numbers");
         }
@@ -109,7 +108,8 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("PIN length must be 4");
         }
-        else if (Regex.IsMatch(pin, @"[A-Za-z]") || Regex.IsMatch(pin, @"^(?=.*[\W_]).+$"))
+
+        if (Regex.IsMatch(pin, @"[A-Za-z]") || Regex.IsMatch(pin, @"^(?=.*[\W_]).+$"))
         {
             throw new Exception("PIN must contain only numbers");
         }
@@ -121,7 +121,8 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("Card number must be 16");
         }
-        else if (Regex.IsMatch(cardNumber, @"^(?=.*[a-zA-Z]).+$") || Regex.IsMatch(cardNumber, @"^(?=.*[\W_]).+$"))
+
+        if (Regex.IsMatch(cardNumber, @"^(?=.*[a-zA-Z]).+$") || Regex.IsMatch(cardNumber, @"^(?=.*[\W_]).+$"))
         {
             throw new Exception("Card Number must contain only numbers");
         }
@@ -148,12 +149,7 @@ public class PropertyValidations : IPropertyValidations
 
     public bool IsCardExpired(DateTime expirationDate)
     {
-        if (expirationDate <= DateTime.Now)
-        {
-            return true;
-        }
-
-        return false;
+        return expirationDate <= DateTime.Now;
     }
 
     public void CheckNameOnCard(string nameOnCard)
@@ -200,12 +196,7 @@ public class PropertyValidations : IPropertyValidations
     public async Task<bool> CheckPrivateNumberUsage(string privateNumber)
     {
         var user = await _userRepository.FindWithPrivateNumber(privateNumber);
-       if (user != null)
-       {
-           return true;
-       }
-
-       return false;
+        return user != null;
     }
 
     public void CheckPrivateNumberFormat(string privateNumber)

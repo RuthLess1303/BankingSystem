@@ -31,7 +31,7 @@ public class AccountValidation : IAccountValidation
 
     public async Task OnCreate(CreateAccountRequest request)
     {
-        _propertyValidations.CheckAmount(request.Amount);
+        _propertyValidations.IsAmountValid(request.Amount);
         _propertyValidations.CheckIbanFormat(request.Iban);
         await _propertyValidations.CheckCurrency(request.CurrencyCode);
         await _propertyValidations.CheckPrivateNumberUsage(request.PrivateNumber);
@@ -53,12 +53,7 @@ public class AccountValidation : IAccountValidation
         var aggressorCurrencyCode = await _accountRepository.GetAccountCurrencyCode(aggressorIban);
         var receiverCurrencyCode = await _accountRepository.GetAccountCurrencyCode(receiverIban);
 
-        if (aggressorCurrencyCode == receiverCurrencyCode)
-        {
-            return true;
-        }
-
-        return false;
+        return string.Equals(aggressorCurrencyCode, receiverCurrencyCode, StringComparison.CurrentCultureIgnoreCase);
     }
 
     public async Task HasSufficientBalance(string iban, decimal amount)
@@ -96,24 +91,32 @@ public class AccountValidation : IAccountValidation
     {
         var transaction = await _accountRepository.HasTransaction(iban);
 
-        if (transaction == null)
-        {
-            return false;
-        }
-
-        return true;
+        return transaction != null;
     }
 
+    // public async Task<List<TransactionEntity>> GetTransactionsWithIban(string iban)
+    // {
+    //     var allTransactions = new List<TransactionEntity>();
+    //     
+    //     var transactionsAsAggressor = await _accountRepository.GetSenderTransactions(iban);
+    //     var transactionsAsReceiver = await _accountRepository.GetReceiverTransactions(iban);
+    //     
+    //     allTransactions.AddRange(transactionsAsAggressor);
+    //     allTransactions.AddRange(transactionsAsReceiver);
+    //
+    //     return allTransactions;
+    // }
     public async Task<List<TransactionEntity>> GetTransactionsWithIban(string iban)
     {
-        var allTransactions = new List<TransactionEntity>();
-        
-        var transactionsAsAggressor = await _accountRepository.GetSenderTransactions(iban);
-        var transactionsAsReceiver = await _accountRepository.GetReceiverTransactions(iban);
-        
-        allTransactions.AddRange(transactionsAsAggressor);
-        allTransactions.AddRange(transactionsAsReceiver);
+        var transactionsAsAggressorTask = _accountRepository.GetSenderTransactions(iban);
+        var transactionsAsReceiverTask = _accountRepository.GetReceiverTransactions(iban);
 
-        return allTransactions;
+        await Task.WhenAll(transactionsAsAggressorTask, transactionsAsReceiverTask);
+
+        var allTransactions = new HashSet<TransactionEntity>(transactionsAsAggressorTask.Result);
+        allTransactions.UnionWith(transactionsAsReceiverTask.Result);
+
+        return allTransactions.ToList();
     }
+
 }

@@ -5,7 +5,6 @@ namespace InternetBank.Db.Db.Repositories;
 
 public interface ICardRepository
 {
-    Task<CardEntity> FindCardEntityByCardNumberAsync(string cardNumber);
     Task LinkWithAccount(string iban, Guid cardId);
     Task CardNumberUsage(string cardNumber);
     Task<CardEntity?> GetCardWithIban(string iban);
@@ -19,16 +18,7 @@ public class CardRepository : ICardRepository
     {
         _db = db;
     }
-
-    public async Task<CardEntity> FindCardEntityByCardNumberAsync(string cardNumber)
-    {
-        var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
-
-        if (card == null) throw new ArgumentException("Card entity not found with the given card number.");
-
-        return card;
-    }
-
+    
     public async Task CardNumberUsage(string cardNumber)
     {
         var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);

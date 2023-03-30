@@ -13,7 +13,7 @@ public interface ITransactionRepository
 public class TransactionRepository : ITransactionRepository
 {
     private readonly AppDbContext _db;
-    private const string withdrawalType = "ATM";
+    private const string WithdrawalType = "ATM";
 
     public TransactionRepository(AppDbContext db)
     {
@@ -41,24 +41,12 @@ public class TransactionRepository : ITransactionRepository
 
         //Retrieve the withdrawals for the user's accounts in the last 24 hours
         var withdrawalsInLast24Hours =  _db.Transaction.AsEnumerable()
-            .Where(t => userAccounts.Any(a => a.Iban == t.ReceiverIban) && t.Type == withdrawalType && t.TransactionTime >=  DateTimeOffset.UtcNow.AddDays(-1))
+            .Where(t => userAccounts.Any(a => a.Iban == t.ReceiverIban) && t.Type == WithdrawalType && t.TransactionTime >=  DateTimeOffset.UtcNow.AddDays(-1))
             .Sum(t => t.Amount);
-        
-        // var withdrawalsInLast24Hours = await _db.Account
-        //     .Join(
-        //         _db.Transaction,
-        //         a => a.Iban,
-        //         transactionAccounts => transactionAccounts.ReceiverIban,
-        //         (a, transactionAccounts) => new { Account = a, Transaction = transactionAccounts }
-        //     )
-        //     .Where(joinedEntities  => joinedEntities .Account.Iban == iban && joinedEntities .Transaction.Type == WithdrawalType && joinedEntities .Transaction.TransactionTime >= DateTimeOffset.UtcNow.AddDays(-1))
-        //     .SumAsync(joinedEntities => joinedEntities.Transaction.Amount);
-        
         
         return withdrawalsInLast24Hours;
     }
-
-
+    
     public async Task AddTransactionInDb(TransactionEntity entity)
     {
         await _db.Transaction.AddAsync(entity);

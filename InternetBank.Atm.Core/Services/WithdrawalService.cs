@@ -41,7 +41,6 @@ public class WithdrawalService : IWithdrawalService
         if (account.Balance < withdrawAmount) throw new InvalidOperationException("Insufficient funds.");
 
         // Check if the withdrawal amount exceeds the daily limit
-        // const decimal dailyLimit = 10000m;
         var dailyLimit = account.CurrencyCode.ToUpper() switch
         {
             "GEL" => DailyLimitInGel,

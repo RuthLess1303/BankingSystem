@@ -6,7 +6,7 @@ namespace InternetBank.Atm.Api.Controllers;
 
 [ApiController]
 [Route("api/atm")]
-public class AtmController : Controller
+public class AtmController : ControllerBase
 {
     private readonly IBalanceService _balanceService;
     private readonly ICardPinService _cardPinService;
@@ -23,21 +23,21 @@ public class AtmController : Controller
     }
     
     [HttpPost("withdraw")]
-    public async Task<OkResult> Withdraw([FromBody]WithdrawalRequest request)
+    public async Task<IActionResult> Withdraw([FromBody]WithdrawalRequest request)
     {
         await _withdrawalService.Withdraw(request);
         return Ok();
     }
     
     [HttpPost("see-balance")]
-    public async Task<OkObjectResult> SeeBalance([FromBody]AuthorizeCardRequest request)
+    public async Task<IActionResult> SeeBalance([FromBody]AuthorizeCardRequest request)
     {
         var balance = await _balanceService.SeeBalance(request);
         return Ok(balance);
     }
     
     [HttpPost("change-pin")]
-    public async Task<OkResult> ChangePin([FromBody]ChangePinRequest request)
+    public async Task<IActionResult> ChangePin([FromBody]ChangePinRequest request)
     {
         await _cardPinService.ChangeCardPin(request);
         return Ok();

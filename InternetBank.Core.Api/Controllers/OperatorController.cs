@@ -7,6 +7,7 @@ namespace InternetBank.Core.Api.Controllers;
 
 [ApiController]
 [Route("api/operator")]
+[Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
 public class OperatorController : ControllerBase
 {
     private readonly IUserService _userService;

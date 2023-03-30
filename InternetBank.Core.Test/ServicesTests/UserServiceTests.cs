@@ -174,46 +174,77 @@ namespace InternetBank.Core.Test.ServicesTests;
 [TestFixture]
 public class UserServiceTests
 {
+    private AppDbContext _dbContext;
+    private IUserRepository _userRepository;
+    private UserManager<UserEntity> _userManager;
+    private IPropertyValidations _propertyValidations;
+    private IUserService _userService;
+    
     [SetUp]
     public async Task SetUp()
     {
-        // Set up an in-memory database for testing
+        // // Set up an in-memory database for testing
+        // var options = new DbContextOptionsBuilder<AppDbContext>()
+        //     .UseInMemoryDatabase("InternetBank")
+        //     .Options;
+        // _dbContext = new AppDbContext(options);
+        // await _dbContext.Database.EnsureCreatedAsync();
+        //
+        //
+        // // Set up the user manager
+        // var userStore = new UserStore<UserEntity, IdentityRole<int>, AppDbContext, int>(_dbContext);
+        // var passwordHasher = new PasswordHasher<UserEntity>();
+        // var userValidators = new List<IUserValidator<UserEntity>>();
+        // var passwordValidators = new List<IPasswordValidator<UserEntity>>();
+        // var keyNormalizer = new UpperInvariantLookupNormalizer();
+        // var errors = new IdentityErrorDescriber();
+        // var services = new ServiceCollection();
+        // services.AddSingleton<ILogger<UserManager<UserEntity>>>(NullLogger<UserManager<UserEntity>>.Instance);
+        //
+        // services.AddScoped<IRoleStore<IdentityRole<Guid>>, RoleStore<IdentityRole<Guid>, AppDbContext, Guid>>();
+        // services.AddScoped<RoleManager<IdentityRole<Guid>>>();
+        // _userManager = new UserManager<UserEntity>(userStore, null, passwordHasher, userValidators, passwordValidators,
+        //     keyNormalizer, errors, null, null);
+        //
+        // // Set up the user service
+        // var propertyValidations = new PropertyValidations(
+        //     new CurrencyRepository(_dbContext),
+        //     new UserRepository(_dbContext, new UserManager<UserEntity>(
+        //         userStore,
+        //         null, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, null, null)),
+        //     new AccountRepository(_dbContext),
+        //     new CardRepository(_dbContext)
+        // );
+        // var userRepository = new UserRepository(_dbContext, _userManager);
+        // var accountRepository = new AccountRepository(_dbContext);
+        // var cardRepository = new CardRepository(_dbContext);
+        //  _userService = new UserService(propertyValidations, userRepository, _userManager);
+        //  
+         
+         
         var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .UseInMemoryDatabase(databaseName: "InternetBank")
             .Options;
         _dbContext = new AppDbContext(options);
-        await _dbContext.Database.EnsureCreatedAsync();
-
-
-        // Set up the user manager
+        
+        
         var userStore = new UserStore<UserEntity, IdentityRole<int>, AppDbContext, int>(_dbContext);
         var passwordHasher = new PasswordHasher<UserEntity>();
         var userValidators = new List<IUserValidator<UserEntity>>();
         var passwordValidators = new List<IPasswordValidator<UserEntity>>();
         var keyNormalizer = new UpperInvariantLookupNormalizer();
         var errors = new IdentityErrorDescriber();
-        var services = new ServiceCollection();
-        services.AddSingleton<ILogger<UserManager<UserEntity>>>(NullLogger<UserManager<UserEntity>>.Instance);
-
-        services.AddScoped<IRoleStore<IdentityRole<Guid>>, RoleStore<IdentityRole<Guid>, AppDbContext, Guid>>();
-        services.AddScoped<RoleManager<IdentityRole<Guid>>>();
+        
         _userManager = new UserManager<UserEntity>(userStore, null, passwordHasher, userValidators, passwordValidators,
             keyNormalizer, errors, null, null);
-
-        // Set up the user service
         var propertyValidations = new PropertyValidations(
             new CurrencyRepository(_dbContext),
-            new UserRepository(_dbContext, new UserManager<UserEntity>(
-                userStore,
-                null, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, null, null)),
+            new UserRepository(_dbContext, _userManager),
             new AccountRepository(_dbContext),
             new CardRepository(_dbContext)
         );
-        var userRepository = new UserRepository(_dbContext, _userManager);
-        var accountRepository = new AccountRepository(_dbContext);
-        var cardRepository = new CardRepository(_dbContext);
-        // _userService = new UserService(propertyValidations, userRepository, accountRepository, _userManager,
-        //     cardRepository);
+        _userRepository = new UserRepository(_dbContext,_userManager);
+        _userService = new UserService(propertyValidations, _userRepository, _userManager);
     }
 
     [TearDown]
@@ -223,63 +254,29 @@ public class UserServiceTests
         await _dbContext.Database.EnsureDeletedAsync();
     }
 
-    private AppDbContext _dbContext;
-    private UserManager<UserEntity> _userManager;
-    private IUserService _userService;
-
     [Test]
     public async Task Register_Should_Register_New_User()
     {
         // Arrange
         var request = new RegisterUserRequest
         {
-            Email = "test@example.com",
-            Password = "P@ssw0rd",
             PrivateNumber = "12345678901",
             Name = "John",
-            Surname = "Doe"
+            Surname = "Doe",
+            Email = "johndoe@example.com",
+            Password = "Password123!"
         };
 
         // Act
         await _userService.Register(request);
 
         // Assert
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
-        Assert.IsNotNull(user);
+        // var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        var user = await _userRepository.FindWithEmail(request.Email);
+        Assert.That(user, Is.Not.Null);
         Assert.AreEqual(request.PrivateNumber, user.PrivateNumber);
         Assert.AreEqual(request.Name, user.FirstName);
         Assert.AreEqual(request.Surname, user.LastName);
     }
-
-    [Test]
-    public async Task CreateAccount_Should_Create_New_Account()
-    {
-        // Arrange
-        var user = new UserEntity
-        {
-            Email = "test@example.com",
-            UserName = "test@example.com",
-            PrivateNumber = "12345678901",
-            FirstName = "John",
-            LastName = "Doe"
-        };
-        await _userManager.CreateAsync(user, "P@ssw0rd");
-        var request = new CreateAccountRequest
-        {
-            PrivateNumber = user.PrivateNumber,
-            Iban = "GE60TB7523316094900002",
-            CurrencyCode = "GEL",
-            Amount = 1000
-        };
-
-        // Act
-        // await _userService.CreateAccount(request);
-
-        // Assert
-        var account = await _dbContext.Account.FirstOrDefaultAsync(a => a.Iban == request.Iban);
-        Assert.IsNotNull(account);
-        Assert.AreEqual(request.PrivateNumber, account.PrivateNumber);
-        Assert.AreEqual(request.CurrencyCode, account.CurrencyCode);
-        Assert.AreEqual(request.Amount, account.Balance);
-    }
+    
 }

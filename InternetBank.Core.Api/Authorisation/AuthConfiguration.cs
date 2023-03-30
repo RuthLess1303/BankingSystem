@@ -19,7 +19,7 @@ public static class AuthConfigurator
         {
             s.Issuer = issuer;
             s.Audience = audience;
-            s.SecrectKey = key;
+            s.SecretKey = key;
         });
         builder.Services.AddTransient<TokenGenerator>();
 

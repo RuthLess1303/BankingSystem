@@ -13,7 +13,6 @@ public interface ITransactionRepository
 public class TransactionRepository : ITransactionRepository
 {
     private readonly AppDbContext _db;
-
     public TransactionRepository(AppDbContext db)
     {
         _db = db;
@@ -32,10 +31,14 @@ public class TransactionRepository : ITransactionRepository
     
     public async Task MakeTransactionWithFee(TransactionRequest request, decimal convertedAmount)
     {
+        const decimal transactionFeePercentage = 1.01M; 
+        const decimal transactionFeeAmount = 0.5M;
+        
         var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.SenderIban);
         var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
 
-        aggressor.Balance -= request.Amount * (decimal)1.01 + (decimal)0.5;
+        const decimal transactionFee = transactionFeePercentage + transactionFeeAmount;
+        aggressor.Balance -= request.Amount * transactionFee;
         receiver.Balance += convertedAmount;
         
         await _db.SaveChangesAsync();

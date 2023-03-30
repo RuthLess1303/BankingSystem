@@ -270,7 +270,7 @@ namespace InternetBank.Db.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3667582c-1d93-4407-992a-8b4c494cdd7e", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, null, null, "AQAAAAIAAYagAAAAEOQt3gCUA9Si19OsVM++0a+49vBER1LbflHAKf5OmCgeA3emR87Q9cPxnYGPofp9Rw==", null, false, "01000000003", null, false, "operator@bank.com" });
 
-            migrationBuilder.InsertData(
+                migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[] { 2, 1 });

@@ -15,11 +15,11 @@ public class TokenGenerator
         _settings = settings.Value;
     }
     
-    public string Generate(string userId, IList<string> roles)
+    public string Generate(string userId, IEnumerable<string> roles)
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userId)
+            new(JwtRegisteredClaimNames.Sub, userId)
         };
 
         foreach (var role in roles)
@@ -27,14 +27,14 @@ public class TokenGenerator
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecrectKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             issuer: _settings.Issuer,
             audience: _settings.Audience,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(60),
+            expires: DateTime.UtcNow.AddMinutes(60),
             signingCredentials: credentials);
 
         var tokenGenerator = new JwtSecurityTokenHandler();

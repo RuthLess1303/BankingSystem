@@ -29,13 +29,8 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody]LoginRequest request)
     {
         var user = await _userService.Login(request);
-        var u = await _userManager.GetRolesAsync(user);
-        foreach (var role in u)
-        {
-            Console.WriteLine(role);
-        }
-        
         var roles = await _userManager.GetRolesAsync(user);
-        return Ok(_tokenGenerator.Generate(user.Id.ToString(), roles));
+        var token = _tokenGenerator.Generate(user.Id.ToString(), roles);
+        return Ok(token);
     }
 }
