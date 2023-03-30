@@ -42,6 +42,8 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
             Id = 1,
             Email = userName,
             UserName = userName,
+            NormalizedEmail = userName.ToUpper(),
+            NormalizedUserName = userName.ToUpper(),
             FirstName = "example",
             LastName = "exampleLastname",
             PrivateNumber = "01000000003"

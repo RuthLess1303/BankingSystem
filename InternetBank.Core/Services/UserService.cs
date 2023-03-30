@@ -36,7 +36,11 @@ public class UserService : IUserService
 
     public async Task<UserEntity> Login(LoginRequest request)
     {
-        var user = await _userRepository.FindWithEmail(request.Email);
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
         
         var checkPassword = await _userManager.CheckPasswordAsync(user, request.Password);
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InternetBank.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230328120958_new")]
-    partial class @new
+    [Migration("20230330130423_normalized_properties_added_for_seed")]
+    partial class normalized_properties_added_for_seed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -355,14 +355,16 @@ namespace InternetBank.Db.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "3667582c-1d93-4407-992a-8b4c494cdd7e",
+                            ConcurrencyStamp = "9a47064a-46ce-42f7-ae54-a4b7c790890e",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
                             FirstName = "example",
                             LastName = "exampleLastname",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEOQt3gCUA9Si19OsVM++0a+49vBER1LbflHAKf5OmCgeA3emR87Q9cPxnYGPofp9Rw==",
+                            NormalizedEmail = "OPERATOR@BANK.COM",
+                            NormalizedUserName = "OPERATOR@BANK.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOuixdhFHHTVzjRSnhU4lIsDXNE89ogJzpYY9/6tHsYUQH3EpsRAVD/PHili5cpakA==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,

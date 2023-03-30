@@ -1,11 +1,9 @@
 ﻿using InternetBank.Core.Api.Authorisation;
 using InternetBank.Core.Services;
-using InternetBank.Db.Db;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace InternetBank.Core.Api.Controllers;
 
