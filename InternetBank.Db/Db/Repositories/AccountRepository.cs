@@ -38,6 +38,7 @@ public class AccountRepository : IAccountRepository
     public async Task<decimal> GetBalance(string iban)
     {
         var account = await GetAccountByIban(iban);
+        
         return account.Balance;
     }
 
@@ -71,11 +72,11 @@ public class AccountRepository : IAccountRepository
     private async Task<AccountEntity> GetAccountByIban(string iban)
     {
         if (string.IsNullOrEmpty(iban))
-            throw new ArgumentException("The IBAN cannot be null or empty");
+            throw new Exception("The IBAN cannot be null or empty");
 
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
         if (account == null)
-            throw new ArgumentException("Could not find account with provided Iban");
+            throw new Exception("Could not find account with provided Iban");
 
         return account;
     }
