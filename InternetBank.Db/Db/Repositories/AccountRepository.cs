@@ -75,8 +75,6 @@ public class AccountRepository : IAccountRepository
             throw new Exception("The IBAN cannot be null or empty");
 
         var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
-        if (account == null)
-            throw new Exception("Could not find account with provided Iban");
 
         return account;
     }

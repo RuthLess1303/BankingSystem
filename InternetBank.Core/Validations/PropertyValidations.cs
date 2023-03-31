@@ -154,7 +154,7 @@ public class PropertyValidations : IPropertyValidations
 
     public void CheckNameOnCard(string nameOnCard)
     {
-        if(Regex.IsMatch(nameOnCard, @"^[0-9]+$") || Regex.IsMatch(nameOnCard, @"^[^\\s0-9]+$"))
+        if(Regex.IsMatch(nameOnCard, "^(?=.*\\d)(?=.*[\\W_]).*$"))
         {
             throw new Exception("Name on card must contain only alphabetical characters");
         }
