@@ -30,7 +30,11 @@ public class AuthController : ControllerBase
     {
         var user = await _userService.Login(request);
         var roles = await _userManager.GetRolesAsync(user);
-        var token = _tokenGenerator.Generate(user.Id.ToString(), roles);
-        return Ok(token);
+        if (roles.Count == 0)
+        {
+            throw new Exception("Role for user was not found");
+        }
+        
+        return Ok(_tokenGenerator.Generate(user.Id.ToString(), roles));
     }
 }

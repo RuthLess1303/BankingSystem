@@ -17,7 +17,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, IdentityRole<int>, int
     public DbSet<CardAccountConnectionEntity> CardAccountConnection { get; set; }
     public DbSet<TransactionEntity> Transaction { get; set; }
     public DbSet<CurrencyEntity> Currency { get; set; }
-    public DbSet<RoleEntity> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,6 +40,8 @@ public class AppDbContext : IdentityDbContext<UserEntity, IdentityRole<int>, int
             Id = 1,
             Email = userName,
             UserName = userName,
+            NormalizedEmail = userName.ToUpper(),
+            NormalizedUserName = userName.ToUpper(),
             FirstName = "example",
             LastName = "exampleLastname",
             PrivateNumber = "01000000003"

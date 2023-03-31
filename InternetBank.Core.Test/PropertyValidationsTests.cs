@@ -58,7 +58,6 @@ public class PropertyValidationsTests
     [TestCase("!22")]
     public void CheckIncorrectCvvFormatValidation(string cvv)
     {
-        // Assert.Th(() => _propertyValidations.CvvValidation(cvv));
         Assert.Throws<Exception>(() => _propertyValidations.CvvValidation(cvv));
     }
     

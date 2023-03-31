@@ -10,7 +10,7 @@ public interface IUserRepository
     Task CreateCard(CardEntity cardEntity);
     Task<UserEntity?> FindWithPrivateNumber(string privateNumber);
     Task<UserEntity?> FindWithId(int id);
-    Task<UserEntity?> FindWithEmail(string email);
+    Task<UserEntity> FindWithEmail(string email);
     Task Register(RegisterUserRequest request);
     Task<UserEntity?> GetUserWithEmail(string email);
     Task<UserEntity?> GetOperatorWithEmail(string email);
@@ -38,9 +38,15 @@ public class UserRepository : IUserRepository
         return  await _db.User.FirstOrDefaultAsync(u => u.Id == id);
     }
     
-    public async Task<UserEntity?> FindWithEmail(string email)
+    public async Task<UserEntity> FindWithEmail(string email)
     {
-        return  await _db.User.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _db.User.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        
+        return user;
     }
 
     public async Task Register(RegisterUserRequest request)
