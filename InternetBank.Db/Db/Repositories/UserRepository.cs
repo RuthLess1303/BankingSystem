@@ -41,11 +41,7 @@ public class UserRepository : IUserRepository
     public async Task<UserEntity> FindWithEmail(string email)
     {
         var user = await _db.User.FirstOrDefaultAsync(u => u.Email == email);
-        if (user == null)
-        {
-            throw new Exception("User not found");
-        }
-        
+
         return user;
     }
 

@@ -46,7 +46,7 @@ public class CardService : ICardService
         _propertyValidations.CheckIbanFormat(request.Iban);
         _propertyValidations.CheckNameOnCard(request.NameOnCard);
         await _propertyValidations.CheckCardNumberFormat(request.CardNumber);
-        var account = _accountRepository.GetAccountWithIban(request.Iban);
+        var account = await _accountRepository.GetAccountWithIban(request.Iban);
         if (account == null)
         {
             throw new Exception("Iban is not in use");

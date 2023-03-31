@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InternetBank.Db.Db;
 
-public class AppDbContext : IdentityDbContext<UserEntity, IdentityRole<int>, int>
+public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
 {
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
     {
