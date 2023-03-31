@@ -62,7 +62,7 @@ public class TransactionService : ITransactionService
             transactionEntity.Type = "Inner";
             transactionEntity.Fee = 0;
             transactionEntity.GrossAmount = request.Amount;
-            transactionEntity.TransactionTime = DateTime.Now;
+            transactionEntity.TransactionTime = DateTimeOffset.Now;
             await _transactionRepository.AddDataInDb(transactionEntity);
             return;
         }
@@ -78,7 +78,7 @@ public class TransactionService : ITransactionService
         transactionEntity.Type = "Outside";
         transactionEntity.Fee = fee;
         transactionEntity.GrossAmount = grossAmount;
-        transactionEntity.TransactionTime = DateTime.Now;
+        transactionEntity.TransactionTime = DateTimeOffset.Now;
         await _transactionRepository.AddDataInDb(transactionEntity);
     }
     

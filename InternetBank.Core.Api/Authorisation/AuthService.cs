@@ -15,11 +15,3 @@ public class AuthService : IAuthService
         return _counter++.ToString();
     }
 }
-
-public class FakeAuthService : IAuthService
-{
-    public string Login(string email, string password)
-    {
-        return "fake token";
-    }
-}

@@ -76,7 +76,7 @@ public class TransactionRepositoryTests
             ReceiverIban = iban,
             Type = "ATM",
             Amount = 100,
-            TransactionTime = DateTime.UtcNow.AddDays(-2),
+            TransactionTime = DateTime.UtcNow.AddDays(-0.7),
             CurrencyCode = "Usd"
         };
         await _dbContext.Transaction.AddRangeAsync(transaction1, transaction2);
@@ -86,7 +86,7 @@ public class TransactionRepositoryTests
         var result = await _transactionRepository.GetWithdrawalAmountInLast24HoursAsync(iban);
 
         // Assert
-        Assert.That(result, Is.EqualTo(50));
+        Assert.That(result, Is.EqualTo(150));
     }
 
     [Test]

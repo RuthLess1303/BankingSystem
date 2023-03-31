@@ -25,60 +25,58 @@ public class AccountRepository : IAccountRepository
 
     public async Task<string> GetAccountCurrencyCode(string iban)
     {
-        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
-        if (account == null)
-        {
-            throw new Exception("Could not find account with provided Iban");
-        }
-        
-        var currencyCode = account.CurrencyCode;
-
-        return currencyCode;
+        var account = await GetAccountByIban(iban);
+        return account.CurrencyCode;
     }
 
     public async Task<AccountEntity?> GetAccountWithIban(string iban)
     {
-        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
-
+        var account = await GetAccountByIban(iban);
         return account;
     }
 
     public async Task<decimal> GetBalance(string iban)
     {
-        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
-        if (account == null)
-        {
-            throw new Exception("Could not find account with provided Iban");
-        }
-        var amount = account.Balance;
-        
-        return amount;
+        var account = await GetAccountByIban(iban);
+        return account.Balance;
     }
 
     public async Task<List<TransactionEntity>> GetSenderTransactions(string iban)
     {
-        var aggressorTransactions = await _db.Transaction.Where(t => t.SenderIban == iban).ToListAsync();
-
-        return aggressorTransactions;
+        var senderTransactions = await _db.Transaction.Where(t => t.SenderIban == iban).ToListAsync();
+        return senderTransactions;
     }
     
     public async Task<List<TransactionEntity>> GetReceiverTransactions(string iban)
     {
         var receiverTransactions = await _db.Transaction.Where(t => t.ReceiverIban == iban).ToListAsync();
-
         return receiverTransactions;
     }
 
     public async Task<TransactionEntity?> HasTransaction(string iban)
     {
         var transaction = await _db.Transaction.FirstOrDefaultAsync(t => t.ReceiverIban == iban);
-
         return transaction;
     }
 
     public async Task Create(AccountEntity accountEntity)
     {
-        await _db.AddAsync(accountEntity);
+        if (accountEntity == null)
+            throw new ArgumentNullException(nameof(accountEntity));
+        
+        await _db.Account.AddAsync(accountEntity);
         await _db.SaveChangesAsync();
+    }
+    
+    private async Task<AccountEntity> GetAccountByIban(string iban)
+    {
+        if (string.IsNullOrEmpty(iban))
+            throw new ArgumentException("The IBAN cannot be null or empty");
+
+        var account = await _db.Account.FirstOrDefaultAsync(a => a.Iban == iban);
+        if (account == null)
+            throw new ArgumentException("Could not find account with provided Iban");
+
+        return account;
     }
 }

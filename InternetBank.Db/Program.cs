@@ -2,4 +2,4 @@
 using Microsoft.EntityFrameworkCore;
 
 var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-optionsBuilder.UseSqlServer("Server=localhost;Database=MobileBankDb;User Id=sa;Password=wavedi123;Encrypt=false;");
+optionsBuilder.UseSqlServer("Server=localhost;Database=MobileBankDb;User Id=nika;Password=123;Encrypt=false;");

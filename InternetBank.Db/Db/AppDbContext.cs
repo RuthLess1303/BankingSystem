@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InternetBank.Db.Db;
 
-public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
+public class AppDbContext : IdentityDbContext<UserEntity, IdentityRole<int>, int>
 {
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
     {
@@ -29,11 +29,9 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         
         base.OnModelCreating(builder);
         
-        builder.Entity<RoleEntity>().HasData(new[]
-        {
+        builder.Entity<RoleEntity>().HasData(
             new RoleEntity {  Id = 1,  Name = "api-user", NormalizedName = "API-USER"},
-            new RoleEntity {  Id = 2,  Name = "api-operator", NormalizedName = "API-OPERATOR"}
-        });
+            new RoleEntity {  Id = 2,  Name = "api-operator", NormalizedName = "API-OPERATOR"});
         
         var userName = "operator@bank.com";
         var password = "abc123";
@@ -53,9 +51,9 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         operatorUser.PasswordHash = hasher.HashPassword(operatorUser, password);
         builder.Entity<UserEntity>().HasData(operatorUser);
         
-        builder.Entity<IdentityUserRole<int>>().HasData(new []
-        {
-            new IdentityUserRole<int> { UserId = operatorUser.Id, RoleId = 2 }
-        });
+        builder.Entity<IdentityUserRole<int>>()
+            .HasData(new IdentityUserRole<int> { UserId = operatorUser.Id, RoleId = 2 });
+        
+        base.OnModelCreating(builder);
     }
 }
