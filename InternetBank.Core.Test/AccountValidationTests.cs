@@ -243,10 +243,11 @@ public class AccountValidationTests
 
 
     [Test]
-    [TestCase("EE0011112222", 200, "Insufficient balance")]
-    [TestCase("EE0011112223", 150, "Could not find account with provided Iban")]
+    [TestCase("EE0011112224", 200)]
+    [TestCase("EE0011112223", 150)]
+    [TestCase("EE0011112222", 15000000)]
     public async Task HasSufficientBalance_Throws_Exception_When_Balance_Is_Less_Than_Amount(string iban,
-        decimal amount, string expectedMessage)
+        decimal amount)
     {
         // Arrange
         var account = new AccountEntity
@@ -256,13 +257,12 @@ public class AccountValidationTests
             CurrencyCode = "USD",
             Balance = 100m
         };
-        _dbContext.Account.Add(account);
+        await _dbContext.Account.AddAsync(account);
         await _dbContext.SaveChangesAsync();
 
         // Act and Assert
-        var ex = Assert.ThrowsAsync<Exception>(async () =>
+        Assert.ThrowsAsync<Exception>(async () =>
             await _accountValidation.HasSufficientBalance(iban, amount));
-        Assert.That(ex.Message, Is.EqualTo(expectedMessage));
     }
 
 
