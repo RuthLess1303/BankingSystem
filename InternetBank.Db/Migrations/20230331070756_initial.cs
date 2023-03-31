@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InternetBank.Db.Migrations
 {
     /// <inheritdoc />
-    public partial class normalized_properties_added_for_seed : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -268,7 +268,7 @@ namespace InternetBank.Db.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "9a47064a-46ce-42f7-ae54-a4b7c790890e", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEOuixdhFHHTVzjRSnhU4lIsDXNE89ogJzpYY9/6tHsYUQH3EpsRAVD/PHili5cpakA==", null, false, "01000000003", null, false, "operator@bank.com" });
+                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "329059f2-dd65-4457-9b2a-b50a45ddbe87", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEA2yC7D+eNlTOsJJcFBa5c57yoMEQHTrJUVUSjjDFCvwfyAmVso8EvdXU62lx2rWnQ==", null, false, "01000000003", null, false, "operator@bank.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

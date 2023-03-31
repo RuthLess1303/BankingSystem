@@ -43,7 +43,6 @@ public class UserService : IUserService
         }
         
         var checkPassword = await _userManager.CheckPasswordAsync(user, request.Password);
-
         if (!checkPassword)
         {
             throw new Exception($"Incorrect credentials");
