@@ -15,16 +15,13 @@ public class AccountServiceTests
     [SetUp]
     public async Task SetUp()
     {
-        // Set up the in-memory database
         _options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase("InternetBankTestDb")
             .Options;
 
         _dbContext = new AppDbContext(_options);
         await _dbContext.Database.EnsureCreatedAsync();
-
-        // Add test data to the database
-
+        
         var account = new AccountEntity
             { Iban = "NL12ABCD345678910", PrivateNumber = "1234567890", CurrencyCode = "GEL", Balance = 50 };
         _dbContext.Account.Add(account);
@@ -78,17 +75,14 @@ public class AccountServiceTests
     private DbContextOptions<AppDbContext> _options;
     private AppDbContext _dbContext;
 
-    [Test]
-    public async Task SeeAccount_ReturnsBalanceAndTransactions_WhenTransactionsExist()
+    [TestCase("GB12CDEF345678910")]
+    [TestCase("GE12CDEF882900129")]
+    [TestCase("GE12CD34225678910")]
+    public async Task SeeAccount_ReturnsBalanceAndTransactions_WhenTransactionsExist(string iban)
     {
-        // Arrange
-        const string iban = "NL12ABCD345678910";
-
-        // Act
         var result = await _accountService.SeeAccount(iban);
         Assert.Multiple(() =>
         {
-            // Assert
             Assert.That(result.Item1, Is.EqualTo(50));
             Assert.That(result.Item2?.Count, Is.EqualTo(2));
         });
@@ -99,13 +93,11 @@ public class AccountServiceTests
         });
     }
 
-    [Test]
-    public Task SeeAccount_ReturnsNull_WhenIbanDoesNotExist()
+    [TestCase("GB12CDEF345678910")]
+    [TestCase("GE12CDEF882900129")]
+    [TestCase("GE12CD34225678910")]
+    public Task SeeAccount_ReturnsNull_WhenIbanDoesNotExist(string iban)
     {
-        // Arrange
-        var iban = "GB12CDEF345678910";
-
-        // Assert
         Assert.ThrowsAsync<Exception>(() => _accountService.SeeAccount(iban));
         return Task.CompletedTask;
     }
