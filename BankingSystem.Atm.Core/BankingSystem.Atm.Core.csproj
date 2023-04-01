@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>BankingSystem.Atm.Core</AssemblyName>
+        <RootNamespace>BankingSystem.Atm.Core</RootNamespace>
+        <Company>BankingSystem.Atm.Core</Company>
+        <Product>BankingSystem.Atm.Core</Product>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\InternetBank.Core\InternetBank.Core.csproj" />
+    </ItemGroup>
+
+</Project>
