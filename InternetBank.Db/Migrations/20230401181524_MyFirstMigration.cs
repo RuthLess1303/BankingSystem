@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InternetBank.Db.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class MyFirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -120,8 +120,8 @@ namespace InternetBank.Db.Migrations
                     Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Diff = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ValidFromDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ValidFromDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -268,7 +268,7 @@ namespace InternetBank.Db.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "dd40b7f0-f841-4ce4-9180-13ece157c907", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEK9ccf5+uOZKkSBNG0gmRHt8m//Gw0xFkMkVx2oPdPJ8PIJGlI2UfmqcnsShfs58hQ==", null, false, "01000000003", null, false, "operator@bank.com" });
+                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "4cc147e9-208f-43bd-898e-fff3a991a48e", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEHnie3VU9pFO/D0aT/oOaGndyqs7+bJc5N4hHK8AA3lWRWT01gyig+pG+wGyypiq/g==", null, false, "01000000003", null, false, "operator@bank.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

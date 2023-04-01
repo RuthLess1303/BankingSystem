@@ -125,9 +125,9 @@ namespace InternetBank.Test.ServicesTests
                 DiffFormatted = 0.0000M,
                 Rate = 1.2M,
                 Name = "აშშ დოლარი",
-                Diff = -0.0004M,
-                Date = DateTime.UtcNow.AddDays(-2),
-                ValidFromDate = DateTime.UtcNow.AddDays(-1)
+                Diff = -0.004M,
+                Date = DateTimeOffset.UtcNow.AddDays(-2),
+                ValidFromDate = DateTimeOffset.UtcNow.AddDays(-1)
             };
             _dbContext.Currency.Add(currency);
             await _dbContext.User.AddRangeAsync(user1,user2);

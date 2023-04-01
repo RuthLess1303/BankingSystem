@@ -10,6 +10,6 @@ public class CurrencyEntity
     public decimal Rate { get; set; }
     public string Name { get; set; }
     public decimal Diff { get; set; }
-    public DateTime Date { get; set; }
-    public DateTime ValidFromDate { get; set; }
+    public DateTimeOffset Date { get; set; }
+    public DateTimeOffset ValidFromDate { get; set; }
 }
