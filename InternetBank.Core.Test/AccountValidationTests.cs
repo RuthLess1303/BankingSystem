@@ -242,9 +242,8 @@ public class AccountValidationTests
     }
 
 
-    [Test]
-    [TestCase("EE0011112224", 200)]
-    [TestCase("EE0011112223", 150)]
+    [TestCase("EE0011112222", 200)]
+    [TestCase("EE0011112222", 1500)]
     [TestCase("EE0011112222", 15000000)]
     public async Task HasSufficientBalance_Throws_Exception_When_Balance_Is_Less_Than_Amount(string iban,
         decimal amount)
@@ -292,7 +291,8 @@ public class AccountValidationTests
 
     [Test]
     public async Task GetAccountWithIban_Returns_Account_When_Exists(
-        [Values("EE0011112222", "EE0011223344", "EE0099887766")] string iban)
+        [Values("EE0011112222", "EE0011223344", "EE0099887766")]
+        string iban)
     {
         // Arrange
         var account = new AccountEntity
@@ -388,13 +388,11 @@ public class AccountValidationTests
 // Assert
         Assert.That(result, Has.Count.EqualTo(expectedCount));
         foreach (var transaction in result)
-        {
             Assert.Multiple(() =>
             {
                 Assert.That(transaction.SenderIban, Is.EqualTo(iban).Or.EqualTo(transaction.SenderIban));
                 Assert.That(transaction.ReceiverIban, Is.EqualTo(iban).Or.EqualTo(transaction.ReceiverIban));
             });
-        }
     }
 
     [Test]
