@@ -64,7 +64,6 @@ public class AccountValidationTests
     [TestCase(-1)]
     public Task OnCreate_ThrowsException_WhenAmountIsNegative(decimal amount)
     {
-// Arrange
         var request = new CreateAccountRequest
         {
             Amount = amount,
@@ -88,7 +87,6 @@ public class AccountValidationTests
     [TestCase("EE001111222$")]
     public Task OnCreate_ThrowsException_WhenIbanIsInvalid(string iban)
     {
-        // Arrange
         var request = new CreateAccountRequest
         {
             Amount = 1000,
@@ -110,7 +108,6 @@ public class AccountValidationTests
         string currencyCode,
         string privateNumber)
     {
-        // Arrange
         var request = new CreateAccountRequest
         {
             Amount = amount,
@@ -118,8 +115,6 @@ public class AccountValidationTests
             CurrencyCode = currencyCode,
             PrivateNumber = privateNumber
         };
-
-        // Act & Assert
         Assert.ThrowsAsync<Exception>(() => _accountValidation.OnCreate(request));
         return Task.CompletedTask;
     }
@@ -130,7 +125,6 @@ public class AccountValidationTests
     [TestCase("01000000008")]
     public async Task OnCreate_ThrowsException_WhenPrivateNumberIsAlreadyUsed(string privateNumber)
     {
-        // Arrange
         var dbContext = new AppDbContext(_options);
         
 
@@ -153,7 +147,6 @@ public class AccountValidationTests
 
         _accountValidation = new AccountValidation(_propertyValidations, _accountRepository);
 
-        // Act & Assert
         Assert.ThrowsAsync<Exception>(() => _accountValidation.OnCreate(request));
     }
 
@@ -163,7 +156,6 @@ public class AccountValidationTests
     [TestCase("EE3011112222","42345678901")]
     public async Task AccountWithIbanExists_Returns_True_When_Account_Exists(string iban, string privateNumber)
     {
-        // Arrange
         var account = new AccountEntity
         {
             Iban = iban,
@@ -173,10 +165,8 @@ public class AccountValidationTests
         await _dbContext.Account.AddAsync(account);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _accountValidation.AccountWithIbanExists(iban);
 
-        // Assert
         Assert.That(result, Is.True);
     }
     
@@ -188,7 +178,6 @@ public class AccountValidationTests
     public async Task IsCurrencySame_Returns_Correct_Result(string aggressorIban, string receiverIban,
         string aggressorCurrencyCode, string receiverCurrencyCode, bool expectedResult)
     {
-        // Arrange
         var aggressorAccount = new AccountEntity
         {
             Iban = aggressorIban,
@@ -204,17 +193,14 @@ public class AccountValidationTests
         _dbContext.Account.AddRange(aggressorAccount, receiverAccount);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _accountValidation.IsCurrencySame(aggressorIban, receiverIban);
 
-        // Assert
         Assert.That(result, Is.EqualTo(expectedResult));
     }
 
     [Test]
     public async Task IsCurrencySame_Returns_CorrectResult()
     {
-        // Arrange
         const string aggressorIban = "EE0011112222";
         const string receiverIban = "EE0033334444";
         var aggressorAccount = new AccountEntity
@@ -232,7 +218,6 @@ public class AccountValidationTests
         _dbContext.Account.AddRange(aggressorAccount, receiverAccount);
         await _dbContext.SaveChangesAsync();
 
-        // Act & Assert
         Assert.That(await _accountValidation.IsCurrencySame(aggressorIban, receiverIban), Is.False);
 
         aggressorAccount.CurrencyCode = "EUR";
@@ -254,7 +239,6 @@ public class AccountValidationTests
     public async Task HasSufficientBalance_Throws_Exception_When_Balance_Is_Less_Than_Amount(string iban,
         decimal amount)
     {
-        // Arrange
         var account = new AccountEntity
         {
             Iban = "EE0011112222",
@@ -265,7 +249,6 @@ public class AccountValidationTests
         await _dbContext.Account.AddAsync(account);
         await _dbContext.SaveChangesAsync();
 
-        // Act and Assert
         Assert.ThrowsAsync<Exception>(async () =>
             await _accountValidation.HasSufficientBalance(iban, amount));
     }
@@ -274,7 +257,6 @@ public class AccountValidationTests
     [TestCase("EE0011223344", 0)]
     public async Task GetAmountWithIban_Returns_Correct_Balance(string iban, decimal expectedBalance)
     {
-        // Arrange
         var account = new AccountEntity
         {
             Iban = iban,
@@ -285,10 +267,8 @@ public class AccountValidationTests
         _dbContext.Account.Add(account);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _accountValidation.GetAmountWithIban(iban);
 
-        // Assert
         Assert.That(result, Is.EqualTo(expectedBalance));
     }
 
@@ -298,7 +278,6 @@ public class AccountValidationTests
     [TestCase("EE0099887766")]
     public async Task GetAccountWithIban_Returns_Account_When_Exists(string iban)
     {
-        // Arrange
         var account = new AccountEntity
         {
             Iban = iban,
@@ -309,10 +288,8 @@ public class AccountValidationTests
         _dbContext.Account.Add(account);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _accountRepository.GetAccountWithIban(iban);
 
-        // Assert
         Assert.That(result, Is.Not.Null);
         Assert.That(result, Is.InstanceOf<AccountEntity>());
     }
@@ -320,7 +297,6 @@ public class AccountValidationTests
     [Test]
     public async Task HasTransaction_Returns_True_When_Transaction_Exists()
     {
-        // Arrange
         var transaction = new TransactionEntity
         {
             Id = 1,
@@ -338,11 +314,8 @@ public class AccountValidationTests
         _dbContext.Transaction.Add(transaction);
         await _dbContext.SaveChangesAsync();
 
-
-        // Act
         var result = await _accountRepository.HasTransaction("GB29NWBK60161331926821");
 
-        // Assert
         Assert.That(result, Is.Not.Null);
     }
     
@@ -352,7 +325,6 @@ public class AccountValidationTests
     [TestCase("TR987654321098765432109876", 3)]
     public async Task GetTransactionsWithIban_Returns_Correct_Transactions_Count(string iban, int expectedCount)
     {
-// Arrange
         var transaction1 = new TransactionEntity
         {
             SenderIban = iban,
@@ -385,10 +357,8 @@ public class AccountValidationTests
         await _dbContext.Transaction.AddRangeAsync(transaction1, transaction2, transaction3);
         await _dbContext.SaveChangesAsync();
 
-// Act
         var result = await _accountValidation.GetTransactionsWithIban(iban);
 
-// Assert
         Assert.That(result, Has.Count.EqualTo(expectedCount));
         foreach (var transaction in result)
             Assert.Multiple(() =>
@@ -402,7 +372,6 @@ public class AccountValidationTests
     public async Task GetCardWithIban_Returns_Card_When_Exists(string iban, string cardNumber, string cardHolderName,
         string cvv, string pin, string currencyCode, string privateNumber)
     {
-        // Arrange
         var card = new CardEntity
         {
             Id = Guid.NewGuid(),
@@ -434,10 +403,8 @@ public class AccountValidationTests
         _dbContext.CardAccountConnection.Add(cardAccountConnection);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _cardRepository.GetCardWithIban(iban);
 
-        // Assert
         Assert.That(result, Is.Not.Null);
         Assert.Multiple(() =>
         {

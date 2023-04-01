@@ -77,7 +77,6 @@ namespace InternetBank.Core.Test.ServicesTests
         [Test]
         public async Task MakeTransaction_WhenTransactionIsSuccessful_ShouldAddTransactionToDatabase()
         {
-            // Arrange
             var user1 = new UserEntity
             {
                 UserName = "john.doe@example.com",
@@ -141,11 +140,8 @@ namespace InternetBank.Core.Test.ServicesTests
                 ReceiverIban = receiverAccount.Iban,
                 Amount = 500
             };
-
-            // Act
             await _transactionService.MakeTransaction(transactionRequest);
-
-            // Assert
+            
             var transactions = await _dbContext.Transaction.ToListAsync();
             Assert.That(transactions, Has.Count.EqualTo(1));
 

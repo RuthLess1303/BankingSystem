@@ -63,7 +63,6 @@ public class CardServiceTests
     public async Task PrintCardModelProperties_ShouldReturnCorrectString(string cardNumber, string cadHolderName,
         string cvv)
     {
-        // Arrange
         var card = new CardModel
         {
             CardNumber = cardNumber,
@@ -71,11 +70,7 @@ public class CardServiceTests
             Cvv = cvv,
             ExpirationDate = new DateTime(2023, 12, 31)
         };
-
-        // Act
         var result = _cardService.PrintCardModelProperties(card);
-
-        // Assert
         Assert.That(result, Is.EqualTo($"Card Number: {cardNumber}\n" +
                                        $"Name on Card: {cadHolderName}\n" +
                                        $"Cvv: {cvv}\n" +

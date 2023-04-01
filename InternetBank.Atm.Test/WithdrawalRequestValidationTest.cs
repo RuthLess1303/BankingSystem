@@ -24,12 +24,11 @@ public class WithdrawalRequestValidationTests
     [TestCase("4111 1111 1111 111a")]
     [TestCase("")]
     [TestCase(null)]
+    [TestCase("411111111111!!!!")]
     public void ValidateCreditCardNumber_InvalidInput_ReturnsFalse(string input)
     {
-        // Act
         var result = _withdrawalValidation.ValidateCreditCardNumber(input);
 
-        // Assert
         Assert.That(result, Is.False);
     }
 
@@ -46,10 +45,8 @@ public class WithdrawalRequestValidationTests
     [TestCase("5555555555554444")]
     public void ValidateCreditCardNumber_ValidInput_ReturnsTrue(string input)
     {
-        // Act
         var result = _withdrawalValidation.ValidateCreditCardNumber(input);
 
-        // Assert
         Assert.That(result, Is.True);
     }
 }
