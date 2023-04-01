@@ -75,9 +75,7 @@ public class AccountServiceTests
     private DbContextOptions<AppDbContext> _options;
     private AppDbContext _dbContext;
 
-    [TestCase("GB12CDEF345678910")]
-    [TestCase("GE12CDEF882900129")]
-    [TestCase("GE12CD34225678910")]
+    [TestCase("NL12ABCD345678910")]
     public async Task SeeAccount_ReturnsBalanceAndTransactions_WhenTransactionsExist(string iban)
     {
         var result = await _accountService.SeeAccount(iban);
