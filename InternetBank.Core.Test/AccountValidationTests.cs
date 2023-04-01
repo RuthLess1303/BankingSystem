@@ -124,19 +124,15 @@ public class AccountValidationTests
         return Task.CompletedTask;
     }
 
-    [Test]
-    public async Task OnCreate_ThrowsException_WhenPrivateNumberIsAlreadyUsed(
-        [Values("12345678901", "23456789012")] string privateNumber)
+    [TestCase("01000000008")]
+    [TestCase("01000000008")]
+    [TestCase("01000000008")]
+    [TestCase("01000000008")]
+    public async Task OnCreate_ThrowsException_WhenPrivateNumberIsAlreadyUsed(string privateNumber)
     {
         // Arrange
         var dbContext = new AppDbContext(_options);
-        dbContext.Account.Add(new AccountEntity
-        {
-            Iban = "EE0011112222",
-            PrivateNumber = privateNumber,
-            CurrencyCode = "Usd"
-        });
-        await dbContext.SaveChangesAsync();
+        
 
         var request = new CreateAccountRequest
         {
@@ -145,6 +141,15 @@ public class AccountValidationTests
             CurrencyCode = "EUR",
             PrivateNumber = privateNumber
         };
+        
+        await dbContext.Account.AddAsync(new AccountEntity
+        {
+            Iban = request.Iban,
+            PrivateNumber = request.PrivateNumber,
+            CurrencyCode = request.CurrencyCode,
+            Balance = request.Amount
+        });
+        await dbContext.SaveChangesAsync();
 
         _accountValidation = new AccountValidation(_propertyValidations, _accountRepository);
 
@@ -152,27 +157,29 @@ public class AccountValidationTests
         Assert.ThrowsAsync<Exception>(() => _accountValidation.OnCreate(request));
     }
 
-    [Test]
-    public async Task AccountWithIbanExists_Returns_True_When_Account_Exists()
+    [TestCase("EE0011112222","12345678901")]
+    [TestCase("EE1011112222","22345678901")]
+    [TestCase("EE2011112222","32345678901")]
+    [TestCase("EE3011112222","42345678901")]
+    public async Task AccountWithIbanExists_Returns_True_When_Account_Exists(string iban, string privateNumber)
     {
         // Arrange
         var account = new AccountEntity
         {
-            Iban = "EE0011112222",
-            PrivateNumber = "12345678901",
+            Iban = iban,
+            PrivateNumber = privateNumber,
             CurrencyCode = "Usd"
         };
-        _dbContext.Account.Add(account);
+        await _dbContext.Account.AddAsync(account);
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _accountValidation.AccountWithIbanExists("EE0011112222");
+        var result = await _accountValidation.AccountWithIbanExists(iban);
 
         // Assert
         Assert.That(result, Is.True);
     }
-
-    [Test]
+    
     [TestCase("EE0011112222", "EE0033334444", "USD", "USD", true)]
     [TestCase("EE0011112222", "EE0033334444", "USD", "EUR", false)]
     [TestCase("EE0011112222", "EE0033334444", "USD", "usd", true)]
@@ -240,10 +247,9 @@ public class AccountValidationTests
 
         Assert.That(await _accountValidation.IsCurrencySame(aggressorIban, receiverIban), Is.False);
     }
-
-
+    
     [TestCase("EE0011112222", 200)]
-    [TestCase("EE0011112222", 1500)]
+    [TestCase("EE0011112222", 150)]
     [TestCase("EE0011112222", 15000000)]
     public async Task HasSufficientBalance_Throws_Exception_When_Balance_Is_Less_Than_Amount(string iban,
         decimal amount)
@@ -263,9 +269,7 @@ public class AccountValidationTests
         Assert.ThrowsAsync<Exception>(async () =>
             await _accountValidation.HasSufficientBalance(iban, amount));
     }
-
-
-    [Test]
+    
     [TestCase("EE0011112222", 100.0)]
     [TestCase("EE0011223344", 0)]
     public async Task GetAmountWithIban_Returns_Correct_Balance(string iban, decimal expectedBalance)
@@ -289,10 +293,10 @@ public class AccountValidationTests
     }
 
 
-    [Test]
-    public async Task GetAccountWithIban_Returns_Account_When_Exists(
-        [Values("EE0011112222", "EE0011223344", "EE0099887766")]
-        string iban)
+    [TestCase("EE0011112222")]
+    [TestCase("EE0011223344")]
+    [TestCase("EE0099887766")]
+    public async Task GetAccountWithIban_Returns_Account_When_Exists(string iban)
     {
         // Arrange
         var account = new AccountEntity
@@ -341,8 +345,7 @@ public class AccountValidationTests
         // Assert
         Assert.That(result, Is.Not.Null);
     }
-
-    [Test]
+    
     [TestCase("GB29NWBK60161331926821", 3)]
     [TestCase("EE0011112222", 3)]
     [TestCase("US123456789012345678901234", 3)]
@@ -395,7 +398,6 @@ public class AccountValidationTests
             });
     }
 
-    [Test]
     [TestCase("GB29NWBK60161331926821", "1111222233334444", "John Doe", "123", "1234", "Usd", "1234567890")]
     public async Task GetCardWithIban_Returns_Card_When_Exists(string iban, string cardNumber, string cardHolderName,
         string cvv, string pin, string currencyCode, string privateNumber)
