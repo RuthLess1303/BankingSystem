@@ -1,6 +1,5 @@
 using BankingSystem.Atm.Core.Repositories;
 using BankingSystem.Atm.Core.Requests;
-using InternetBank.Atm.Core.Services;
 
 namespace BankingSystem.Atm.Core.Services;
 

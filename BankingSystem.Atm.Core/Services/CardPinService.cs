@@ -1,8 +1,7 @@
 ﻿using BankingSystem.Atm.Core.Repositories;
 using BankingSystem.Atm.Core.Requests;
-using BankingSystem.Atm.Core.Services;
 
-namespace InternetBank.Atm.Core.Services;
+namespace BankingSystem.Atm.Core.Services;
 
 public interface ICardPinService
 {

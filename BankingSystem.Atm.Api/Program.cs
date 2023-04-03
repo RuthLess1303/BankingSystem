@@ -2,7 +2,6 @@ using BankingSystem.Atm.Api.Middlewares;
 using BankingSystem.Atm.Core.Repositories;
 using BankingSystem.Atm.Core.Services;
 using BankingSystem.Atm.Core.Validations;
-using InternetBank.Atm.Core.Services;
 using InternetBank.Db.Db;
 using Microsoft.EntityFrameworkCore;
 

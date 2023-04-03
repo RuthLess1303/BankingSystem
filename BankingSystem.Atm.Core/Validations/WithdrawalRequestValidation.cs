@@ -3,36 +3,42 @@
 public interface IWithdrawalRequestValidation
 {
     bool ValidateCreditCardNumber(string cardNumber);
-    bool ValidateAmount(decimal amount);
     bool ValidatePinCode(string pinCode);
 }
 
 public class WithdrawalRequestValidation : IWithdrawalRequestValidation
 {
+    private const int MinCardNumberLength = 13;
+    private const int MaxCardNumberLength = 19;
+    private const int PinCodeLength = 4;
+
     public bool ValidateCreditCardNumber(string cardNumber)
     {
-        if (string.IsNullOrWhiteSpace(cardNumber)) return false;
+        if (string.IsNullOrWhiteSpace(cardNumber))
+            throw new ArgumentException("Card number is null, empty or whitespace.");
 
-        cardNumber = RemoveNonDigitCharacters(cardNumber);
+        if (!cardNumber.All(char.IsDigit))
+            throw new ArgumentException("The card number can only contain digit characters.");
 
-        if (cardNumber.Length is < 13 or > 19) return false;
+        if (cardNumber.Length is < MinCardNumberLength or > MaxCardNumberLength)
+            throw new ArgumentException(
+                $"Invalid card number length. Length should be between {MinCardNumberLength} and {MaxCardNumberLength}.");
 
-        return CalculateChecksum(cardNumber) % 10 == 0;
-    }
+        if (CalculateChecksum(cardNumber) % 10 != 0) throw new ArgumentException("Invalid card number.");
 
-    public bool ValidateAmount(decimal amount)
-    {
-        return amount >= 0;
+        return true;
     }
 
     public bool ValidatePinCode(string pinCode)
     {
-        return !string.IsNullOrWhiteSpace(pinCode) && pinCode.Length == 4 && pinCode.All(char.IsDigit);
-    }
+        if (string.IsNullOrWhiteSpace(pinCode)) throw new ArgumentException("PIN code is null, empty or whitespace.");
 
-    private string RemoveNonDigitCharacters(string input)
-    {
-        return new string(input.Where(char.IsDigit).ToArray());
+        if (pinCode.Length != PinCodeLength)
+            throw new ArgumentException($"Invalid PIN code length. Length should be {PinCodeLength}.");
+
+        if (!pinCode.All(char.IsDigit)) throw new ArgumentException("PIN code must contain only digits.");
+
+        return true;
     }
 
     private int CalculateChecksum(string cardNumber)

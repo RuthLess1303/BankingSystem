@@ -1,9 +1,8 @@
 ﻿using BankingSystem.Atm.Core.Repositories;
 using BankingSystem.Atm.Core.Requests;
-using BankingSystem.Atm.Core.Services;
 using InternetBank.Db.Db.Entities;
 
-namespace InternetBank.Atm.Core.Services;
+namespace BankingSystem.Atm.Core.Services;
 
 public interface IWithdrawalService
 {
@@ -33,7 +32,7 @@ public class WithdrawalService : IWithdrawalService
                       ?? throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
         
         if (request.Amount <= 0)
-            throw new ArgumentException("Amount must be greater than zero.", nameof(request.CardNumber));
+            throw new ArgumentException("Amount must be greater than zero.");
 
         // Calculate the withdrawal fee
         var fee = request.Amount * WithdrawalFeePercentage;

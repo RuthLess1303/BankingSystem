@@ -2,7 +2,6 @@
 using BankingSystem.Atm.Core.Requests;
 using BankingSystem.Atm.Core.Services;
 using BankingSystem.Atm.Core.Validations;
-using InternetBank.Atm.Core.Services;
 using InternetBank.Db.Db;
 using InternetBank.Db.Db.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +46,7 @@ public class CardCardPinServiceTests
     public async Task ChangeCardPin_ValidRequest_ChangesPin()
     {
         // Arrange
-        const string cardNumber = "1234567890123456";
+        const string cardNumber = "341824880203048";
         const string pin = "1234";
         const string newPin = "4321";
 
@@ -124,7 +123,7 @@ public class CardCardPinServiceTests
 
         // Assert
         // Check that the method throws an exception
-        Assert.ThrowsAsync<UnauthorizedAccessException>(() => _cardPinService.ChangeCardPin(request));
+        Assert.ThrowsAsync<ArgumentException>(() => _cardPinService.ChangeCardPin(request));
 
         // Check that the PIN was not changed in the in-memory database
         var updatedCard = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
