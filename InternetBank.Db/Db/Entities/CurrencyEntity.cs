@@ -12,4 +12,5 @@ public class CurrencyEntity
     public decimal Diff { get; set; }
     public DateTimeOffset Date { get; set; }
     public DateTimeOffset ValidFromDate { get; set; }
+    public decimal RatePerQuantity { get; set; }
 }

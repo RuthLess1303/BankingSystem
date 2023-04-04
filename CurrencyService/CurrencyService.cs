@@ -29,7 +29,8 @@ public class CurrencyService : ICurrencyService
     private async Task<List<CurrencyEntity>> GetCurrencies()
     {
         var client = new HttpClient();
-        var response = await client.GetAsync("https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/ka/json/");
+        const string urlOfCurrencyJson = "https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/ka/json/";
+        var response = await client.GetAsync(urlOfCurrencyJson);
 
         var contentString = await response.Content.ReadAsStringAsync();
 
@@ -46,7 +47,8 @@ public class CurrencyService : ICurrencyService
                 Name = currencyJson.Name,
                 Diff = currencyJson.Diff,
                 Date = currencyJson.Date,
-                ValidFromDate = currencyJson.ValidFromDate
+                ValidFromDate = currencyJson.ValidFromDate,
+                RatePerQuantity = currencyJson.Rate / currencyJson.Quantity
             })
             .ToList();
     }

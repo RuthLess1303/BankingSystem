@@ -51,10 +51,3 @@ public class CurrencyService : ICurrencyService
         return rate.Rate;
     }
 }
-
-
-public class Root
-{
-    public DateTime date { get; set; }
-    public List<CurrencyEntity> currencies { get; } = new();
-}
