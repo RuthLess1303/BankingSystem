@@ -53,13 +53,4 @@ public class OperatorController : ControllerBase
         
         return Ok();
     }
-    
-    [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
-    [HttpPost("add-currency-in-db")]
-    public async Task<IActionResult> AddCurrencyInDb()
-    {
-        await _currencyService.AddInDb();
-        
-        return Ok();
-    }
 }

@@ -36,12 +36,9 @@ public class TransactionService : ITransactionService
     public async Task MakeTransaction(TransactionRequest request)
     {
         var senderAccount = await _accountValidation.GetAccountWithIban(request.SenderIban);
+        ValidateAmount(request.Amount, senderAccount.Balance);
         var receiverAccount = await _accountValidation.GetAccountWithIban(request.ReceiverIban);
-        if (request.Amount > senderAccount.Balance)
-        {
-            throw new Exception("Insufficient funds");
-        }
-        
+
         var senderCurrency = senderAccount.CurrencyCode;
         var receiverCurrency = receiverAccount.CurrencyCode;
         var convertedAmount = await _currencyService.ConvertAmount(senderCurrency, receiverCurrency, request.Amount);
@@ -58,22 +55,28 @@ public class TransactionService : ITransactionService
 
         if (senderUser.Id == receiverUser.Id)
         {
-            await _transactionRepository.MakeTransaction(request, convertedAmount);
-            transactionEntity.Type = "Inner";
-            transactionEntity.Fee = 0;
-            transactionEntity.GrossAmount = request.Amount;
-            transactionEntity.TransactionTime = DateTimeOffset.Now;
-            await _transactionRepository.AddDataInDb(transactionEntity);
+            await MakeInternalTransaction(request, convertedAmount, transactionEntity);
             return;
         }
 
         var fee = _transactionValidations.CalculateFee(request.Amount, 1, (decimal)0.5);
         var grossAmount = request.Amount + fee;
-        if (grossAmount > senderAccount.Balance)
+        ValidateAmount(grossAmount, senderAccount.Balance);
+        
+        await MakeExternalTransaction(request, convertedAmount, transactionEntity, fee, grossAmount);
+    }
+
+    private static void ValidateAmount(decimal amount, decimal balance)
+    {
+        if (amount > balance)
         {
             throw new Exception("Insufficient funds");
         }
-        
+    }
+
+    private async Task MakeExternalTransaction(TransactionRequest request, decimal convertedAmount,
+        TransactionEntity transactionEntity, decimal fee, decimal grossAmount)
+    {
         await _transactionRepository.MakeTransactionWithFee(request, convertedAmount);
         transactionEntity.Type = "Outside";
         transactionEntity.Fee = fee;
@@ -81,7 +84,18 @@ public class TransactionService : ITransactionService
         transactionEntity.TransactionTime = DateTimeOffset.Now;
         await _transactionRepository.AddDataInDb(transactionEntity);
     }
-    
+
+    private async Task MakeInternalTransaction(TransactionRequest request, decimal convertedAmount,
+        TransactionEntity transactionEntity)
+    {
+        await _transactionRepository.MakeTransaction(request, convertedAmount);
+        transactionEntity.Type = "Inner";
+        transactionEntity.Fee = 0;
+        transactionEntity.GrossAmount = request.Amount;
+        transactionEntity.TransactionTime = DateTimeOffset.Now;
+        await _transactionRepository.AddDataInDb(transactionEntity);
+    }
+
     public string PrintTransaction(TransactionEntity transaction)
     {
         return $"Transaction Amount: {transaction.Amount}\n" +

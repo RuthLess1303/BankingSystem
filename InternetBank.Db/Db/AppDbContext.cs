@@ -55,6 +55,22 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         
         builder.Entity<IdentityUserRole<int>>()
             .HasData(new IdentityUserRole<int> { UserId = operatorUser.Id, RoleId = 2 });
+
+        builder.Entity<CurrencyEntity>().HasData(
+            new CurrencyEntity
+            {
+                Id = 300,
+                Code = "GEL",
+                Quantity = 1,
+                RateFormatted = 0,
+                DiffFormatted = 0,
+                Rate = 1,
+                Name = "ქართული ლარი",
+                Diff = 0,
+                Date = DateTimeOffset.Now,
+                ValidFromDate = DateTimeOffset.Now.AddDays(1)
+            }
+        );
         
         base.OnModelCreating(builder);
     }

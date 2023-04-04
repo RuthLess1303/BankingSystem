@@ -34,8 +34,7 @@ namespace InternetBank.Test.ServicesTests
             _dbContext.Database.EnsureCreated();
 
             _transactionRepository = new TransactionRepository(_dbContext);
-            _currencyService = new CurrencyService(_dbContext,new CurrencyRepository(_dbContext));
-            
+
             var userStore = new UserStore<UserEntity, IdentityRole<int>, AppDbContext, int>(_dbContext);
             var passwordHasher = new PasswordHasher<UserEntity>();
             var userValidators = new List<IUserValidator<UserEntity>>();

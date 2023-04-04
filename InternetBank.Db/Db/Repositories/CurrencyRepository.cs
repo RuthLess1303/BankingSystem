@@ -19,10 +19,6 @@ public class CurrencyRepository : ICurrencyRepository
 
     public async Task<CurrencyEntity> FindCurrency(string currencyCode)
     {
-        if (currencyCode.ToUpper() == "GEL")
-        {
-            return null;
-        }
         var currency = await _db.Currency
             .OrderByDescending(c => c.Date)
             .FirstOrDefaultAsync(c => c.Code == currencyCode);

@@ -7,98 +7,32 @@ namespace InternetBank.Core.Services;
 
 public interface ICurrencyService
 {
-    Task AddInDb();
-    Task<decimal> ConvertAmount(string from, string to, decimal amount);
+    Task<decimal> ConvertAmount(string fromCurrencyCode, string toCurrencyCode, decimal amount);
     Task<decimal> GetRateAsync(string currencyCode);
 }
 
 public class CurrencyService : ICurrencyService
 {
-    private readonly AppDbContext _db;
     private readonly ICurrencyRepository _currencyRepository;
 
-    public CurrencyService(
-        AppDbContext db, 
-        ICurrencyRepository currencyRepository)
+    public CurrencyService(ICurrencyRepository currencyRepository)
     {
-        _db = db;
         _currencyRepository = currencyRepository;
     }
-
-    private async Task<List<CurrencyEntity>> GetCurrencies()
-    {
-        var client = new HttpClient();
-        var response = await client.GetAsync("https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/ka/json/");
-
-        var contentString = await response.Content.ReadAsStringAsync();
-
-        var dataList = JsonConvert.DeserializeObject<Root[]>(contentString);
-        var currencyList = dataList![0].currencies;
-
-        return currencyList.Select(currencyJson => new CurrencyEntity
-            {
-                Code = currencyJson.Code,
-                Quantity = currencyJson.Quantity,
-                RateFormatted = currencyJson.RateFormatted,
-                DiffFormatted = currencyJson.DiffFormatted,
-                Rate = currencyJson.Rate,
-                Name = currencyJson.Name,
-                Diff = currencyJson.Diff,
-                Date = currencyJson.Date,
-                ValidFromDate = currencyJson.ValidFromDate
-            })
-            .ToList();
-    }
-
-    public async Task AddInDb()
-    {
-        var currencies = await GetCurrencies();
-        foreach (var currency in currencies)
-        {
-            await _db.AddAsync(currency);
-        }
-        
-        await _db.SaveChangesAsync();
-    }
     
-    public async Task<decimal> ConvertAmount(string from, string to, decimal amount)
+    public async Task<decimal> ConvertAmount(string fromCurrencyCode, string toCurrencyCode, decimal amount)
     {
-        if (to.ToUpper().Equals(from.ToUpper()))
+        if (toCurrencyCode.ToUpper().Equals(fromCurrencyCode.ToUpper()))
         {
             return amount;
         }
-        
-        if (to.ToUpper() == "GEL")
-        {
-            var fromCurrencyEntity = await _currencyRepository.FindCurrency(from);
-            var rate = fromCurrencyEntity.Rate;
-            rate /= fromCurrencyEntity.Quantity;
-
-            amount *= rate;
-            
-            return amount;
-        }
-        var toCurrency = await _currencyRepository.FindCurrency(to);
+        var toCurrency = await _currencyRepository.FindCurrency(toCurrencyCode);
         var toRate = toCurrency.Rate;
+        toRate /= toCurrency.Quantity;
 
-        if (toCurrency.Quantity != 1)
-        {
-            toRate /= toCurrency.Quantity;
-        }
-        
-        if (from.ToUpper() == "GEL")
-        {
-            amount /= toRate;
-            return amount;
-        }
-
-        var fromCurrency = await _currencyRepository.FindCurrency(from);
+        var fromCurrency = await _currencyRepository.FindCurrency(fromCurrencyCode);
         var fromRate = fromCurrency.Rate;
-
-        if (fromCurrency.Quantity != 1)
-        {
-            toRate /= fromCurrency.Quantity;
-        }
+        fromRate /= fromCurrency.Quantity;
 
         amount *= fromRate;
         amount /= toRate;
