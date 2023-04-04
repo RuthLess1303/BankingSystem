@@ -1,4 +1,4 @@
-﻿using BankingSystem.Atm.Core.Requests;
+using BankingSystem.Atm.Core.Requests;
 using BankingSystem.Atm.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,21 +22,21 @@ public class AtmController : ControllerBase
         _cardPinService = cardPinService;
     }
     
-    [HttpPost("Withdraw")]
+    [HttpPost("withdraw")]
     public async Task<IActionResult> Withdraw([FromBody]WithdrawalRequest request)
     {
         await _withdrawalService.Withdraw(request);
         return Ok();
     }
     
-    [HttpGet("See_Balance")]
+    [HttpGet("see_balance")]
     public async Task<IActionResult> SeeBalance([FromBody]AuthorizeCardRequest request)
     {
         var balance = await _balanceService.SeeBalance(request);
         return Ok(balance);
     }
     
-    [HttpPut("Change_Pin")]
+    [HttpPut("change_pin")]
     public async Task<IActionResult> ChangePin([FromBody]ChangePinRequest request)
     {
         await _cardPinService.ChangeCardPin(request);
