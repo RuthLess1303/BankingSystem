@@ -63,64 +63,49 @@ public class CurrencyService : ICurrencyService
     
     public async Task<decimal> ConvertAmount(string from, string to, decimal amount)
     {
-        if (to.Equals("GEL", StringComparison.OrdinalIgnoreCase))
+        if (to.ToUpper().Equals(from.ToUpper()))
+        {
+            return amount;
+        }
+        
+        if (to.ToUpper() == "GEL")
         {
             var fromCurrencyEntity = await _currencyRepository.FindCurrency(from);
-
-            if (fromCurrencyEntity == null)
-            {
-                throw new ArgumentException($"Currency {from} not found");
-            }
-
-            var rate = decimal.Divide(fromCurrencyEntity.Rate, fromCurrencyEntity.Quantity);
+            var rate = fromCurrencyEntity.Rate;
+            rate /= fromCurrencyEntity.Quantity;
 
             amount *= rate;
             
             return amount;
         }
-
         var toCurrency = await _currencyRepository.FindCurrency(to);
-
-        if (toCurrency == null)
-        {
-            throw new ArgumentException($"Currency {to} not found");
-        }
-
         var toRate = toCurrency.Rate;
 
         if (toCurrency.Quantity != 1)
         {
-            toRate = decimal.Divide(toCurrency.Rate, toCurrency.Quantity);
+            toRate /= toCurrency.Quantity;
         }
         
-        if (from.Equals("GEL", StringComparison.OrdinalIgnoreCase))
+        if (from.ToUpper() == "GEL")
         {
-            amount = decimal.Divide(amount, toRate);
+            amount /= toRate;
             return amount;
         }
 
         var fromCurrency = await _currencyRepository.FindCurrency(from);
-
-        if (fromCurrency == null)
-        {
-            throw new ArgumentException($"Currency {from} not found");
-        }
-
         var fromRate = fromCurrency.Rate;
 
         if (fromCurrency.Quantity != 1)
         {
-            fromRate = decimal.Divide(fromCurrency.Rate, fromCurrency.Quantity);
+            toRate /= fromCurrency.Quantity;
         }
 
         amount *= fromRate;
-        amount = decimal.Divide(amount, toRate);
+        amount /= toRate;
 
         return amount;
     }
-
     
-
     public async Task<decimal> GetRateAsync(string currencyCode)
     {
         var rate = await _currencyRepository.FindCurrency(currencyCode);

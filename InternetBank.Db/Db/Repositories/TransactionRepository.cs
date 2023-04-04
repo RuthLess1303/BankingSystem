@@ -20,10 +20,18 @@ public class TransactionRepository : ITransactionRepository
 
     public async Task MakeTransaction(TransactionRequest request, decimal convertedAmount)
     {
-        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.SenderIban);
         var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
+        if (receiver == null)
+        {
+            throw new Exception($"Could not find account with iban: {request.ReceiverIban}");
+        }
+        var sender = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.SenderIban);
+        if (sender == null)
+        {
+            throw new Exception($"Could not find account with iban: {request.SenderIban}");
+        }
 
-        aggressor.Balance -= request.Amount;
+        sender.Balance -= request.Amount;
         receiver.Balance += convertedAmount;
         
         await _db.SaveChangesAsync();
@@ -31,14 +39,18 @@ public class TransactionRepository : ITransactionRepository
     
     public async Task MakeTransactionWithFee(TransactionRequest request, decimal convertedAmount)
     {
-        const decimal transactionFeePercentage = 1.01M; 
-        const decimal transactionFeeAmount = 0.5M;
-        
-        var aggressor = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.SenderIban);
         var receiver = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.ReceiverIban);
+        if (receiver == null)
+        {
+            throw new Exception($"Could not find account with iban: {request.ReceiverIban}");
+        }
+        var sender = await _db.Account.FirstOrDefaultAsync(a => a.Iban == request.SenderIban);
+        if (sender == null)
+        {
+            throw new Exception($"Could not find account with iban: {request.SenderIban}");
+        }
 
-        const decimal transactionFee = transactionFeePercentage + transactionFeeAmount;
-        aggressor.Balance -= request.Amount * transactionFee;
+        sender.Balance -= request.Amount * (decimal)1.01 + (decimal)0.5;
         receiver.Balance += convertedAmount;
         
         await _db.SaveChangesAsync();
