@@ -113,7 +113,7 @@ namespace InternetBank.Db.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     RateFormatted = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DiffFormatted = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -121,12 +121,29 @@ namespace InternetBank.Db.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Diff = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ValidFromDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    ValidFromDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    RatePerQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Currency", x => x.Id);
-                    table.UniqueConstraint("AK_Currency_Code", x => x.Code);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Logger",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApiName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Exception = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StackTrace = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ThrowTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logger", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,7 +285,17 @@ namespace InternetBank.Db.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "4cc147e9-208f-43bd-898e-fff3a991a48e", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEHnie3VU9pFO/D0aT/oOaGndyqs7+bJc5N4hHK8AA3lWRWT01gyig+pG+wGyypiq/g==", null, false, "01000000003", null, false, "operator@bank.com" });
+                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "7f38605e-5665-4f20-838d-ebb246026a27", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEEhsY2SztbyUzkNJbMjL9stX+HTece1Jy1UpLEqQWSvH0HOG8MmLqJIStVXeEIvyqg==", null, false, "01000000003", null, false, "operator@bank.com" });
+
+            migrationBuilder.InsertData(
+                table: "Currency",
+                columns: new[] { "Id", "Code", "Date", "Diff", "DiffFormatted", "Name", "Quantity", "Rate", "RateFormatted", "RatePerQuantity", "ValidFromDate" },
+                values: new object[,]
+                {
+                    { 1L, "GEL", new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4891), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ქართული ლარი", 1, 1m, 0m, 0m, new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0)) },
+                    { 2L, "USD", new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4920), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "დოლარი", 1, 1m, 0m, 0m, new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0)) },
+                    { 3L, "EUR", new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4922), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ეურო", 1, 1m, 0m, 0m, new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0)) }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -344,6 +371,9 @@ namespace InternetBank.Db.Migrations
 
             migrationBuilder.DropTable(
                 name: "Currency");
+
+            migrationBuilder.DropTable(
+                name: "Logger");
 
             migrationBuilder.DropTable(
                 name: "Transaction");

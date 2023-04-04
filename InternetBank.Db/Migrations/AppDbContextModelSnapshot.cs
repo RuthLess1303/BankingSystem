@@ -154,6 +154,9 @@ namespace InternetBank.Db.Migrations
                     b.Property<decimal>("RateFormatted")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal>("RatePerQuantity")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTimeOffset>("ValidFromDate")
                         .HasColumnType("datetimeoffset");
 
@@ -164,16 +167,45 @@ namespace InternetBank.Db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 300L,
+                            Id = 1L,
                             Code = "GEL",
-                            Date = new DateTimeOffset(new DateTime(2023, 4, 4, 14, 31, 46, 293, DateTimeKind.Unspecified).AddTicks(6740), new TimeSpan(0, 4, 0, 0, 0)),
+                            Date = new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4891), new TimeSpan(0, 4, 0, 0, 0)),
                             Diff = 0m,
                             DiffFormatted = 0m,
                             Name = "ქართული ლარი",
                             Quantity = 1,
                             Rate = 1m,
                             RateFormatted = 0m,
-                            ValidFromDate = new DateTimeOffset(new DateTime(2023, 4, 5, 14, 31, 46, 293, DateTimeKind.Unspecified).AddTicks(6790), new TimeSpan(0, 4, 0, 0, 0))
+                            RatePerQuantity = 0m,
+                            ValidFromDate = new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Code = "USD",
+                            Date = new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4920), new TimeSpan(0, 4, 0, 0, 0)),
+                            Diff = 0m,
+                            DiffFormatted = 0m,
+                            Name = "დოლარი",
+                            Quantity = 1,
+                            Rate = 1m,
+                            RateFormatted = 0m,
+                            RatePerQuantity = 0m,
+                            ValidFromDate = new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Code = "EUR",
+                            Date = new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4922), new TimeSpan(0, 4, 0, 0, 0)),
+                            Diff = 0m,
+                            DiffFormatted = 0m,
+                            Name = "ეურო",
+                            Quantity = 1,
+                            Rate = 1m,
+                            RateFormatted = 0m,
+                            RatePerQuantity = 0m,
+                            ValidFromDate = new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
 
@@ -397,7 +429,7 @@ namespace InternetBank.Db.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "65dfd353-1654-4089-a902-2505b7c9294d",
+                            ConcurrencyStamp = "7f38605e-5665-4f20-838d-ebb246026a27",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
@@ -406,7 +438,7 @@ namespace InternetBank.Db.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OPERATOR@BANK.COM",
                             NormalizedUserName = "OPERATOR@BANK.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAECoAAFVbVtIyeoMwLvnr8skFyfW0lRcoKMIa73UgmkL72ttZ53aP+vVRcEPqVPZ42Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEhsY2SztbyUzkNJbMjL9stX+HTece1Jy1UpLEqQWSvH0HOG8MmLqJIStVXeEIvyqg==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,
