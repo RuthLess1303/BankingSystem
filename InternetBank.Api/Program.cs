@@ -28,6 +28,7 @@ builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 builder.Services.AddTransient<ICardRepository, CardRepository>();
 builder.Services.AddTransient<ICardService, CardService>();
 builder.Services.AddTransient<ITransactionValidations, TransactionValidations>();
+builder.Services.AddTransient<ILoggerRepository, LoggerRepository>();
 
 AuthConfigurator.Configure(builder);
 

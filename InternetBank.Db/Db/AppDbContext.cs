@@ -17,6 +17,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
     public DbSet<CardAccountConnectionEntity> CardAccountConnection { get; set; }
     public DbSet<TransactionEntity> Transaction { get; set; }
     public DbSet<CurrencyEntity> Currency { get; set; }
+    public DbSet<LoggerEntity> Logger { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -26,6 +27,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         builder.ApplyConfiguration(new TransactionMap());
         builder.ApplyConfiguration(new UserMap());
         builder.ApplyConfiguration(new CardAccountConnectionMap());
+        builder.ApplyConfiguration(new LoggerMap());
         
         base.OnModelCreating(builder);
         

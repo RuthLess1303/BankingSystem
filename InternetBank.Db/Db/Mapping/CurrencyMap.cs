@@ -9,7 +9,7 @@ public class CurrencyMap : IEntityTypeConfiguration<CurrencyEntity>
     public void Configure(EntityTypeBuilder<CurrencyEntity> builder)
     {
         builder.HasKey(t => t.Id);
-        builder.HasAlternateKey(t => t.Code);
+        builder.Property(t => t.Code).IsRequired();
         builder.Property(t => t.Code).IsRequired();
         builder.Property(t => t.Date).IsRequired();
         builder.Property(t => t.Diff).IsRequired();

@@ -3,7 +3,14 @@ using BankingSystem.Atm.Core.Repositories;
 using BankingSystem.Atm.Core.Services;
 using BankingSystem.Atm.Core.Validations;
 using InternetBank.Db.Db;
+using InternetBank.Db.Db.Repositories;
 using Microsoft.EntityFrameworkCore;
+using AccountRepository = BankingSystem.Atm.Core.Repositories.AccountRepository;
+using CardRepository = BankingSystem.Atm.Core.Repositories.CardRepository;
+using IAccountRepository = BankingSystem.Atm.Core.Repositories.IAccountRepository;
+using ICardRepository = BankingSystem.Atm.Core.Repositories.ICardRepository;
+using ITransactionRepository = BankingSystem.Atm.Core.Repositories.ITransactionRepository;
+using TransactionRepository = BankingSystem.Atm.Core.Repositories.TransactionRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +27,7 @@ builder.Services.AddTransient<IPinRepository, CardPinRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 builder.Services.AddTransient<ICardRepository, CardRepository>();
 builder.Services.AddTransient<IWithdrawalRequestValidation, WithdrawalRequestValidation>();
+builder.Services.AddTransient<ILoggerRepository, LoggerRepository>();
 
 
 builder.Services.AddControllers();
