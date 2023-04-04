@@ -1,6 +1,5 @@
-﻿using BankingSystem.Atm.Core.Requests;
+using BankingSystem.Atm.Core.Requests;
 using BankingSystem.Atm.Core.Services;
-using InternetBank.Atm.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankingSystem.Atm.Api.Controllers;
@@ -30,14 +29,14 @@ public class AtmController : ControllerBase
         return Ok();
     }
     
-    [HttpPost("see-balance")]
+    [HttpGet("see_balance")]
     public async Task<IActionResult> SeeBalance([FromBody]AuthorizeCardRequest request)
     {
         var balance = await _balanceService.SeeBalance(request);
         return Ok(balance);
     }
     
-    [HttpPost("change-pin")]
+    [HttpPut("change_pin")]
     public async Task<IActionResult> ChangePin([FromBody]ChangePinRequest request)
     {
         await _cardPinService.ChangeCardPin(request);

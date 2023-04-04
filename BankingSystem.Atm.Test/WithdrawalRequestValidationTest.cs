@@ -27,9 +27,7 @@ public class WithdrawalRequestValidationTests
     [TestCase("411111111111!!!!")]
     public void ValidateCreditCardNumber_InvalidInput_ReturnsFalse(string input)
     {
-        var result = _withdrawalValidation.ValidateCreditCardNumber(input);
-
-        Assert.That(result, Is.False);
+        Assert.Throws<ArgumentException>(() => _withdrawalValidation.ValidateCreditCardNumber(input));
     }
 
     [TestCase("4111111111111111")]

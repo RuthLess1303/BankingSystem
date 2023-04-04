@@ -2,7 +2,6 @@
 using BankingSystem.Atm.Core.Requests;
 using BankingSystem.Atm.Core.Services;
 using BankingSystem.Atm.Core.Validations;
-using InternetBank.Atm.Core.Services;
 using InternetBank.Db.Db;
 using InternetBank.Db.Db.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -74,7 +73,7 @@ public class WithdrawalServiceTests
         var card1 = new CardEntity
         {
             Id = Guid.NewGuid(),
-            CardNumber = "1234123412341234",
+            CardNumber = "375188936945880",
             CardHolderName = "John Doe",
             Cvv = "123",
             Pin = "1234",
@@ -84,7 +83,7 @@ public class WithdrawalServiceTests
         var card2 = new CardEntity
         {
             Id = Guid.NewGuid(),
-            CardNumber = "13421433244324242",
+            CardNumber = "343394508542431",
             CardHolderName = "John Doe",
             Cvv = "332",
             Pin = "1234",
@@ -118,14 +117,14 @@ public class WithdrawalServiceTests
 
         var request1 = new WithdrawalRequest
         {
-            CardNumber = "1234123412341234",
+            CardNumber = "375188936945880",
             PinCode = "1234",
             Amount = 500
         };
         
         var request2 = new WithdrawalRequest
         {
-            CardNumber = "13421433244324242",
+            CardNumber = "343394508542431",
             PinCode = "1234",
             Amount = 2000
         };

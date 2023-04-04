@@ -27,8 +27,8 @@ public class CardAuthService : ICardAuthService
 
     public async Task<AccountEntity> GetAuthorizedAccountAsync(string cardNumber, string pin)
     {
-        _requestValidation.ValidatePinCode(pin);
         _requestValidation.ValidateCreditCardNumber(cardNumber);
+        _requestValidation.ValidatePinCode(pin);
 
         var card = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
 

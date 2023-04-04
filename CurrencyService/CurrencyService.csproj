@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-CurrencyService-B870D8B7-F170-4688-994A-7DD3AE94E12D</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.2.23128.3"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0-preview.2.23128.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\InternetBank.Core\InternetBank.Core.csproj"/>
+    </ItemGroup>
+</Project>

@@ -132,8 +132,8 @@ namespace InternetBank.Db.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<decimal>("Diff")
                         .HasColumnType("decimal(18,2)");
@@ -154,8 +154,8 @@ namespace InternetBank.Db.Migrations
                     b.Property<decimal>("RateFormatted")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("ValidFromDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("ValidFromDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -352,7 +352,7 @@ namespace InternetBank.Db.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "dd40b7f0-f841-4ce4-9180-13ece157c907",
+                            ConcurrencyStamp = "4cc147e9-208f-43bd-898e-fff3a991a48e",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
@@ -361,7 +361,7 @@ namespace InternetBank.Db.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OPERATOR@BANK.COM",
                             NormalizedUserName = "OPERATOR@BANK.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEK9ccf5+uOZKkSBNG0gmRHt8m//Gw0xFkMkVx2oPdPJ8PIJGlI2UfmqcnsShfs58hQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHnie3VU9pFO/D0aT/oOaGndyqs7+bJc5N4hHK8AA3lWRWT01gyig+pG+wGyypiq/g==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,
