@@ -27,12 +27,10 @@ public class CurrencyService : ICurrencyService
             return amount;
         }
         var toCurrency = await _currencyRepository.FindCurrency(toCurrencyCode);
-        var toRate = toCurrency.Rate;
-        toRate /= toCurrency.Quantity;
+        var toRate = toCurrency.RatePerQuantity;
 
         var fromCurrency = await _currencyRepository.FindCurrency(fromCurrencyCode);
-        var fromRate = fromCurrency.Rate;
-        fromRate /= fromCurrency.Quantity;
+        var fromRate = fromCurrency.RatePerQuantity;
 
         amount *= fromRate;
         amount /= toRate;
