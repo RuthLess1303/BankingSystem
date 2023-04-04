@@ -5,7 +5,7 @@ namespace InternetBank.Db.Db.Repositories;
 
 public interface ICurrencyRepository
 {
-    Task<CurrencyEntity?> FindCurrency(string currencyCode);
+    Task<CurrencyEntity> FindCurrency(string currencyCode);
 }
 
 public class CurrencyRepository : ICurrencyRepository
@@ -17,7 +17,7 @@ public class CurrencyRepository : ICurrencyRepository
         _db = db;
     }
 
-    public async Task<CurrencyEntity?> FindCurrency(string currencyCode)
+    public async Task<CurrencyEntity> FindCurrency(string currencyCode)
     {
         if (currencyCode.ToUpper() == "GEL")
         {
