@@ -59,39 +59,13 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         builder.Entity<CurrencyEntity>().HasData(
             new CurrencyEntity
             {
-                Id = 1,
+                Id = 300,
                 Code = "GEL",
                 Quantity = 1,
                 RateFormatted = 0,
                 DiffFormatted = 0,
                 Rate = 1,
                 Name = "ქართული ლარი",
-                Diff = 0,
-                Date = DateTimeOffset.Now,
-                ValidFromDate = DateTimeOffset.MaxValue
-            },
-            new CurrencyEntity
-            {
-                Id = 2,
-                Code = "USD",
-                Quantity = 1,
-                RateFormatted = 0,
-                DiffFormatted = 0,
-                Rate = 1,
-                Name = "დოლარი",
-                Diff = 0,
-                Date = DateTimeOffset.Now,
-                ValidFromDate = DateTimeOffset.MaxValue
-            },
-            new CurrencyEntity
-            {
-                Id = 3,
-                Code = "EUR",
-                Quantity = 1,
-                RateFormatted = 0,
-                DiffFormatted = 0,
-                Rate = 1,
-                Name = "ეურო",
                 Diff = 0,
                 Date = DateTimeOffset.Now,
                 ValidFromDate = DateTimeOffset.MaxValue
