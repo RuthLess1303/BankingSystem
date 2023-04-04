@@ -27,7 +27,7 @@ public class LoggerRepository : ILoggerRepository
             ThrowTime = DateTimeOffset.Now
         };
 
-        await _db.AddAsync(loggerEntity);
+        await _db.Logger.AddAsync(loggerEntity);
         await _db.SaveChangesAsync();
     }
 }

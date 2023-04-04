@@ -7,12 +7,12 @@ namespace InternetBank.Api.Middlewares;
 public class GlobalErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILoggerRepository _loggerRepository;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public GlobalErrorHandlingMiddleware(RequestDelegate next, ILoggerRepository loggerRepository)
+    public GlobalErrorHandlingMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
     {
         _next = next;
-        _loggerRepository = loggerRepository;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     public async Task InvokeAsync(HttpContext httpContext)
@@ -23,7 +23,9 @@ public class GlobalErrorHandlingMiddleware
         }
         catch (Exception ex)
         {
-            await _loggerRepository.AddLogInDb(ex, "Internet Bank");
+            var scope = _serviceScopeFactory.CreateScope();
+            var logger = scope.ServiceProvider.GetService<ILoggerRepository>();
+            await logger!.AddLogInDb(ex, "Internet Bank");
             var error = new { message = ex.Message };
             var errorJson = JsonConvert.SerializeObject(error);
             httpContext.Response.StatusCode = 500;
