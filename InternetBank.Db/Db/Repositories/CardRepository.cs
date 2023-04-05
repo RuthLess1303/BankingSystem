@@ -8,6 +8,7 @@ public interface ICardRepository
     Task LinkWithAccount(string iban, Guid cardId);
     Task CardNumberUsage(string cardNumber);
     Task<CardEntity?> GetCardWithIban(string iban);
+    Task<List<CardEntity>?> GetAllCards(string privateNumber);
 }
 
 public class CardRepository : ICardRepository
@@ -55,5 +56,32 @@ public class CardRepository : ICardRepository
         var card = await _db.Card.FirstOrDefaultAsync(c => c.Id == cardAccountConnection.CardId);
 
         return card;
+    }
+    
+    public async Task<List<CardEntity>?> GetAllCards(string privateNumber)
+    {
+        // var cardList = new List<CardEntity>();
+        var accounts = _db.Account.Where(a => a.PrivateNumber == privateNumber);
+        if (accounts == null)
+        {
+            throw new Exception("User does not have accounts");
+        }
+        var cardAccountConnection = _db.CardAccountConnection
+            .Where(c => accounts.Select(a => a.Iban).Contains(c.Iban));
+        var cards = await _db.Card
+            .Where(c => cardAccountConnection.Select(crd => crd.CardId).Contains(c.Id))
+            .ToListAsync();
+        // foreach (var account in accounts)
+        // {
+        //     var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.Iban == account.Iban);
+        //     if (cardAccountConnection != null)
+        //     {
+        //         var card = await _db.Card.FirstOrDefaultAsync(c => c.Id == cardAccountConnection.CardId);
+        //         
+        //         cardList.Add(card);
+        //     }
+        // }
+
+        return cards;
     }
 }
