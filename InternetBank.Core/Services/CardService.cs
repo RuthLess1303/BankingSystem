@@ -11,6 +11,8 @@ public interface ICardService
     Task CreateCard(CreateCardRequest request);
     string PrintCardModelProperties(CardModel model);
     Task<(CardModel, string?)> SeeCard(string iban);
+    Task<List<(CardModel,string?)>> SeeAllCards(string privateNumber);
+    string PrintAllCardModelProperties(List<(CardModel, string?)> cardModelList);
 }
 
 public class CardService : ICardService
@@ -51,8 +53,7 @@ public class CardService : ICardService
         {
             throw new Exception("Iban is not in use");
         }
-        
-        
+
         var cardEntity = new CardEntity
         {
             Id = Guid.NewGuid(),
@@ -99,5 +100,66 @@ public class CardService : ICardService
         }
 
         return (cardModel, null);
+    }
+
+    public async Task<List<(CardModel,string?)>> SeeAllCards(string privateNumber)
+    {
+        var cards = await _cardRepository.GetAllCards(privateNumber);
+        if (cards == null)
+        {
+            throw new Exception("There are 0 Cards registered under provided private number");
+        }
+
+        var cardModels = new List<(CardModel,string)>();
+
+        foreach (var card in cards)
+        {
+            var isCardExpired = _propertyValidations.IsCardExpired(card.ExpirationDate);
+            
+            var cardModel = new CardModel
+            {
+                CardNumber = card.CardNumber,
+                CardHolderName = card.CardHolderName,
+                Cvv = card.Cvv,
+                ExpirationDate = card.ExpirationDate
+            };
+
+            if (isCardExpired)
+            {
+                cardModels.Add((cardModel, "Card Expired"));
+                continue;
+            }
+            
+            if (DateTime.Now.Year == card.ExpirationDate.Year && card.ExpirationDate.Month-DateTime.Now.Month <= 3)
+            {
+                cardModels.Add((cardModel, $"Card will expire in: {card.ExpirationDate.Month - DateTime.Now.Month} month"));
+                continue;
+            }
+            
+            cardModels.Add((cardModel, null));
+        }
+        
+        return cardModels;
+    }
+
+    public string PrintAllCardModelProperties(List<(CardModel, string?)> cardModelList)
+    {
+        string text = "";
+
+        foreach (var cardModel in cardModelList)
+        {
+            if (cardModel.Item2 != null)
+            {
+                text += "\nW A R N I N G\n" +
+                        $"{cardModel.Item2}\n\n";
+            }
+            
+            text += $"Card Number: {cardModel.Item1.CardNumber}\n" +
+                    $"Name on Card: {cardModel.Item1.CardHolderName}\n" +
+                    $"Cvv: {cardModel.Item1.Cvv}\n" +
+                    $"Expiration Date: {cardModel.Item1.ExpirationDate}\n\n";
+        }
+
+        return text;
     }
 }

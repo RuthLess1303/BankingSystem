@@ -11,18 +11,15 @@ namespace InternetBank.Api.Controllers;
 public class OperatorController : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly ICurrencyService _currencyService;
     private readonly IAccountService _accountService;
     private readonly ICardService _cardService;
 
     public OperatorController(
-        IUserService userService, 
-        ICurrencyService currencyService, 
+        IUserService userService,
         IAccountService accountService, 
         ICardService cardService)
     {
         _userService = userService;
-        _currencyService = currencyService;
         _accountService = accountService;
         _cardService = cardService;
     }

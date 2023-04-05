@@ -1,4 +1,5 @@
 using InternetBank.Core.Services;
+using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -69,4 +70,15 @@ public class UserController : ControllerBase
         
         return Ok(text);
     }
+    
+    [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]
+    [HttpPost("see-all-cards")]
+    public async Task<string> SeeAllCards(string privateNumber)
+    {
+        var cards = await _cardService.SeeAllCards(privateNumber);
+        var text = _cardService.PrintAllCardModelProperties(cards);
+
+        return text;
+    }
+    
 }
