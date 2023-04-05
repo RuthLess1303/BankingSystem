@@ -9,7 +9,7 @@ namespace InternetBank.Core.Services;
 public interface ICardService
 {
     Task CreateCard(CreateCardRequest request);
-    string PrintCardModelProperties(CardModel model);
+    string PrintCardModelProperties((CardModel, string?) model);
     Task<(CardModel, string?)> SeeCard(string iban);
     Task<List<(CardModel,string?)>> SeeAllCards(string privateNumber);
     string PrintAllCardModelProperties(List<(CardModel, string?)> cardModelList);
@@ -72,12 +72,22 @@ public class CardService : ICardService
         await _userRepository.CreateCard(cardEntity);
     }
 
-    public string PrintCardModelProperties(CardModel model)
+    public string PrintCardModelProperties((CardModel, string?) cardModel)
     {
-        return $"Card Number: {model.CardNumber}\n" +
-               $"Name on Card: {model.CardHolderName}\n" +
-               $"Cvv: {model.Cvv}\n" +
-               $"Expiration Date: {model.ExpirationDate}\n";
+        string text = "";
+
+        if (cardModel.Item2 != null)
+        {
+            text += "\nW A R N I N G\n" +
+                    $"{cardModel.Item2}\n\n";
+        }
+            
+        text += $"Card Number: {cardModel.Item1.CardNumber}\n" +
+               $"Name on Card: {cardModel.Item1.CardHolderName}\n" +
+               $"Cvv: {cardModel.Item1.Cvv}\n" +
+               $"Expiration Date: {cardModel.Item1.ExpirationDate}\n";
+
+        return text;
     }
     
     public async Task<(CardModel, string?)> SeeCard(string iban)
