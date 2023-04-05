@@ -6,7 +6,7 @@ namespace InternetBank.Core.Validations;
 
 public interface IPropertyValidations
 {
-    bool IsAmountValid(decimal amount);
+    void IsAmountValid(decimal amount);
     Task CheckCurrency(string currencyCode);
     void CheckIbanFormat(string iban);
     Task CheckCardNumberFormat(string cardNumber);
@@ -42,9 +42,12 @@ public class PropertyValidations : IPropertyValidations
         _cardRepository = cardRepository;
     }
 
-    public bool IsAmountValid(decimal amount)
+    public void IsAmountValid(decimal amount)
     {
-        return amount >= 0;
+        if (amount < 0)
+        {
+            throw new ArgumentException("The amount must be greater then 0.");
+        }
     }
 
     public async Task CheckCurrency(string currencyCode)
@@ -63,7 +66,6 @@ public class PropertyValidations : IPropertyValidations
     
     public void CheckIbanFormat(string iban)
     {
-        iban = iban?.ToUpper().Replace(" ", "").Replace("-", "") ?? throw new InvalidOperationException("Iban is null!");
         if (iban.Length < 15 || iban.Length > 36)
         {
             throw new Exception("Invalid IBAN length");
@@ -85,7 +87,7 @@ public class PropertyValidations : IPropertyValidations
         
         if (!result.IsValid)
         {
-            Console.WriteLine("IBAN is not valid.");
+            throw new Exception("IBAN is not valid.");
         }
     }
 

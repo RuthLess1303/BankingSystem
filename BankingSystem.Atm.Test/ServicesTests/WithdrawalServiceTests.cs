@@ -113,7 +113,7 @@ public class WithdrawalServiceTests
         await _dbContext.Card.AddAsync(card2);
         await _dbContext.SaveChangesAsync();
 
-        var withdrawalService = new WithdrawalService(_cardAuthService, new TransactionRepository(_dbContext));
+        var withdrawalService = new WithdrawalService(_cardAuthService, new TransactionRepository(_dbContext),new WithdrawalRequestValidation());
 
         var request1 = new WithdrawalRequest
         {
@@ -148,7 +148,7 @@ public class WithdrawalServiceTests
     {
         // Arrange
 
-        var withdrawalService = new WithdrawalService(_cardAuthService, new TransactionRepository(_dbContext));
+        var withdrawalService = new WithdrawalService(_cardAuthService, new TransactionRepository(_dbContext),new WithdrawalRequestValidation());
 
         var request = new WithdrawalRequest
         {

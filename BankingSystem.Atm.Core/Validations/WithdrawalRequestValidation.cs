@@ -4,6 +4,7 @@ public interface IWithdrawalRequestValidation
 {
     bool ValidateCreditCardNumber(string cardNumber);
     bool ValidatePinCode(string pinCode);
+    void ValidateAmount(int amount);
 }
 
 public class WithdrawalRequestValidation : IWithdrawalRequestValidation
@@ -39,6 +40,19 @@ public class WithdrawalRequestValidation : IWithdrawalRequestValidation
         if (!pinCode.All(char.IsDigit)) throw new ArgumentException("PIN code must contain only digits.");
 
         return true;
+    }
+
+    public void ValidateAmount(int amount)
+    {
+        if (amount <= 0)
+        {
+            throw new ArgumentException("Amount must be greater than zero.");
+        }
+
+        if (amount % 5 != 0)
+        {
+            throw new ArgumentException("Amount must be a multiple of 5.");
+        }
     }
 
     private int CalculateChecksum(string cardNumber)

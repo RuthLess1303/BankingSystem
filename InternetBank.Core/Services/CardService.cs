@@ -43,12 +43,15 @@ public class CardService : ICardService
         {
             throw new Exception("Expiration date must be more than 1 year apart");
         }
+        
+        var iban = request.Iban.ToUpper().Replace(" ", "").Replace("-", "");
+        
         _propertyValidations.CvvValidation(request.Cvv);
         _propertyValidations.PinValidation(request.Pin);
-        _propertyValidations.CheckIbanFormat(request.Iban);
+        _propertyValidations.CheckIbanFormat(iban);
         _propertyValidations.CheckNameOnCard(request.NameOnCard);
         await _propertyValidations.CheckCardNumberFormat(request.CardNumber);
-        var account = await _accountRepository.GetAccountWithIban(request.Iban);
+        var account = await _accountRepository.GetAccountWithIban(iban);
         if (account == null)
         {
             throw new Exception("Iban is not in use");
@@ -65,7 +68,7 @@ public class CardService : ICardService
             CreationDate = DateTime.Now
         };
 
-        await _cardRepository.LinkWithAccount(request.Iban, cardEntity.Id);
+        await _cardRepository.LinkWithAccount(iban, cardEntity.Id);
         await _userRepository.CreateCard(cardEntity);
     }
 

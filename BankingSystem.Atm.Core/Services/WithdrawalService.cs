@@ -1,5 +1,6 @@
 ﻿using BankingSystem.Atm.Core.Repositories;
 using BankingSystem.Atm.Core.Requests;
+using BankingSystem.Atm.Core.Validations;
 using InternetBank.Db.Db.Entities;
 
 namespace BankingSystem.Atm.Core.Services;
@@ -13,6 +14,8 @@ public class WithdrawalService : IWithdrawalService
 {
     private readonly ICardAuthService _cardAuthService;
     private readonly ITransactionRepository _transactionRepository;
+    private readonly IWithdrawalRequestValidation _requestValidation;
+    
     private const decimal WithdrawalFeePercentage = 0.02m;
     private const decimal DailyLimitInGel = 10000;
     private const decimal DailyLimitInUsd = 4000;
@@ -20,20 +23,21 @@ public class WithdrawalService : IWithdrawalService
 
     public WithdrawalService(
         ICardAuthService cardAuthService,
-        ITransactionRepository transactionRepository)
+        ITransactionRepository transactionRepository,
+        IWithdrawalRequestValidation requestValidation)
     {
         _cardAuthService = cardAuthService;
         _transactionRepository = transactionRepository;
+        _requestValidation = requestValidation;
     }
 
     public async Task Withdraw(WithdrawalRequest request)
     {
         var account = await _cardAuthService.GetAuthorizedAccountAsync(request.CardNumber, request.PinCode) 
                       ?? throw new ArgumentException("Account not found with the given CardNumber.", nameof(request.CardNumber));
-        
-        if (request.Amount <= 0)
-            throw new ArgumentException("Amount must be greater than zero.");
 
+        _requestValidation.ValidateAmount(request.Amount);
+        
         // Calculate the withdrawal fee
         var fee = request.Amount * WithdrawalFeePercentage;
         var withdrawAmount = request.Amount + fee;

@@ -35,16 +35,20 @@ public class AccountService : IAccountService
         {
             throw new Exception($"User with Private Number: {request.PrivateNumber} is not registered");
         }
-        _propertyValidations.CheckIbanFormat(request.Iban);
-        await _propertyValidations.CheckIbanUsage(request.Iban);
+        
+        var iban = request.Iban.ToUpper().Replace(" ", "").Replace("-", "");
+        
+        _propertyValidations.CheckIbanFormat(iban);
+        _propertyValidations.IsAmountValid(request.Amount);
+        await _propertyValidations.CheckIbanUsage(iban);
         await _propertyValidations.CheckCurrency(request.CurrencyCode);
 
         var accountEntity = new AccountEntity
         {
             Id = Guid.NewGuid(),
             PrivateNumber = request.PrivateNumber,
-            Iban = request.Iban,
-            CurrencyCode = request.CurrencyCode,
+            Iban = iban,
+            CurrencyCode = request.CurrencyCode.ToUpper(),
             Balance = request.Amount,
             CreationDate = DateTime.Now
         };
