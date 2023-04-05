@@ -61,9 +61,8 @@ public class UserController : ControllerBase
     {
         var cardModel = await _cardService.SeeCard(iban);
         var cardInfo = _cardService.PrintCardModelProperties(cardModel);
-        var text = "Your Card Information" + $"{cardInfo}\n";
 
-        return Ok(text);
+        return Ok(cardInfo);
     }
     
     [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]

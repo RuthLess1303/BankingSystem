@@ -74,7 +74,7 @@ public class CardService : ICardService
 
     public string PrintCardModelProperties((CardModel, string?) cardModel)
     {
-        string text = "";
+        string text = "Your Card Information";
 
         if (cardModel.Item2 != null)
         {
@@ -157,7 +157,7 @@ public class CardService : ICardService
 
     public string PrintAllCardModelProperties(List<(CardModel, string?)> cardModelList)
     {
-        string text = "";
+        string text = "Your Cards Information";
 
         foreach (var cardModel in cardModelList)
         {
