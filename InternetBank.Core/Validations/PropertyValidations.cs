@@ -82,6 +82,7 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("IBAN should not contain Symbols");
         }
+        
         var validator = new IbanValidator();
         var result = validator.Validate(iban);
         
