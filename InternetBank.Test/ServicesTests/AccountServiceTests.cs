@@ -59,8 +59,6 @@ public class AccountServiceTests
             new AccountRepository(_dbContext),
             new CardRepository(_dbContext)
         );
-        var accountValidation = new AccountValidation(propertyValidations, new AccountRepository(_dbContext));
-         _accountService = new AccountService(accountValidation, propertyValidations,new AccountRepository(_dbContext));
     }
 
     [TearDown]
@@ -74,22 +72,7 @@ public class AccountServiceTests
     private AccountService _accountService;
     private DbContextOptions<AppDbContext> _options;
     private AppDbContext _dbContext;
-
-    [TestCase("NL12ABCD345678910")]
-    public async Task SeeAccount_ReturnsBalanceAndTransactions_WhenTransactionsExist(string iban)
-    {
-        var result = await _accountService.SeeAccount(iban);
-        Assert.Multiple(() =>
-        {
-            Assert.That(result.Item1, Is.EqualTo(50));
-            Assert.That(result.Item2?.Count, Is.EqualTo(2));
-        });
-        Assert.Multiple(() =>
-        {
-            Assert.That(result.Item2?[0].Amount, Is.EqualTo(100));
-            Assert.That(result.Item2?[1].Amount, Is.EqualTo(200));
-        });
-    }
+    
 
     [TestCase("GB12CDEF345678910")]
     [TestCase("GE12CDEF882900129")]

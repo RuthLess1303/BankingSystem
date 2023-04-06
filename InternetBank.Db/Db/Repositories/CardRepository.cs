@@ -60,7 +60,6 @@ public class CardRepository : ICardRepository
     
     public async Task<List<CardEntity>?> GetAllCards(string privateNumber)
     {
-        // var cardList = new List<CardEntity>();
         var accounts = _db.Account.Where(a => a.PrivateNumber == privateNumber);
         if (accounts == null)
         {
@@ -71,16 +70,6 @@ public class CardRepository : ICardRepository
         var cards = await _db.Card
             .Where(c => cardAccountConnection.Select(crd => crd.CardId).Contains(c.Id))
             .ToListAsync();
-        // foreach (var account in accounts)
-        // {
-        //     var cardAccountConnection = await _db.CardAccountConnection.FirstOrDefaultAsync(c => c.Iban == account.Iban);
-        //     if (cardAccountConnection != null)
-        //     {
-        //         var card = await _db.Card.FirstOrDefaultAsync(c => c.Id == cardAccountConnection.CardId);
-        //         
-        //         cardList.Add(card);
-        //     }
-        // }
 
         return cards;
     }
