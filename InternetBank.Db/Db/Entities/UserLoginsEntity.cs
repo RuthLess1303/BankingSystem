@@ -1,6 +1,6 @@
 namespace InternetBank.Db.Db.Entities;
 
-public class LoginLoggerEntity
+public class UserLoginsEntity
 {
     public int Id { get; set; }
     public int UserId { get; set; }
