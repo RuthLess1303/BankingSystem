@@ -78,6 +78,7 @@ public class AccountValidation : IAccountValidation
     
     public async Task<AccountEntity> GetAccountWithIban(string iban)
     {
+        _propertyValidations.CheckIbanFormat(iban);
         var account = await _accountRepository.GetAccountWithIban(iban);
         if (account == null)
         {
@@ -96,11 +97,11 @@ public class AccountValidation : IAccountValidation
     
     public async Task<List<TransactionEntity>> GetTransactionsWithIban(string iban)
     {
-        var transactionsAsAggressorTask = await _accountRepository.GetSenderTransactions(iban);
+        var transactionsAsSenderTask = await _accountRepository.GetSenderTransactions(iban);
         var transactionsAsReceiverTask = await _accountRepository.GetReceiverTransactions(iban);
 
         var allTransactions = new List<TransactionEntity>();
-        allTransactions.AddRange(transactionsAsAggressorTask);
+        allTransactions.AddRange(transactionsAsSenderTask);
         allTransactions.AddRange(transactionsAsReceiverTask);
 
         return allTransactions;

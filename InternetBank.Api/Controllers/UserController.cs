@@ -28,9 +28,8 @@ public class UserController : ControllerBase
         _cardService = cardService;
         _currentUserValidation = currentUserValidation;
     }
-
-    [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]
-    [HttpPost("make-transaction")]
+    
+    [HttpPost("transactions")]
     public async Task<IActionResult> MakeTransaction([FromBody]TransactionRequest request)
     {
         await _transactionService.MakeTransaction(request);
@@ -38,9 +37,8 @@ public class UserController : ControllerBase
         return Ok();
     }
     
-    [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]
-    [HttpPost("see-account")]
-    public async Task<IActionResult> SeeAccount(string iban)
+    [HttpGet("accounts/{iban}")]
+    public async Task<IActionResult> GetAccount(string iban)
     {
         await _currentUserValidation.IsSameUserWithIban(iban);
         var text = await _accountService.SeeAccount(iban);
@@ -48,9 +46,8 @@ public class UserController : ControllerBase
         return Ok(text);
     }
     
-    [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]
-    [HttpPost("see-card")]
-    public async Task<IActionResult> SeeCard(string iban)
+    [HttpGet("cards/{iban}")]
+    public async Task<IActionResult> GetCard(string iban)
     {
         await _currentUserValidation.IsSameUserWithIban(iban);
         var cardModel = await _cardService.SeeCard(iban);
@@ -59,9 +56,8 @@ public class UserController : ControllerBase
         return Ok(cardInfo);
     }
     
-    [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]
-    [HttpPost("see-all-cards")]
-    public async Task<IActionResult> SeeAllCards(string privateNumber)
+    [HttpGet("cards/all/{privateNumber}")]
+    public async Task<IActionResult> GetAllCards(string privateNumber)
     {
         await _currentUserValidation.IsSameUserWithPrivateNumber(privateNumber);
         var cards = await _cardService.SeeAllCards(privateNumber);
