@@ -18,23 +18,27 @@ public class TransactionService : ITransactionService
     private readonly IAccountValidation _accountValidation;
     private readonly ITransactionValidations _transactionValidations;
     private readonly IUserRepository _userRepository;
+    private readonly ICurrentUserValidation _currentUserValidation;
 
     public TransactionService(
         ITransactionRepository transactionRepository, 
         ICurrencyService currencyService, 
         IAccountValidation accountValidation,
         ITransactionValidations transactionValidations, 
-        IUserRepository userRepository)
+        IUserRepository userRepository, 
+        ICurrentUserValidation currentUserValidation)
     {
         _transactionRepository = transactionRepository;
         _currencyService = currencyService;
         _accountValidation = accountValidation;
         _transactionValidations = transactionValidations;
         _userRepository = userRepository;
+        _currentUserValidation = currentUserValidation;
     }
 
     public async Task MakeTransaction(TransactionRequest request)
     {
+        await _currentUserValidation.IsSameUserWithIban(request.SenderIban);
         var senderAccount = await _accountValidation.GetAccountWithIban(request.SenderIban);
         ValidateAmount(request.Amount, senderAccount.Balance);
         var receiverAccount = await _accountValidation.GetAccountWithIban(request.ReceiverIban);

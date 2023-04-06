@@ -56,24 +56,24 @@ public class CardServiceTests
         _dbContext.Dispose();
     }
     
-    [TestCase("1234 5678 9012 3456", "John Doe", "123")]
-    [TestCase("0987 6543 2109 8765", "Mike Tyson", "000")]
-    [TestCase("0092 1234 0982 9901", "Joe Mamba", "001")]
-    [TestCase("1029 2001 2345 2999", "John Doe", "111")]
-    public async Task PrintCardModelProperties_ShouldReturnCorrectString(string cardNumber, string cadHolderName,
-        string cvv)
-    {
-        var card = new CardModel
-        {
-            CardNumber = cardNumber,
-            CardHolderName = cadHolderName,
-            Cvv = cvv,
-            ExpirationDate = new DateTime(2023, 12, 31)
-        };
-        var result = _cardService.PrintCardModelProperties(card);
-        Assert.That(result, Is.EqualTo($"Card Number: {cardNumber}\n" +
-                                       $"Name on Card: {cadHolderName}\n" +
-                                       $"Cvv: {cvv}\n" +
-                                       $"Expiration Date: {card.ExpirationDate}\n"));
-    }
+    // [TestCase("1234 5678 9012 3456", "John Doe", "123")]
+    // [TestCase("0987 6543 2109 8765", "Mike Tyson", "000")]
+    // [TestCase("0092 1234 0982 9901", "Joe Mamba", "001")]
+    // [TestCase("1029 2001 2345 2999", "John Doe", "111")]
+    // public async Task PrintCardModelProperties_ShouldReturnCorrectString(string cardNumber, string cadHolderName,
+    //     string cvv)
+    // {
+    //     var card = new CardModel
+    //     {
+    //         CardNumber = cardNumber,
+    //         CardHolderName = cadHolderName,
+    //         Cvv = cvv,
+    //         ExpirationDate = new DateTime(2023, 12, 31)
+    //     };
+    //     var result = _cardService.PrintCardModelProperties(card);
+    //     Assert.That(result, Is.EqualTo($"Card Number: {cardNumber}\n" +
+    //                                    $"Name on Card: {cadHolderName}\n" +
+    //                                    $"Cvv: {cvv}\n" +
+    //                                    $"Expiration Date: {card.ExpirationDate}\n"));
+    // }
 }

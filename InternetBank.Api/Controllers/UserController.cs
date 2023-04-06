@@ -1,4 +1,5 @@
 using InternetBank.Core.Services;
+using InternetBank.Core.Validations;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Requests;
 using Microsoft.AspNetCore.Authorization;
@@ -14,14 +15,18 @@ public class UserController : ControllerBase
     private readonly ITransactionService _transactionService;
     private readonly IAccountService _accountService;
     private readonly ICardService _cardService;
+    private readonly ICurrentUserValidation _currentUserValidation;
 
     public UserController(
         ITransactionService transactionService, 
-        IAccountService accountService, ICardService cardService)
+        IAccountService accountService, 
+        ICardService cardService, 
+        ICurrentUserValidation currentUserValidation)
     {
         _transactionService = transactionService;
         _accountService = accountService;
         _cardService = cardService;
+        _currentUserValidation = currentUserValidation;
     }
 
     [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]
@@ -37,20 +42,8 @@ public class UserController : ControllerBase
     [HttpPost("see-account")]
     public async Task<IActionResult> SeeAccount(string iban)
     {
-        var account = await _accountService.SeeAccount(iban);
-        var text = $"Your Balance is: {account.Item1}\nTransactions\n";
-
-        if (account.Item2 != null)
-        {
-            foreach (var transaction in account.Item2)
-            {
-                text += $"{_transactionService.PrintTransaction(transaction)}\n";
-            }
-        }
-        else
-        {
-            text += "There are no transactions made yet";
-        }
+        await _currentUserValidation.IsSameUserWithIban(iban);
+        var text = await _accountService.SeeAccount(iban);
 
         return Ok(text);
     }
@@ -59,26 +52,22 @@ public class UserController : ControllerBase
     [HttpPost("see-card")]
     public async Task<IActionResult> SeeCard(string iban)
     {
-        var card = await _cardService.SeeCard(iban);
-        var cardInfo = _cardService.PrintCardModelProperties(card.Item1);
-        var text = "Your Card Information" + $"{cardInfo}\n";
-        
-        if (card.Item2 != null)
-        {
-            text += $"Card Status: {card.Item2}";
-        }
-        
-        return Ok(text);
+        await _currentUserValidation.IsSameUserWithIban(iban);
+        var cardModel = await _cardService.SeeCard(iban);
+        var cardInfo = _cardService.TurnCardInfoToJson(cardModel);
+
+        return Ok(cardInfo);
     }
     
     [Authorize("ApiUser", AuthenticationSchemes = "Bearer")]
     [HttpPost("see-all-cards")]
-    public async Task<string> SeeAllCards(string privateNumber)
+    public async Task<IActionResult> SeeAllCards(string privateNumber)
     {
+        await _currentUserValidation.IsSameUserWithPrivateNumber(privateNumber);
         var cards = await _cardService.SeeAllCards(privateNumber);
-        var text = _cardService.PrintAllCardModelProperties(cards);
+        var cardInfo = _cardService.TurnCardInfoToJson(cards);
 
-        return text;
+        return Ok(cardInfo);
     }
     
 }

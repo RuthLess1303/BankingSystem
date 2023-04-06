@@ -1,18 +1,22 @@
+using System.Runtime.InteropServices.JavaScript;
 using InternetBank.Core.Validations;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Models;
 using InternetBank.Db.Db.Repositories;
 using InternetBank.Db.Requests;
+using Newtonsoft.Json;
 
 namespace InternetBank.Core.Services;
 
 public interface ICardService
 {
     Task CreateCard(CreateCardRequest request);
-    string PrintCardModelProperties(CardModel model);
+    string PrintCardModelProperties((CardModel, string?) model);
     Task<(CardModel, string?)> SeeCard(string iban);
     Task<List<(CardModel,string?)>> SeeAllCards(string privateNumber);
     string PrintAllCardModelProperties(List<(CardModel, string?)> cardModelList);
+    string TurnCardInfoToJson(List<(CardModel, string?)> cardModelInfo);
+    string TurnCardInfoToJson((CardModel, string?) cardModelInfo);
 }
 
 public class CardService : ICardService
@@ -72,12 +76,22 @@ public class CardService : ICardService
         await _userRepository.CreateCard(cardEntity);
     }
 
-    public string PrintCardModelProperties(CardModel model)
+    public string PrintCardModelProperties((CardModel, string?) cardModel)
     {
-        return $"Card Number: {model.CardNumber}\n" +
-               $"Name on Card: {model.CardHolderName}\n" +
-               $"Cvv: {model.Cvv}\n" +
-               $"Expiration Date: {model.ExpirationDate}\n";
+        string text = "Your Card Information";
+
+        if (cardModel.Item2 != null)
+        {
+            text += "\nW A R N I N G\n" +
+                    $"{cardModel.Item2}\n\n";
+        }
+            
+        text += $"Card Number: {cardModel.Item1.CardNumber}\n" +
+               $"Name on Card: {cardModel.Item1.CardHolderName}\n" +
+               $"Cvv: {cardModel.Item1.Cvv}\n" +
+               $"Expiration Date: {cardModel.Item1.ExpirationDate}\n";
+
+        return text;
     }
     
     public async Task<(CardModel, string?)> SeeCard(string iban)
@@ -107,6 +121,13 @@ public class CardService : ICardService
 
     public async Task<List<(CardModel,string?)>> SeeAllCards(string privateNumber)
     {
+        _propertyValidations.CheckPrivateNumberFormat(privateNumber);
+        var user = await _propertyValidations.CheckPrivateNumberUsage(privateNumber);
+        if (user == false)
+        {
+            throw new Exception("Private number not in use");
+        }
+        
         var cards = await _cardRepository.GetAllCards(privateNumber);
         if (cards == null)
         {
@@ -147,7 +168,7 @@ public class CardService : ICardService
 
     public string PrintAllCardModelProperties(List<(CardModel, string?)> cardModelList)
     {
-        string text = "";
+        string text = "Your Cards Information";
 
         foreach (var cardModel in cardModelList)
         {
@@ -164,5 +185,19 @@ public class CardService : ICardService
         }
 
         return text;
+    }
+
+    public string TurnCardInfoToJson(List<(CardModel, string?)> cardModelInfo)
+    {
+        var jsonFormat = JsonConvert.SerializeObject(cardModelInfo);
+
+        return jsonFormat;
+    }
+    
+    public string TurnCardInfoToJson((CardModel, string?) cardModelInfo)
+    {
+        var jsonFormat = JsonConvert.SerializeObject(cardModelInfo);
+
+        return jsonFormat;
     }
 }

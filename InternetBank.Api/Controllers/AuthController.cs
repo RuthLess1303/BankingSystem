@@ -1,6 +1,7 @@
 ﻿using InternetBank.Api.Authorisation;
 using InternetBank.Core.Services;
 using InternetBank.Db.Db.Entities;
+using InternetBank.Db.Db.Repositories;
 using InternetBank.Db.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +15,18 @@ public class AuthController : ControllerBase
     private readonly TokenGenerator _tokenGenerator;
     private readonly IUserService _userService;
     private readonly UserManager<UserEntity> _userManager;
+    private readonly ILoginLoggerRepository _loginLoggerRepository;
 
     public AuthController(
         TokenGenerator tokenGenerator,
         IUserService userService,
-        UserManager<UserEntity> userManager)
+        UserManager<UserEntity> userManager, 
+        ILoginLoggerRepository loginLoggerRepository)
     {
         _tokenGenerator = tokenGenerator;
         _userService = userService;
         _userManager = userManager;
+        _loginLoggerRepository = loginLoggerRepository;
     }
 
     [HttpPost("login")]
@@ -34,6 +38,8 @@ public class AuthController : ControllerBase
         {
             throw new Exception("Role for user was not found");
         }
+
+        await _loginLoggerRepository.AddLoggedInUser(user.Id);
         
         return Ok(_tokenGenerator.Generate(user.Id.ToString(), roles));
     }
