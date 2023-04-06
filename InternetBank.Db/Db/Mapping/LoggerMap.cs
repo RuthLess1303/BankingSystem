@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InternetBank.Db.Db.Mapping;
 
-public class LoggerMap: IEntityTypeConfiguration<LoggerEntity>
+public class LoggerMap : IEntityTypeConfiguration<LoggerEntity>
 {
     public void Configure(EntityTypeBuilder<LoggerEntity> builder)
     {

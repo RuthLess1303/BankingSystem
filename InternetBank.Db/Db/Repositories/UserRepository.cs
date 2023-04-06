@@ -12,8 +12,6 @@ public interface IUserRepository
     Task<UserEntity?> FindWithId(int id);
     Task<UserEntity> FindWithEmail(string email);
     Task Register(RegisterUserRequest request);
-    Task<UserEntity?> GetUserWithEmail(string email);
-    Task<UserEntity?> GetOperatorWithEmail(string email);
     Task<UserEntity> GetUserWithIban(string iban);
 }
 
@@ -31,6 +29,7 @@ public class UserRepository : IUserRepository
     public async Task<UserEntity?> FindWithPrivateNumber(string privateNumber)
     {
         var user = await _db.User.FirstOrDefaultAsync(u => u.PrivateNumber == privateNumber);
+        
         return user;
     }
 
@@ -71,16 +70,6 @@ public class UserRepository : IUserRepository
     {
         await _db.Card.AddAsync(cardEntity);
         await _db.SaveChangesAsync();
-    }
-    
-    public async Task<UserEntity?> GetUserWithEmail(string email)
-    {
-        return await _db.User.FirstOrDefaultAsync(u => u.Email == email);
-    }
-    
-    public async Task<UserEntity?> GetOperatorWithEmail(string email)
-    {
-        return await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<UserEntity> GetUserWithIban(string iban)

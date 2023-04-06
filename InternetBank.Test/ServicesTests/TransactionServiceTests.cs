@@ -21,6 +21,7 @@ namespace InternetBank.Test.ServicesTests
         private IAccountRepository _accountRepository;
         private ITransactionValidations _transactionValidations;
         private ITransactionService _transactionService;
+        private ICurrentUserValidation _currentUserValidation;
 
         [SetUp]
         public void Setup()
@@ -62,7 +63,8 @@ namespace InternetBank.Test.ServicesTests
                 _currencyService,
                 _accountValidation,
                 _transactionValidations,
-                userRepository
+                userRepository,
+                _currentUserValidation
             );
         }
 
