@@ -18,7 +18,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
     public DbSet<TransactionEntity> Transaction { get; set; }
     public DbSet<CurrencyEntity> Currency { get; set; }
     public DbSet<LoggerEntity> Logger { get; set; }
-    public DbSet<LoginLoggerEntity> LoginLogger { get; set; }
+    public DbSet<UserLoginsEntity> UserLogins { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -29,7 +29,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         builder.ApplyConfiguration(new UserMap());
         builder.ApplyConfiguration(new CardAccountConnectionMap());
         builder.ApplyConfiguration(new LoggerMap());
-        builder.ApplyConfiguration(new LoginLoggerMap());
+        builder.ApplyConfiguration(new UserLoginsMap());
         
         base.OnModelCreating(builder);
         

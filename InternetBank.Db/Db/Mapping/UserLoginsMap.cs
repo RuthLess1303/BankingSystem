@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InternetBank.Db.Db.Mapping;
 
-public class LoginLoggerMap : IEntityTypeConfiguration<LoginLoggerEntity>
+public class UserLoginsMap : IEntityTypeConfiguration<UserLoginsEntity>
 {
-    public void Configure(EntityTypeBuilder<LoginLoggerEntity> builder)
+    public void Configure(EntityTypeBuilder<UserLoginsEntity> builder)
     {
         builder.HasKey(l => l.Id);
         builder.Property(l => l.UserId).IsRequired();
