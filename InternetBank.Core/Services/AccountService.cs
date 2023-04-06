@@ -7,7 +7,7 @@ namespace InternetBank.Core.Services;
 
 public interface IAccountService
 {
-    Task<(decimal, List<TransactionEntity>?)> SeeAccount(string iban);
+    Task<string> SeeAccount(string iban);
     Task CreateAccount(CreateAccountRequest request);
 }
 
@@ -16,15 +16,18 @@ public class AccountService : IAccountService
     private readonly IAccountValidation _accountValidation;
     private readonly IPropertyValidations _propertyValidations;
     private readonly IAccountRepository _accountRepository;
+    private readonly ITransactionService _transactionService;
 
     public AccountService(
         IAccountValidation accountValidation, 
         IPropertyValidations propertyValidations, 
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository, 
+        ITransactionService transactionService)
     {
         _accountValidation = accountValidation;
         _propertyValidations = propertyValidations;
         _accountRepository = accountRepository;
+        _transactionService = transactionService;
     }
     
     public async Task CreateAccount(CreateAccountRequest request)
@@ -55,8 +58,28 @@ public class AccountService : IAccountService
 
         await _accountRepository.Create(accountEntity);
     }
+    
+    public async Task<string> SeeAccount(string iban)
+    {
+        var account = await GetAccount(iban);
+        var text = $"Your Balance is: {account.Item1}\nTransactions\n";
 
-    public async Task<(decimal,List<TransactionEntity>?)> SeeAccount(string iban)
+        if (account.Item2 != null)
+        {
+            foreach (var transaction in account.Item2)
+            {
+                text += $"{_transactionService.PrintTransaction(transaction)}\n";
+            }
+        }
+        else
+        {
+            text += "There are no transactions made yet";
+        }
+
+        return text;
+    }
+
+    private async Task<(decimal,List<TransactionEntity>?)> GetAccount(string iban)
     {
         var balance = await _accountValidation.GetAmountWithIban(iban);
         var transactionCheck = await _accountValidation.HasTransaction(iban);
@@ -66,6 +89,7 @@ public class AccountService : IAccountService
         }
         
         var transactions = await _accountValidation.GetTransactionsWithIban(iban);
+        
         return (balance, transactions);
     }
 }

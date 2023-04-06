@@ -93,30 +93,17 @@ public class AccountValidation : IAccountValidation
 
         return transaction != null;
     }
-
-    // public async Task<List<TransactionEntity>> GetTransactionsWithIban(string iban)
-    // {
-    //     var allTransactions = new List<TransactionEntity>();
-    //     
-    //     var transactionsAsAggressor = await _accountRepository.GetSenderTransactions(iban);
-    //     var transactionsAsReceiver = await _accountRepository.GetReceiverTransactions(iban);
-    //     
-    //     allTransactions.AddRange(transactionsAsAggressor);
-    //     allTransactions.AddRange(transactionsAsReceiver);
-    //
-    //     return allTransactions;
-    // }
+    
     public async Task<List<TransactionEntity>> GetTransactionsWithIban(string iban)
     {
-        var transactionsAsAggressorTask = _accountRepository.GetSenderTransactions(iban);
-        var transactionsAsReceiverTask = _accountRepository.GetReceiverTransactions(iban);
+        var transactionsAsAggressorTask = await _accountRepository.GetSenderTransactions(iban);
+        var transactionsAsReceiverTask = await _accountRepository.GetReceiverTransactions(iban);
 
-        await Task.WhenAll(transactionsAsAggressorTask, transactionsAsReceiverTask);
+        var allTransactions = new List<TransactionEntity>();
+        allTransactions.AddRange(transactionsAsAggressorTask);
+        allTransactions.AddRange(transactionsAsReceiverTask);
 
-        var allTransactions = new HashSet<TransactionEntity>(transactionsAsAggressorTask.Result);
-        allTransactions.UnionWith(transactionsAsReceiverTask.Result);
-
-        return allTransactions.ToList();
+        return allTransactions;
     }
 
 }

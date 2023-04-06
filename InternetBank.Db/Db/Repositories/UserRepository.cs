@@ -30,12 +30,14 @@ public class UserRepository : IUserRepository
 
     public async Task<UserEntity?> FindWithPrivateNumber(string privateNumber)
     {
-        return await _db.User.FirstOrDefaultAsync(u => u.PrivateNumber == privateNumber);
+        var user = await _db.User.FirstOrDefaultAsync(u => u.PrivateNumber == privateNumber);
+        return user;
     }
 
     public async Task<UserEntity?> FindWithId(int id)
     {
-        return  await _db.User.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _db.User.FirstOrDefaultAsync(u => u.Id == id);
+        return user;
     }
     
     public async Task<UserEntity> FindWithEmail(string email)
