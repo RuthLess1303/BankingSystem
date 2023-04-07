@@ -24,7 +24,6 @@ public class OperatorController : ControllerBase
         _cardService = cardService;
     }
     
-    [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
     [HttpPost("register-user")]
     public async Task<IActionResult> RegisterUser([FromBody]RegisterUserRequest request)
     {
@@ -33,7 +32,6 @@ public class OperatorController : ControllerBase
         return Ok();
     }
     
-    [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
     [HttpPost("create-account")]
     public async Task<IActionResult> CreateAccount([FromBody]CreateAccountRequest request)
     {
@@ -42,7 +40,6 @@ public class OperatorController : ControllerBase
         return Ok();
     }
     
-    [Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
     [HttpPost("create-card")]
     public async Task<IActionResult> CreateCard([FromBody]CreateCardRequest request)
     {

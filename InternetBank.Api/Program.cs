@@ -9,8 +9,8 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContextPool<AppDbContext>(c =>
-    c.UseSqlServer(builder.Configuration["AppDbContext"]));
+builder.Services.AddDbContextPool<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration["AppDbContext"]));
 
 // Add services to the container.
 builder.Services.AddTransient<IAuthService, AuthService>();
@@ -32,23 +32,24 @@ builder.Services.AddTransient<ITransactionValidations, TransactionValidations>()
 builder.Services.AddTransient<ILoginLoggerRepository, LoginLoggerRepository>();
 builder.Services.AddTransient<ICurrentUserValidation, CurrentUserValidation>();
 
+// Configure authentication
 AuthConfigurator.Configure(builder);
-
 builder.Services.AddTransient<TokenGenerator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddSwaggerGen();
 
+// Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "JWTToken_Auth_API",
-        Version = "v1"
+        Title = "InternetBank API",
+        Version = "v1",
+        Description = "API for managing InternetBank transactions, accounts and cards."
     });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey,
@@ -71,7 +72,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

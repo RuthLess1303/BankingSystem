@@ -72,6 +72,10 @@ public class TransactionService : ITransactionService
 
     private static void ValidateAmount(decimal amount, decimal balance)
     {
+        if (amount <= 0)
+        {
+            throw new Exception("Amount must be greater than zero.");
+        }
         if (amount > balance)
         {
             throw new Exception("Insufficient funds");

@@ -168,6 +168,20 @@ namespace InternetBank.Db.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserLogins",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LoginDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLogins", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -285,17 +299,12 @@ namespace InternetBank.Db.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "7f38605e-5665-4f20-838d-ebb246026a27", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEEhsY2SztbyUzkNJbMjL9stX+HTece1Jy1UpLEqQWSvH0HOG8MmLqJIStVXeEIvyqg==", null, false, "01000000003", null, false, "operator@bank.com" });
+                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bdb4f8e4-cf91-41f2-9822-6d7b47b51b85", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEA1sDPWs8Aq0d7n8QrI43mCl25a4YKkceb5FVMA15+c/IjIquPH32xZaIhxEWc7bRg==", null, false, "01000000003", null, false, "operator@bank.com" });
 
             migrationBuilder.InsertData(
                 table: "Currency",
                 columns: new[] { "Id", "Code", "Date", "Diff", "DiffFormatted", "Name", "Quantity", "Rate", "RateFormatted", "RatePerQuantity", "ValidFromDate" },
-                values: new object[,]
-                {
-                    { 1L, "GEL", new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4891), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ქართული ლარი", 1, 1m, 0m, 0m, new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { 2L, "USD", new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4920), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "დოლარი", 1, 1m, 0m, 0m, new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { 3L, "EUR", new DateTimeOffset(new DateTime(2023, 4, 4, 21, 2, 58, 584, DateTimeKind.Unspecified).AddTicks(4922), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ეურო", 1, 1m, 0m, 0m, new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0)) }
-                });
+                values: new object[] { 1L, "GEL", new DateTimeOffset(new DateTime(2023, 4, 6, 20, 59, 14, 973, DateTimeKind.Unspecified).AddTicks(907), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ქართული ლარი", 1, 1m, 0m, 1m, new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0)) });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -377,6 +386,9 @@ namespace InternetBank.Db.Migrations
 
             migrationBuilder.DropTable(
                 name: "Transaction");
+
+            migrationBuilder.DropTable(
+                name: "UserLogins");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

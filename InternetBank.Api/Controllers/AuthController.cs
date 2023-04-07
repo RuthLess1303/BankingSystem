@@ -1,8 +1,9 @@
-﻿using InternetBank.Api.Authorisation;
+using InternetBank.Api.Authorisation;
 using InternetBank.Core.Services;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Repositories;
 using InternetBank.Db.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody]LoginRequest request)
     {
         var user = await _userService.Login(request);
@@ -40,7 +42,8 @@ public class AuthController : ControllerBase
         }
 
         await _loginLoggerRepository.AddLoggedInUser(user.Id);
-        
-        return Ok(_tokenGenerator.Generate(user.Id.ToString(), roles));
+
+        var token = _tokenGenerator.Generate(user.Id.ToString(), roles);
+        return Ok(token);
     }
 }

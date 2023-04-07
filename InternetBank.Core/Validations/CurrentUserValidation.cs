@@ -45,9 +45,10 @@ public class CurrentUserValidation : ICurrentUserValidation
     public async Task IsSameUserWithPrivateNumber(string privateNumber)
     {
         var currentUser = await _loginLoggerRepository.GetLoggedUser();
+        
         var initiatorUser = await _userRepository.FindWithPrivateNumber(privateNumber);
             
-        if (currentUser.UserId != initiatorUser.Id)
+        if (initiatorUser == null || currentUser.UserId != initiatorUser.Id)
         {
             throw new Exception("Please provide your Private Number");
         }

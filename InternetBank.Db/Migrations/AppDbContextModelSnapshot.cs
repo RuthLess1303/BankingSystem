@@ -167,16 +167,16 @@ namespace InternetBank.Db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 300L,
+                            Id = 1L,
                             Code = "GEL",
-                            Date = new DateTimeOffset(new DateTime(2023, 4, 6, 15, 38, 26, 6, DateTimeKind.Unspecified).AddTicks(8760), new TimeSpan(0, 4, 0, 0, 0)),
+                            Date = new DateTimeOffset(new DateTime(2023, 4, 6, 20, 59, 14, 973, DateTimeKind.Unspecified).AddTicks(907), new TimeSpan(0, 4, 0, 0, 0)),
                             Diff = 0m,
                             DiffFormatted = 0m,
                             Name = "ქართული ლარი",
                             Quantity = 1,
                             Rate = 1m,
                             RateFormatted = 0m,
-                            RatePerQuantity = 0m,
+                            RatePerQuantity = 1m,
                             ValidFromDate = new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
@@ -211,25 +211,6 @@ namespace InternetBank.Db.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Logger");
-                });
-
-            modelBuilder.Entity("InternetBank.Db.Db.Entities.LoginLoggerEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("LoginDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LoginLogger");
                 });
 
             modelBuilder.Entity("InternetBank.Db.Db.Entities.RoleEntity", b =>
@@ -420,7 +401,7 @@ namespace InternetBank.Db.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "650c6b60-0732-4369-9c21-0305fbcac269",
+                            ConcurrencyStamp = "bdb4f8e4-cf91-41f2-9822-6d7b47b51b85",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
@@ -429,12 +410,31 @@ namespace InternetBank.Db.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OPERATOR@BANK.COM",
                             NormalizedUserName = "OPERATOR@BANK.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAECgSURX3RiFbgeNF+lbHdI6pnD46CwDu4YCupgtVnsxkIIimdvVw2f5v+ZSnEaDQNw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA1sDPWs8Aq0d7n8QrI43mCl25a4YKkceb5FVMA15+c/IjIquPH32xZaIhxEWc7bRg==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,
                             UserName = "operator@bank.com"
                         });
+                });
+
+            modelBuilder.Entity("InternetBank.Db.Db.Entities.UserLoginsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("LoginDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
