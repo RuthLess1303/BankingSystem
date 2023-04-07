@@ -56,7 +56,7 @@ public class UserController : ControllerBase
         return Ok(cardInfo);
     }
     
-    [HttpPost("cards/all")]
+    [HttpGet("cards/all")]
     public async Task<IActionResult> GetAllCards()
     {
         var loggedUserPrivateNumber = await _currentUserValidation.GetLoggedUserPrivateNumber();
