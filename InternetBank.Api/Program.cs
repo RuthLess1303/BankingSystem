@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContextPool<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration["AppDbContext"]));
 
 // Add services to the container.
@@ -80,20 +80,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseMiddleware<GlobalErrorHandlingMiddleware>();
-//
-// app.UseHttpsRedirection();
-//
-// app.UseAuthorization();
-//
-// app.MapControllers();
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 
-app.UseMiddleware<GlobalErrorHandlingMiddleware>();
+app.UseAuthorization();
 
 app.MapControllers();
 
