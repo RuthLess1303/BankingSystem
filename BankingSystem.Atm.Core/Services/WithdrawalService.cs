@@ -1,7 +1,7 @@
-﻿using BankingSystem.Atm.Core.Repositories;
-using BankingSystem.Atm.Core.Requests;
+﻿using BankingSystem.Atm.Core.Requests;
 using BankingSystem.Atm.Core.Validations;
 using InternetBank.Db.Db.Entities;
+using ITransactionRepository = BankingSystem.Atm.Core.Repositories.ITransactionRepository;
 
 namespace BankingSystem.Atm.Core.Services;
 

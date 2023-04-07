@@ -13,6 +13,7 @@ public interface IUserRepository
     Task<UserEntity> FindWithEmail(string email);
     Task Register(RegisterUserRequest request);
     Task<UserEntity> GetUserWithIban(string iban);
+    Task<int> GetUserWithCardNumber(string cardNumber);
 }
 
 public class UserRepository : IUserRepository
@@ -86,5 +87,24 @@ public class UserRepository : IUserRepository
         }
 
         return user;
+    }
+
+    public async Task<int> GetUserWithCardNumber(string cardNumber)
+    {
+        var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+        if (card == null)
+        {
+            throw new Exception("Card does not exist under provided card number");
+        }
+
+        var account = await _db.CardAccountConnection.FirstOrDefaultAsync(a => a.CardId == card.Id);
+        if (account == null)
+        {
+            throw new Exception("Card is not linked to account");
+        }
+
+        var user = await GetUserWithIban(account.Iban);
+
+        return user.Id;
     }
 }
