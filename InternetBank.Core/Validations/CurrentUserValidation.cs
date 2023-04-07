@@ -7,18 +7,23 @@ public interface ICurrentUserValidation
     Task IsSameUserWithId(int userId);
     Task IsSameUserWithIban(string iban);
     Task IsSameUserWithPrivateNumber(string privateNumber);
+    Task<string> GetLoggedUserPrivateNumber();
+    
 }
 
 public class CurrentUserValidation : ICurrentUserValidation
 {
     private readonly IUserRepository _userRepository;
     private readonly ILoginLoggerRepository _loginLoggerRepository;
+    private readonly IAccountValidation _accountValidation;
 
     public CurrentUserValidation(IUserRepository userRepository, 
-        ILoginLoggerRepository loginLoggerRepository)
+        ILoginLoggerRepository loginLoggerRepository, 
+        IAccountValidation accountValidation)
     {
         _userRepository = userRepository;
         _loginLoggerRepository = loginLoggerRepository;
+        _accountValidation = accountValidation;
     }
 
     public async Task IsSameUserWithId(int userId)
@@ -52,5 +57,17 @@ public class CurrentUserValidation : ICurrentUserValidation
         {
             throw new Exception("Please provide your Private Number");
         }
+    }
+
+    public async Task<string> GetLoggedUserPrivateNumber()
+    {
+        var currentUser = await _loginLoggerRepository.GetLoggedUser();
+        var userInfo = await _userRepository.FindWithId(currentUser.UserId);
+        if (userInfo == null)
+        {
+            throw new Exception("User not found with provided Id");
+        }
+
+        return userInfo.PrivateNumber;
     }
 }

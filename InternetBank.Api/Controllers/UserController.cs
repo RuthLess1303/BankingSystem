@@ -56,11 +56,11 @@ public class UserController : ControllerBase
         return Ok(cardInfo);
     }
     
-    [HttpGet("cards/all/{privateNumber}")]
-    public async Task<IActionResult> GetAllCards(string privateNumber)
+    [HttpPost("cards/all")]
+    public async Task<IActionResult> GetAllCards()
     {
-        await _currentUserValidation.IsSameUserWithPrivateNumber(privateNumber);
-        var cards = await _cardService.SeeAllCards(privateNumber);
+        var loggedUserPrivateNumber = await _currentUserValidation.GetLoggedUserPrivateNumber();
+        var cards = await _cardService.SeeAllCards(loggedUserPrivateNumber);
         var cardInfo = _cardService.TurnCardInfoToJson(cards);
 
         return Ok(cardInfo);
