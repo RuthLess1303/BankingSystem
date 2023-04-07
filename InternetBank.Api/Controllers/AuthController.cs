@@ -1,4 +1,4 @@
-﻿using InternetBank.Api.Authorisation;
+using InternetBank.Api.Authorisation;
 using InternetBank.Core.Services;
 using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Repositories;
