@@ -29,7 +29,6 @@ builder.Services.AddTransient<ICardRepository, CardRepository>();
 builder.Services.AddTransient<IWithdrawalRequestValidation, WithdrawalRequestValidation>();
 builder.Services.AddTransient<ILoggerRepository, LoggerRepository>();
 
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
