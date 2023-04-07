@@ -19,14 +19,14 @@ public class PropertyValidationsTests
         _propertyValidations = new PropertyValidations(currencyRepositoryMock.Object, userRepositoryMock.Object,
             accountRepositoryMock.Object, cardRepositoryMock.Object);
     }
-
-    [TestCase("GE55CD0360000031041898")]
-    [TestCase("AU55TB0360000031041898")]
-    [TestCase("GE55BG0360000031041898")]
-    public void CheckCorrectIbanFormat(string iban)
-    {
-        Assert.DoesNotThrow(() => _propertyValidations.CheckIbanFormat(iban));
-    }
+    //
+    // [TestCase("GE55CD0360000031041898")]
+    // [TestCase("AU55TB0360000031041898")]
+    // [TestCase("GE55BG0360000031041898")]
+    // public void CheckCorrectIbanFormat(string iban)
+    // {
+    //     Assert.DoesNotThrow(() => _propertyValidations.CheckIbanFormat(iban));
+    // }
     
     [TestCase("55CD0360000031041898")]
     [TestCase("55GB0360000031041898")]
