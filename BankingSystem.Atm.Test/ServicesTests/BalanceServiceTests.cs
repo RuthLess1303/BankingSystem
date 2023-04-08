@@ -49,15 +49,6 @@ public class BalanceServiceTests
             CurrencyCode = "Usd",
             PrivateNumber = "1234567890"
         };
-        _dbContext.Account.Add(account);
-        await _dbContext.SaveChangesAsync();
-
-        var request = new AuthorizeCardRequest
-        {
-            CardNumber = "1111222233334444",
-            PinCode = "1234"
-        };
-
         var card = new CardEntity
         {
             Id = Guid.NewGuid(),
@@ -75,10 +66,17 @@ public class BalanceServiceTests
             Iban = account.Iban,
             CreationDate = DateTime.UtcNow
         };
+        _dbContext.Account.Add(account);
         _dbContext.Card.Add(card);
         _dbContext.CardAccountConnection.Add(connection);
         await _dbContext.SaveChangesAsync();
 
+        var request = new AuthorizeCardRequest
+        {
+            CardNumber = "1111222233334444",
+            PinCode = "1234"
+        };
+        
         // Act
         var balance = await _balanceService.SeeBalance(request);
 

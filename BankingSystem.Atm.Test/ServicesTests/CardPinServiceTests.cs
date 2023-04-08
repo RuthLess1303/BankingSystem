@@ -31,14 +31,13 @@ public class CardCardPinServiceTests
         _cardAuthService = new CardAuthService(new AccountRepository(_dbContext), _cardRepository,
             new WithdrawalRequestValidation());
         _pinRepository = new CardPinRepository(_dbContext);
-        _cardPinService = new CardCardPinService(_cardRepository, _cardAuthService, _pinRepository);
+        _cardPinService = new CardCardPinService(_cardRepository, _cardAuthService, _pinRepository,new WithdrawalRequestValidation());
     }
 
     [TearDown]
     public void TearDown()
     {
         _dbContext.Database.EnsureDeleted();
-        // Dispose the in-memory database context after each test
         _dbContext.Dispose();
     }
     
@@ -50,7 +49,15 @@ public class CardCardPinServiceTests
         const string pin = "1234";
         const string newPin = "4321";
 
-        // Add a card entity to the in-memory database
+        var account = new AccountEntity
+        {
+            Id = Guid.NewGuid(),
+            Iban = "NL91ABNA0417164300",
+            Balance = 1000.00m,
+            CurrencyCode = "Usd",
+            PrivateNumber = "1234567890",
+            CreationDate = DateTime.UtcNow.AddYears(-6)
+        };
         var card = new CardEntity
         {
             Id = Guid.NewGuid(),
@@ -61,17 +68,6 @@ public class CardCardPinServiceTests
             ExpirationDate = DateTime.UtcNow.AddYears(1),
             CreationDate = DateTime.UtcNow.AddYears(-6)
         };
-
-        var account = new AccountEntity
-        {
-            Id = Guid.NewGuid(),
-            Iban = "NL91ABNA0417164300",
-            Balance = 1000.00m,
-            CurrencyCode = "Usd",
-            PrivateNumber = "1234567890",
-            CreationDate = DateTime.UtcNow.AddYears(-6)
-        };
-
         var connection = new CardAccountConnectionEntity
         {
             Id = 1,

@@ -29,7 +29,7 @@ public class AtmController : ControllerBase
         return Ok();
     }
     
-    [HttpGet("see_balance")]
+    [HttpPost("see_balance")]
     public async Task<IActionResult> SeeBalance([FromBody]AuthorizeCardRequest request)
     {
         var balance = await _balanceService.SeeBalance(request);
