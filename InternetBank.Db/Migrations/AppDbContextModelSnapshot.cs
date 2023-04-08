@@ -29,7 +29,7 @@ namespace InternetBank.Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(38, 38)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -169,7 +169,7 @@ namespace InternetBank.Db.Migrations
                         {
                             Id = 1L,
                             Code = "GEL",
-                            Date = new DateTimeOffset(new DateTime(2023, 4, 7, 16, 13, 33, 684, DateTimeKind.Unspecified).AddTicks(2560), new TimeSpan(0, 4, 0, 0, 0)),
+                            Date = new DateTimeOffset(new DateTime(2023, 4, 9, 0, 38, 23, 243, DateTimeKind.Unspecified).AddTicks(7310), new TimeSpan(0, 4, 0, 0, 0)),
                             Diff = 0m,
                             DiffFormatted = 0m,
                             Name = "ქართული ლარი",
@@ -177,7 +177,7 @@ namespace InternetBank.Db.Migrations
                             Rate = 1m,
                             RateFormatted = 0m,
                             RatePerQuantity = 1m,
-                            ValidFromDate = new DateTimeOffset(new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999), new TimeSpan(0, 0, 0, 0, 0))
+                            ValidFromDate = new DateTimeOffset(new DateTime(2023, 4, 10, 0, 38, 23, 243, DateTimeKind.Unspecified).AddTicks(7350), new TimeSpan(0, 4, 0, 0, 0))
                         });
                 });
 
@@ -189,20 +189,17 @@ namespace InternetBank.Db.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApiName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Data")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Exception")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StackTrace")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("ThrowTime")
@@ -275,13 +272,13 @@ namespace InternetBank.Db.Migrations
                         .IsFixedLength();
 
                     b.Property<decimal>("Fee")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(38, 38)");
 
                     b.Property<decimal>("GrossAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(38, 38)");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(38, 38)");
 
                     b.Property<string>("ReceiverIban")
                         .IsRequired()
@@ -401,7 +398,7 @@ namespace InternetBank.Db.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "f084f584-17b3-40ae-af0c-f9cbe9be5f56",
+                            ConcurrencyStamp = "bb595191-106d-452c-aa55-8041909fc8ce",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
@@ -410,7 +407,7 @@ namespace InternetBank.Db.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OPERATOR@BANK.COM",
                             NormalizedUserName = "OPERATOR@BANK.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJcsZPrCGyK/Fsnp0jPD6/PXZLRR16LWQXYXmHwaT0jL8s6+BYZnpanIss0mhNfxXA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEB5sAi1mONzCPtHatN5nimzf/8ImAK8RcZlN1ggqS1/ZlPzbI/AwaJGAyaAfvJRYA==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,

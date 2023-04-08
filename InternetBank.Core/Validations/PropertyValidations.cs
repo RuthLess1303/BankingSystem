@@ -72,8 +72,7 @@ public class PropertyValidations : IPropertyValidations
         }
 
         var countryCode = iban.Substring(0,2);
-        var bankCode = iban.Substring(4,2);
-        if (!Regex.IsMatch(countryCode, @"^[a-zA-Z]+$") || !Regex.IsMatch(bankCode, @"^[a-zA-Z]+$"))
+        if (!Regex.IsMatch(countryCode, @"^[a-zA-Z]+$"))
         {
             throw new Exception("IBAN does not contain CountryCode or BankCode");
         }
