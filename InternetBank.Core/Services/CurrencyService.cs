@@ -1,3 +1,4 @@
+using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Repositories;
 
 namespace InternetBank.Core.Services;
