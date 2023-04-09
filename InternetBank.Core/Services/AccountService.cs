@@ -46,6 +46,13 @@ public class AccountService : IAccountService
         await _propertyValidations.CheckIbanUsage(iban);
         await _propertyValidations.CheckCurrency(request.CurrencyCode);
 
+        var accountEntity = CreateAccountEntity(request, iban);
+
+        await _accountRepository.Create(accountEntity);
+    }
+
+    private static AccountEntity CreateAccountEntity(CreateAccountRequest request, string iban)
+    {
         var accountEntity = new AccountEntity
         {
             Id = Guid.NewGuid(),
@@ -55,10 +62,9 @@ public class AccountService : IAccountService
             Balance = request.Amount,
             CreationDate = DateTime.Now
         };
-
-        await _accountRepository.Create(accountEntity);
+        return accountEntity;
     }
-    
+
     public async Task<string> SeeAccount(string iban)
     {
         var account = await GetAccount(iban);

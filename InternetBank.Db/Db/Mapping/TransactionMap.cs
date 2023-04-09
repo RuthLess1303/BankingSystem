@@ -10,13 +10,13 @@ public class TransactionMap : IEntityTypeConfiguration<TransactionEntity>
     {
         builder.HasKey(t => t.Id);
         builder.Property(t => t.Amount).IsRequired();
-        builder.Property(t => t.GrossAmount).IsRequired().HasColumnType("decimal(38, 38)");
+        builder.Property(t => t.GrossAmount).IsRequired();
         builder.Property(t => t.SenderIban).IsRequired().HasMaxLength(36);
         builder.Property(t => t.ReceiverIban).IsRequired().HasMaxLength(36);
         builder.Property(t => t.CurrencyCode).IsRequired().HasMaxLength(3).IsFixedLength();
-        builder.Property(t => t.Fee).IsRequired().HasColumnType("decimal(38, 38)");
+        builder.Property(t => t.Fee).IsRequired();
         builder.Property(t => t.Type).IsRequired();
-        builder.Property(t => t.Rate).IsRequired().HasColumnType("decimal(38, 38)");
+        builder.Property(t => t.Rate).IsRequired();
         builder.Property(t => t.TransactionTime).IsRequired();
     }
     

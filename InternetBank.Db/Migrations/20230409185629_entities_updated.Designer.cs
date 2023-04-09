@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InternetBank.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230408203823_entities_updated")]
+    [Migration("20230409185629_entities_updated")]
     partial class entities_updated
     {
         /// <inheritdoc />
@@ -32,7 +32,7 @@ namespace InternetBank.Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(38, 38)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -172,7 +172,7 @@ namespace InternetBank.Db.Migrations
                         {
                             Id = 1L,
                             Code = "GEL",
-                            Date = new DateTimeOffset(new DateTime(2023, 4, 9, 0, 38, 23, 243, DateTimeKind.Unspecified).AddTicks(7310), new TimeSpan(0, 4, 0, 0, 0)),
+                            Date = new DateTimeOffset(new DateTime(2023, 4, 9, 22, 56, 29, 912, DateTimeKind.Unspecified).AddTicks(6000), new TimeSpan(0, 4, 0, 0, 0)),
                             Diff = 0m,
                             DiffFormatted = 0m,
                             Name = "ქართული ლარი",
@@ -180,7 +180,7 @@ namespace InternetBank.Db.Migrations
                             Rate = 1m,
                             RateFormatted = 0m,
                             RatePerQuantity = 1m,
-                            ValidFromDate = new DateTimeOffset(new DateTime(2023, 4, 10, 0, 38, 23, 243, DateTimeKind.Unspecified).AddTicks(7350), new TimeSpan(0, 4, 0, 0, 0))
+                            ValidFromDate = new DateTimeOffset(new DateTime(2023, 4, 10, 22, 56, 29, 912, DateTimeKind.Unspecified).AddTicks(6260), new TimeSpan(0, 4, 0, 0, 0))
                         });
                 });
 
@@ -275,13 +275,13 @@ namespace InternetBank.Db.Migrations
                         .IsFixedLength();
 
                     b.Property<decimal>("Fee")
-                        .HasColumnType("decimal(38, 38)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("GrossAmount")
-                        .HasColumnType("decimal(38, 38)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnType("decimal(38, 38)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ReceiverIban")
                         .IsRequired()
@@ -401,7 +401,7 @@ namespace InternetBank.Db.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "bb595191-106d-452c-aa55-8041909fc8ce",
+                            ConcurrencyStamp = "4b5b0fc6-0bb9-4788-9b06-7965915a6df4",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
@@ -410,7 +410,7 @@ namespace InternetBank.Db.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OPERATOR@BANK.COM",
                             NormalizedUserName = "OPERATOR@BANK.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEB5sAi1mONzCPtHatN5nimzf/8ImAK8RcZlN1ggqS1/ZlPzbI/AwaJGAyaAfvJRYA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFBI/C/kfj5bksamC7GtqVsky/tC8HuD1nTMJw2tbViGWdlF3yV4TBQns+Xja/y1ow==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,
