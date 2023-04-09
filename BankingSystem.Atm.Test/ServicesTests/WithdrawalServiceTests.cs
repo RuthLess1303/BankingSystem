@@ -105,15 +105,15 @@ public class WithdrawalServiceTests
             CreationDate = DateTime.UtcNow
         };
         await _dbContext.User.AddAsync(user);
-        await _dbContext.CardAccountConnection.AddAsync(connection1);
-        await _dbContext.CardAccountConnection.AddAsync(connection2);
-        await _dbContext.Account.AddAsync(account1);
-        await _dbContext.Account.AddAsync(account2);
-        await _dbContext.Card.AddAsync(card1);
-        await _dbContext.Card.AddAsync(card2);
+        await _dbContext.CardAccountConnection.AddRangeAsync(connection1,connection2);
+        await _dbContext.Account.AddRangeAsync(account1,account2);
+        await _dbContext.Card.AddRangeAsync(card1,card2);
         await _dbContext.SaveChangesAsync();
 
-        var withdrawalService = new WithdrawalService(_cardAuthService, new TransactionRepository(_dbContext),new WithdrawalRequestValidation());
+        var withdrawalService = new WithdrawalService(
+            _cardAuthService,
+            new TransactionRepository(_dbContext),
+            new WithdrawalRequestValidation());
 
         var request1 = new WithdrawalRequest
         {
@@ -148,7 +148,10 @@ public class WithdrawalServiceTests
     {
         // Arrange
 
-        var withdrawalService = new WithdrawalService(_cardAuthService, new TransactionRepository(_dbContext),new WithdrawalRequestValidation());
+        var withdrawalService = new WithdrawalService(
+            _cardAuthService,
+            new TransactionRepository(_dbContext),
+            new WithdrawalRequestValidation());
 
         var request = new WithdrawalRequest
         {

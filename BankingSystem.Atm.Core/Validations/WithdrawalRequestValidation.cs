@@ -3,7 +3,7 @@
 public interface IWithdrawalRequestValidation
 {
     bool ValidateCreditCardNumber(string cardNumber);
-    bool ValidatePinCode(string pinCode);
+    void ValidatePinCode(string pinCode);
     void ValidateAmount(int amount);
 }
 
@@ -30,7 +30,7 @@ public class WithdrawalRequestValidation : IWithdrawalRequestValidation
         return true;
     }
 
-    public bool ValidatePinCode(string pinCode)
+    public void ValidatePinCode(string pinCode)
     {
         if (string.IsNullOrWhiteSpace(pinCode)) throw new ArgumentException("PIN code is null, empty or whitespace.");
 
@@ -38,8 +38,6 @@ public class WithdrawalRequestValidation : IWithdrawalRequestValidation
             throw new ArgumentException($"Invalid PIN code length. Length should be {PinCodeLength}.");
 
         if (!pinCode.All(char.IsDigit)) throw new ArgumentException("PIN code must contain only digits.");
-
-        return true;
     }
 
     public void ValidateAmount(int amount)

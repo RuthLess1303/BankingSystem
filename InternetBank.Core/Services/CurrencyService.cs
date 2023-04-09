@@ -1,7 +1,4 @@
-using InternetBank.Db.Db;
-using InternetBank.Db.Db.Entities;
 using InternetBank.Db.Db.Repositories;
-using Newtonsoft.Json;
 
 namespace InternetBank.Core.Services;
 
