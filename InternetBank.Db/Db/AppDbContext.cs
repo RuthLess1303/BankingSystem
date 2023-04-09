@@ -30,6 +30,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
         builder.ApplyConfiguration(new CardAccountConnectionMap());
         builder.ApplyConfiguration(new LoggerMap());
         builder.ApplyConfiguration(new UserLoginsMap());
+
         
         base.OnModelCreating(builder);
         
@@ -64,14 +65,14 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
                 Id = 1,
                 Code = "GEL",
                 Quantity = 1,
-                RateFormatted = 0,
-                DiffFormatted = 0,
-                Rate = 1,
+                RateFormatted = 0m,
+                DiffFormatted = 0m,
+                Rate = 1m,
                 Name = "ქართული ლარი",
-                Diff = 0,
+                Diff = 0m,
                 Date = DateTimeOffset.Now,
-                ValidFromDate = DateTimeOffset.MaxValue,
-                RatePerQuantity = 1
+                ValidFromDate = DateTimeOffset.Now.AddDays(1),
+                RatePerQuantity = 1m
             }
         );
         

@@ -19,5 +19,6 @@ public class CurrencyMap : IEntityTypeConfiguration<CurrencyEntity>
         builder.Property(t => t.DiffFormatted).IsRequired();
         builder.Property(t => t.RateFormatted).IsRequired();
         builder.Property(t => t.ValidFromDate).IsRequired();
+        builder.Property(t => t.RatePerQuantity).IsRequired();
     }
 }

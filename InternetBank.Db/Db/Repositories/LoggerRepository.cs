@@ -20,7 +20,7 @@ public class LoggerRepository : ILoggerRepository
     {
         var loggerEntity = new LoggerEntity()
         {
-            ApiName = apiName,
+            ProjectName = apiName,
             Exception = exception.Message,
             StackTrace = exception.StackTrace,
             Data = exception.Data.ToString(),

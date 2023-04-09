@@ -27,7 +27,6 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
         _currencyService = currencyService;
         _accountRepository = accountRepository;
     }
-
     public async Task<(decimal, decimal, decimal)> TotalIncomeFromTransactionsByMonth(int month)
     {
         var transactions = _transactionStatisticsRepository.TransactionsLastMonths(month);
@@ -52,19 +51,19 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
             .Where(t => t.CurrencyCode.ToLower() != "gel")
             .ToListAsync();
         var otherOutsideTransactions = await transactions.Item2
-            .Where(t => t.CurrencyCode.ToLower() == "gel")
+            .Where(t => t.CurrencyCode.ToLower() != "gel")
             .ToListAsync();
 
         foreach (var innerTransaction in otherInnerTransactions)
         {
-            var convertedAmount = await _currencyService.ConvertAmount(innerTransaction.CurrencyCode, "Gel", innerTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmountBasedOnDate(innerTransaction, "Gel", innerTransaction.Amount);
                 
             gelInnerIncome += convertedAmount;
         }
         
         foreach (var outsideTransaction in otherOutsideTransactions)
         {
-            var convertedAmount = await _currencyService.ConvertAmount(outsideTransaction.CurrencyCode, "Gel", outsideTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmountBasedOnDate(outsideTransaction, "Gel", outsideTransaction.Amount);
         
             gelOutsideIncome += convertedAmount;
         }
@@ -102,14 +101,14 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
 
         foreach (var innerTransaction in otherInnerTransactions)
         {
-            var convertedAmount = await _currencyService.ConvertAmount(innerTransaction.CurrencyCode, "Gel", innerTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmountBasedOnDate(innerTransaction, "Gel", innerTransaction.Amount);
 
             gelInnerIncome += convertedAmount;
         }
 
         foreach (var outsideTransaction in otherOutsideTransactions)
         {
-            var convertedAmount = await _currencyService.ConvertAmount(outsideTransaction.CurrencyCode, "Gel", outsideTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmountBasedOnDate(outsideTransaction, "Gel", outsideTransaction.Amount);
 
             gelOutsideIncome += convertedAmount;
         }
@@ -129,8 +128,7 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
         
         await Parallel.ForEachAsync(otherTransactions, async (otherTransaction, ct) =>
         {
-            var fromCurrency = await _accountRepository.GetAccountCurrencyCode(otherTransaction.SenderIban);
-            var convertedAmount = await _currencyService.ConvertAmount(fromCurrency, "Gel", otherTransaction.Amount);
+            var convertedAmount = await _currencyService.ConvertAmountBasedOnDate(otherTransaction, "Gel", otherTransaction.Amount);
 
             gelAmount += convertedAmount;
         });
@@ -159,7 +157,7 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
 
         foreach (var otherTransaction in otherTransactions)
         {
-            var convertedAmount = await _currencyService.ConvertAmount(otherTransaction.CurrencyCode, "Gel", otherTransaction.Fee);
+            var convertedAmount = await _currencyService.ConvertAmountBasedOnDate(otherTransaction, "Gel", otherTransaction.Fee);
 
             gelAmount += convertedAmount;
         }
@@ -184,7 +182,7 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
         
         foreach (var otherTransaction in otherTransactions)
         {
-            var convertedAmount = await _currencyService.ConvertAmount(otherTransaction.CurrencyCode, "usd", otherTransaction.Fee);
+            var convertedAmount = await _currencyService.ConvertAmountBasedOnDate(otherTransaction, "usd", otherTransaction.Fee);
 
             usdAmount += convertedAmount;
         }
@@ -208,7 +206,7 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
         
         foreach (var otherTransaction in otherTransactions)
         {
-            var convertedAmount = await _currencyService.ConvertAmount(otherTransaction.CurrencyCode, "eur", otherTransaction.Fee);
+            var convertedAmount = await _currencyService.ConvertAmountBasedOnDate(otherTransaction, "eur", otherTransaction.Fee);
 
             eurAmount += convertedAmount;
         }

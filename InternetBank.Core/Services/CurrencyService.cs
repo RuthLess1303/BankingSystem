@@ -9,6 +9,8 @@ public interface ICurrencyService
 {
     Task<decimal> ConvertAmount(string fromCurrencyCode, string toCurrencyCode, decimal amount);
     Task<decimal> GetRateAsync(string currencyCode);
+
+    Task<decimal> ConvertAmountBasedOnDate(TransactionEntity fromTransactionEntity, string toCurrencyCode, decimal amount);
 }
 
 public class CurrencyService : ICurrencyService
@@ -37,14 +39,28 @@ public class CurrencyService : ICurrencyService
 
         return amount;
     }
+
+    public async Task<decimal> ConvertAmountBasedOnDate(TransactionEntity fromTransactionEntity, string toCurrencyCode, decimal amount)
+    {
+        if (toCurrencyCode.Equals(fromTransactionEntity.CurrencyCode.ToUpper()))
+        {
+            return amount;
+        }
+        var toCurrency = await _currencyRepository.FindCurrencyWithDate(toCurrencyCode, fromTransactionEntity.TransactionTime);
+        var toRate = toCurrency.RatePerQuantity;
+
+        var fromCurrency = await _currencyRepository.FindCurrencyWithDate(fromTransactionEntity.CurrencyCode, fromTransactionEntity.TransactionTime);
+        var fromRate = fromCurrency.RatePerQuantity;
+
+        amount *= fromRate;
+        amount /= toRate;
+
+        return amount;
+    }
     
     public async Task<decimal> GetRateAsync(string currencyCode)
     {
         var rate = await _currencyRepository.FindCurrency(currencyCode);
-        if (rate == null)
-        {
-            return 1;
-        }
 
         return rate.Rate;
     }
