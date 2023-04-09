@@ -21,6 +21,8 @@ public interface IPropertyValidations
     Task EmailInUse(string email);
     Task CheckIbanUsage(string iban);
     void PinValidation(string pin);
+    bool IsOver18(DateTime birthDate);
+
 }
 
 public class PropertyValidations : IPropertyValidations
@@ -239,5 +241,20 @@ public class PropertyValidations : IPropertyValidations
         {
             throw new Exception("Iban already in use");
         }
+    }
+    
+    public bool IsOver18(DateTime birthDate)
+    {
+        if (birthDate >= DateTime.Today)
+        {
+            throw new ArgumentException("Birthdate cannot be in the future.");
+        }
+
+        if (DateTime.Today.AddYears(-18) < birthDate)
+        {
+            throw new ArgumentException("Person must be at least 18 years old.");
+        }
+
+        return true;
     }
 }

@@ -63,6 +63,7 @@ public class UserService : IUserService
         _propertyValidations.CheckNameOrSurname(request.Name);
         _propertyValidations.CheckNameOrSurname(request.Surname);
         _propertyValidations.CheckEmailDomainExistence(request.Email);
+        _propertyValidations.IsOver18(request.BirthDate);
         await _propertyValidations.EmailInUse(request.Email);
     }
 }
