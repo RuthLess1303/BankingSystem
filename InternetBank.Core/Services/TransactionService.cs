@@ -39,6 +39,10 @@ public class TransactionService : ITransactionService
     public async Task MakeTransaction(TransactionRequest request)
     {
         await _currentUserValidation.IsSameUserWithIban(request.SenderIban);
+        if (request.SenderIban == request.ReceiverIban)
+        {
+            throw new Exception("Money can not be transferred on same account");
+        }
         var senderAccount = await _accountValidation.GetAccountWithIban(request.SenderIban);
         ValidateAmount(request.Amount, senderAccount.Balance);
         var receiverAccount = await _accountValidation.GetAccountWithIban(request.ReceiverIban);

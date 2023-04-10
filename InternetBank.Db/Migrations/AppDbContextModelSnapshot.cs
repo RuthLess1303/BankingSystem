@@ -29,7 +29,8 @@ namespace InternetBank.Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -136,10 +137,12 @@ namespace InternetBank.Db.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<decimal>("Diff")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<decimal>("DiffFormatted")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -149,13 +152,16 @@ namespace InternetBank.Db.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<decimal>("RateFormatted")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<decimal>("RatePerQuantity")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<DateTimeOffset>("ValidFromDate")
                         .HasColumnType("datetimeoffset");
@@ -169,7 +175,7 @@ namespace InternetBank.Db.Migrations
                         {
                             Id = 1L,
                             Code = "GEL",
-                            Date = new DateTimeOffset(new DateTime(2023, 4, 9, 22, 56, 29, 912, DateTimeKind.Unspecified).AddTicks(6000), new TimeSpan(0, 4, 0, 0, 0)),
+                            Date = new DateTimeOffset(new DateTime(2023, 4, 10, 15, 38, 52, 823, DateTimeKind.Unspecified).AddTicks(5400), new TimeSpan(0, 4, 0, 0, 0)),
                             Diff = 0m,
                             DiffFormatted = 0m,
                             Name = "ქართული ლარი",
@@ -177,7 +183,7 @@ namespace InternetBank.Db.Migrations
                             Rate = 1m,
                             RateFormatted = 0m,
                             RatePerQuantity = 1m,
-                            ValidFromDate = new DateTimeOffset(new DateTime(2023, 4, 10, 22, 56, 29, 912, DateTimeKind.Unspecified).AddTicks(6260), new TimeSpan(0, 4, 0, 0, 0))
+                            ValidFromDate = new DateTimeOffset(new DateTime(2023, 4, 11, 15, 38, 52, 823, DateTimeKind.Unspecified).AddTicks(5440), new TimeSpan(0, 4, 0, 0, 0))
                         });
                 });
 
@@ -263,7 +269,8 @@ namespace InternetBank.Db.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<string>("CurrencyCode")
                         .IsRequired()
@@ -272,13 +279,16 @@ namespace InternetBank.Db.Migrations
                         .IsFixedLength();
 
                     b.Property<decimal>("Fee")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<decimal>("GrossAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<string>("ReceiverIban")
                         .IsRequired()
@@ -398,7 +408,7 @@ namespace InternetBank.Db.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "4b5b0fc6-0bb9-4788-9b06-7965915a6df4",
+                            ConcurrencyStamp = "a76641b4-59ac-46a9-8f49-bdfd0f3d0f2a",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
@@ -407,7 +417,7 @@ namespace InternetBank.Db.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OPERATOR@BANK.COM",
                             NormalizedUserName = "OPERATOR@BANK.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFBI/C/kfj5bksamC7GtqVsky/tC8HuD1nTMJw2tbViGWdlF3yV4TBQns+Xja/y1ow==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEUiCNXTVSWyjI7+dGTfS5fRnSwRP0oX8/YDbHJPILi8m3qIfzJfH543PhGlBAmOxg==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,

@@ -21,7 +21,7 @@ namespace InternetBank.Db.Migrations
                     PrivateNumber = table.Column<string>(type: "nchar(11)", fixedLength: true, maxLength: 11, nullable: false),
                     Iban = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     CurrencyCode = table.Column<string>(type: "nchar(3)", fixedLength: true, maxLength: 3, nullable: false),
-                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -115,14 +115,14 @@ namespace InternetBank.Db.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    RateFormatted = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DiffFormatted = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    RateFormatted = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
+                    DiffFormatted = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
+                    Rate = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Diff = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Diff = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
                     Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ValidFromDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    RatePerQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    RatePerQuantity = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -152,14 +152,14 @@ namespace InternetBank.Db.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    GrossAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
+                    GrossAmount = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
                     SenderIban = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     ReceiverIban = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     CurrencyCode = table.Column<string>(type: "nchar(3)", fixedLength: true, maxLength: 3, nullable: false),
-                    Fee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Fee = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Rate = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
                     TransactionTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
@@ -299,12 +299,12 @@ namespace InternetBank.Db.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "4b5b0fc6-0bb9-4788-9b06-7965915a6df4", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEFBI/C/kfj5bksamC7GtqVsky/tC8HuD1nTMJw2tbViGWdlF3yV4TBQns+Xja/y1ow==", null, false, "01000000003", null, false, "operator@bank.com" });
+                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a76641b4-59ac-46a9-8f49-bdfd0f3d0f2a", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEEUiCNXTVSWyjI7+dGTfS5fRnSwRP0oX8/YDbHJPILi8m3qIfzJfH543PhGlBAmOxg==", null, false, "01000000003", null, false, "operator@bank.com" });
 
             migrationBuilder.InsertData(
                 table: "Currency",
                 columns: new[] { "Id", "Code", "Date", "Diff", "DiffFormatted", "Name", "Quantity", "Rate", "RateFormatted", "RatePerQuantity", "ValidFromDate" },
-                values: new object[] { 1L, "GEL", new DateTimeOffset(new DateTime(2023, 4, 9, 22, 56, 29, 912, DateTimeKind.Unspecified).AddTicks(6000), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ქართული ლარი", 1, 1m, 0m, 1m, new DateTimeOffset(new DateTime(2023, 4, 10, 22, 56, 29, 912, DateTimeKind.Unspecified).AddTicks(6260), new TimeSpan(0, 4, 0, 0, 0)) });
+                values: new object[] { 1L, "GEL", new DateTimeOffset(new DateTime(2023, 4, 10, 15, 38, 52, 823, DateTimeKind.Unspecified).AddTicks(5400), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ქართული ლარი", 1, 1m, 0m, 1m, new DateTimeOffset(new DateTime(2023, 4, 11, 15, 38, 52, 823, DateTimeKind.Unspecified).AddTicks(5440), new TimeSpan(0, 4, 0, 0, 0)) });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
