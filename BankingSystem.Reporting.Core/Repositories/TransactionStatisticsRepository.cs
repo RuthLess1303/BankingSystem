@@ -59,12 +59,12 @@ public class TransactionStatisticsRepository : ITransactionStatisticsRepository
     public async Task<Dictionary<int, long>> TotalQuantitiesBasedOnDays()
     {
         var transactionByDays = new Dictionary<int, long>();
-        for (var i = 1; i <= 31; i++)
+        for (var i = 0; i <= 30; i++)
         {
             var transactions = await _db.Transaction.Where(t =>
                 t.Type.ToLower() != "atm" && t.TransactionTime.DayOfYear == DateTimeOffset.Now.AddDays(-i).DayOfYear).ToListAsync();
             
-            transactionByDays.Add(i, transactions.Count);
+            transactionByDays.Add(i + 1, transactions.Count);
         }
         
         return transactionByDays;
