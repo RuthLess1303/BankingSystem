@@ -15,7 +15,7 @@ public class TransactionStatisticsController : ControllerBase
     }
 
     [HttpGet("get-transactions-quantity")]
-    public async Task<string> GetTransactionQuantityForLast1Month()
+    public async Task<string> GetTransactionQuantityForLast1To12Month()
     {
         var transactionsOneMonth = await _transactionStatisticsService.GetTransactionQuantityForLastMonth(1);
         var transactionsSixMonth = await _transactionStatisticsService.GetTransactionQuantityForLastMonth(6);
@@ -30,7 +30,7 @@ public class TransactionStatisticsController : ControllerBase
     }
 
     [HttpGet("get-transaction-income")]
-    public async Task<string> GetTransactionIncomeLast1Month()
+    public async Task<string> GetTransactionIncomeForLast1To12Month()
     {
         var transactionsOneMonth = await _transactionStatisticsService.GetTransactionIncomeByMonth(1);
         var transactionsSixMonth = await _transactionStatisticsService.GetTransactionIncomeByMonth(6);
