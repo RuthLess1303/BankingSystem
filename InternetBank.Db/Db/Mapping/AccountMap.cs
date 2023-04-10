@@ -12,7 +12,7 @@ public class AccountMap : IEntityTypeConfiguration<AccountEntity>
         builder.Property(a => a.PrivateNumber).IsRequired().HasMaxLength(11).IsFixedLength();
         builder.Property(a => a.Iban).IsRequired().HasMaxLength(36);
         builder.Property(a => a.CurrencyCode).IsRequired().HasMaxLength(3).IsFixedLength();
-        builder.Property(a => a.Balance).IsRequired();
+        builder.Property(a => a.Balance).IsRequired().HasPrecision(18,6);
         builder.Property(a => a.CreationDate).IsRequired();
     }
 }
