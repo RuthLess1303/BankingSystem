@@ -11,10 +11,8 @@ namespace InternetBank.Core.Services;
 public interface ICardService
 {
     Task CreateCard(CreateCardRequest request);
-    string PrintCardModelProperties((CardModel, string?) model);
     Task<(CardModel, string?)> SeeCard(string iban);
     Task<List<(CardModel,string?)>> SeeAllCards(string privateNumber);
-    string PrintAllCardModelProperties(List<(CardModel, string?)> cardModelList);
     string TurnCardInfoToJson(List<(CardModel, string?)> cardModelInfo);
     string TurnCardInfoToJson((CardModel, string?) cardModelInfo);
 }
@@ -74,24 +72,6 @@ public class CardService : ICardService
 
         await _cardRepository.LinkWithAccount(iban, cardEntity.Id);
         await _userRepository.CreateCard(cardEntity);
-    }
-
-    public string PrintCardModelProperties((CardModel, string?) cardModel)
-    {
-        string text = "Your Card Information";
-
-        if (cardModel.Item2 != null)
-        {
-            text += "\nW A R N I N G\n" +
-                    $"{cardModel.Item2}\n\n";
-        }
-            
-        text += $"Card Number: {cardModel.Item1.CardNumber}\n" +
-               $"Name on Card: {cardModel.Item1.CardHolderName}\n" +
-               $"Cvv: {cardModel.Item1.Cvv}\n" +
-               $"Expiration Date: {cardModel.Item1.ExpirationDate}\n";
-
-        return text;
     }
     
     public async Task<(CardModel, string?)> SeeCard(string iban)
@@ -165,28 +145,7 @@ public class CardService : ICardService
         
         return cardModels;
     }
-
-    public string PrintAllCardModelProperties(List<(CardModel, string?)> cardModelList)
-    {
-        string text = "Your Cards Information";
-
-        foreach (var cardModel in cardModelList)
-        {
-            if (cardModel.Item2 != null)
-            {
-                text += "\nW A R N I N G\n" +
-                        $"{cardModel.Item2}\n\n";
-            }
-            
-            text += $"Card Number: {cardModel.Item1.CardNumber}\n" +
-                    $"Name on Card: {cardModel.Item1.CardHolderName}\n" +
-                    $"Cvv: {cardModel.Item1.Cvv}\n" +
-                    $"Expiration Date: {cardModel.Item1.ExpirationDate}\n\n";
-        }
-
-        return text;
-    }
-
+    
     public string TurnCardInfoToJson(List<(CardModel, string?)> cardModelInfo)
     {
         var jsonFormat = JsonConvert.SerializeObject(cardModelInfo);

@@ -14,7 +14,6 @@ public class Worker : BackgroundService
         using var scope = _services.CreateScope();
         var currencyService = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
 
-        // AddInDb method is called to add currency data for the first time
         await currencyService.AddInDb();
 
         while (!stoppingToken.IsCancellationRequested)
