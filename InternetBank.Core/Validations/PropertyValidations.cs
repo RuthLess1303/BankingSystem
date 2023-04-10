@@ -34,18 +34,15 @@ public class PropertyValidations : IPropertyValidations
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
-    private readonly ICardRepository _cardRepository;
 
     public PropertyValidations(
         ICurrencyRepository currencyRepository, 
         IUserRepository userRepository, 
-        IAccountRepository accountRepository, 
-        ICardRepository cardRepository)
+        IAccountRepository accountRepository)
     {
         _currencyRepository = currencyRepository;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
-        _cardRepository = cardRepository;
     }
 
     public void IsAmountValid(decimal amount)

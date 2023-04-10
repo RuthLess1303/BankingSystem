@@ -55,15 +55,14 @@ public class TransactionServiceTests
             new PropertyValidations(
                 _currencyRepository,
                 _userRepository,
-                _accountRepository,
-                new CardRepository(_dbContext)
+                _accountRepository
             ),
             _accountRepository);
 
         _transactionRepository = new TransactionRepository(_dbContext);
         _transactionValidations = new TransactionValidations();
         _currentUserValidation =
-            new CurrentUserValidation(_userRepository, new LoginLoggerRepository(_dbContext), _accountValidation);
+            new CurrentUserValidation(_userRepository, new LoginLoggerRepository(_dbContext));
         _currencyService = new CurrencyService(_currencyRepository);
         _transactionService = new TransactionService(
             _transactionRepository,

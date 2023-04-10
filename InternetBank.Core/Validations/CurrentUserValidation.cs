@@ -13,15 +13,12 @@ public class CurrentUserValidation : ICurrentUserValidation
 {
     private readonly IUserRepository _userRepository;
     private readonly ILoginLoggerRepository _loginLoggerRepository;
-    private readonly IAccountValidation _accountValidation;
 
     public CurrentUserValidation(IUserRepository userRepository, 
-        ILoginLoggerRepository loginLoggerRepository, 
-        IAccountValidation accountValidation)
+        ILoginLoggerRepository loginLoggerRepository)
     {
         _userRepository = userRepository;
         _loginLoggerRepository = loginLoggerRepository;
-        _accountValidation = accountValidation;
     }
     
     public async Task IsSameUserWithIban(string iban)

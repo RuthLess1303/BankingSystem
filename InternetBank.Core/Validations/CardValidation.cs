@@ -11,14 +11,10 @@ public interface ICardValidation
 
 public class CardValidation : ICardValidation
 {
-    private readonly IPropertyValidations _propertyValidations;
     private readonly ICardRepository _cardRepository;
     
-    public CardValidation(
-        IPropertyValidations propertyValidations, 
-        ICardRepository cardRepository)
+    public CardValidation(ICardRepository cardRepository)
     {
-        _propertyValidations = propertyValidations;
         _cardRepository = cardRepository;
     }
     
