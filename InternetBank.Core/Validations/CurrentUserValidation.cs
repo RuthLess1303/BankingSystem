@@ -4,9 +4,7 @@ namespace InternetBank.Core.Validations;
 
 public interface ICurrentUserValidation
 {
-    Task IsSameUserWithId(int userId);
     Task IsSameUserWithIban(string iban);
-    Task IsSameUserWithPrivateNumber(string privateNumber);
     Task<string> GetLoggedUserPrivateNumber();
     
 }
@@ -25,17 +23,7 @@ public class CurrentUserValidation : ICurrentUserValidation
         _loginLoggerRepository = loginLoggerRepository;
         _accountValidation = accountValidation;
     }
-
-    public async Task IsSameUserWithId(int userId)
-    {
-        var currentUser = await _loginLoggerRepository.GetLoggedUser();
-
-        if (currentUser.UserId != userId)
-        {
-            throw new Exception("Please provide your ID");
-        }
-    }
-
+    
     public async Task IsSameUserWithIban(string iban)
     {
         var currentUser = await _loginLoggerRepository.GetLoggedUser();
@@ -44,18 +32,6 @@ public class CurrentUserValidation : ICurrentUserValidation
         if (currentUser.UserId != initiatorUser.Id)
         {
             throw new Exception("Please provide your IBAN");
-        }
-    }
-    
-    public async Task IsSameUserWithPrivateNumber(string privateNumber)
-    {
-        var currentUser = await _loginLoggerRepository.GetLoggedUser();
-        
-        var initiatorUser = await _userRepository.FindWithPrivateNumber(privateNumber);
-            
-        if (initiatorUser == null || currentUser.UserId != initiatorUser.Id)
-        {
-            throw new Exception("Please provide your Private Number");
         }
     }
 

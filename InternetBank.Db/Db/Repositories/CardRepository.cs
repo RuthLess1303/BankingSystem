@@ -6,7 +6,6 @@ namespace InternetBank.Db.Db.Repositories;
 public interface ICardRepository
 {
     Task LinkWithAccount(string iban, Guid cardId);
-    Task CardNumberUsage(string cardNumber);
     Task<CardEntity?> GetCardWithIban(string iban);
     Task<List<CardEntity>?> GetAllCards(string privateNumber);
 }
@@ -20,12 +19,6 @@ public class CardRepository : ICardRepository
         _db = db;
     }
     
-    public async Task CardNumberUsage(string cardNumber)
-    {
-        var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
-
-        if (card != null) throw new ArgumentException("Card Number already in use.");
-    }
 
     public async Task LinkWithAccount(string iban, Guid cardId)
     {

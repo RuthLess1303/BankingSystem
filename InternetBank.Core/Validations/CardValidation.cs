@@ -6,7 +6,6 @@ namespace InternetBank.Core.Validations;
 
 public interface ICardValidation
 {
-    Task OnCreate(CreateCardRequest request);
     Task<CardEntity> GetCardWithIban(string iban);
 }
 
@@ -21,19 +20,6 @@ public class CardValidation : ICardValidation
     {
         _propertyValidations = propertyValidations;
         _cardRepository = cardRepository;
-    }
-
-    public Task OnCreate(CreateCardRequest request)
-    {
-        var cardExpired = _propertyValidations.IsCardExpired(request.ExpirationDate);
-        if (cardExpired) throw new Exception("Expiration date should not equal today's date");
-        var cardCheck = _propertyValidations.CheckCardNumberFormat(request.CardNumber);
-        if (!cardCheck)
-        {
-            throw new Exception("Card Number is not valid!");
-        }
-
-        return Task.CompletedTask;
     }
     
     public async Task<CardEntity> GetCardWithIban(string iban)
