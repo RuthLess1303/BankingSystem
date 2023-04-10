@@ -87,7 +87,7 @@ public class AccountService : IAccountService
 
     private async Task<(decimal,List<TransactionEntity>?)> GetAccount(string iban)
     {
-        var balance = await _accountValidation.GetAmountWithIban(iban);
+        var balance = await _accountValidation.GetBalanceWithIban(iban);
         var transactionCheck = await _accountValidation.HasTransaction(iban);
         if (!transactionCheck)
         {

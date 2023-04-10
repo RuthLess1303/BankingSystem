@@ -250,7 +250,7 @@ public class AccountValidationTests
         _dbContext.Account.Add(account);
         await _dbContext.SaveChangesAsync();
 
-        var result = await _accountValidation.GetAmountWithIban(iban);
+        var result = await _accountValidation.GetBalanceWithIban(iban);
 
         Assert.That(result, Is.EqualTo(expectedBalance));
     }
