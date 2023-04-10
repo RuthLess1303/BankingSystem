@@ -62,7 +62,7 @@ public class TransactionStatisticsRepository : ITransactionStatisticsRepository
         for (var i = 1; i <= 31; i++)
         {
             var transactions = await _db.Transaction.Where(t =>
-                t.Type.ToLower() == "atm" && t.TransactionTime == DateTime.Now.AddDays(-i)).ToListAsync();
+                t.Type.ToLower() != "atm" && t.TransactionTime == DateTime.Now.AddDays(-i)).ToListAsync();
             
             transactionByDays.Add(i, transactions.Count);
         }
