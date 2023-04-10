@@ -54,7 +54,7 @@ public class CardService : ICardService
         _propertyValidations.PinValidation(request.Pin);
         _propertyValidations.CheckIbanFormat(iban);
         _propertyValidations.CheckNameOnCard(request.NameOnCard);
-        await _propertyValidations.CheckCardNumberFormat(request.CardNumber);
+        _propertyValidations.CheckCardNumberFormat(request.CardNumber);
         var account = await _accountRepository.GetAccountWithIban(iban);
         if (account == null)
         {

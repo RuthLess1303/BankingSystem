@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InternetBank.Db.Migrations
 {
     /// <inheritdoc />
-    public partial class entities_updated : Migration
+    public partial class MyFirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -299,12 +299,12 @@ namespace InternetBank.Db.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PrivateNumber", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a76641b4-59ac-46a9-8f49-bdfd0f3d0f2a", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEEUiCNXTVSWyjI7+dGTfS5fRnSwRP0oX8/YDbHJPILi8m3qIfzJfH543PhGlBAmOxg==", null, false, "01000000003", null, false, "operator@bank.com" });
+                values: new object[] { 1, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "36d56063-fb5c-4723-9fcf-35708eda0816", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "operator@bank.com", false, "example", "exampleLastname", false, null, "OPERATOR@BANK.COM", "OPERATOR@BANK.COM", "AQAAAAIAAYagAAAAEPwIjVKIlX4j0KCAxF7cQhyxk2fGNbtGq1kSe6Aruq5U9NiSqmDpS4yksodAFwXgMQ==", null, false, "01000000003", null, false, "operator@bank.com" });
 
             migrationBuilder.InsertData(
                 table: "Currency",
                 columns: new[] { "Id", "Code", "Date", "Diff", "DiffFormatted", "Name", "Quantity", "Rate", "RateFormatted", "RatePerQuantity", "ValidFromDate" },
-                values: new object[] { 1L, "GEL", new DateTimeOffset(new DateTime(2023, 4, 10, 15, 38, 52, 823, DateTimeKind.Unspecified).AddTicks(5400), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ქართული ლარი", 1, 1m, 0m, 1m, new DateTimeOffset(new DateTime(2023, 4, 11, 15, 38, 52, 823, DateTimeKind.Unspecified).AddTicks(5440), new TimeSpan(0, 4, 0, 0, 0)) });
+                values: new object[] { 1L, "GEL", new DateTimeOffset(new DateTime(2023, 4, 10, 18, 54, 31, 269, DateTimeKind.Unspecified).AddTicks(8585), new TimeSpan(0, 4, 0, 0, 0)), 0m, 0m, "ქართული ლარი", 1, 1m, 0m, 1m, new DateTimeOffset(new DateTime(2023, 4, 11, 18, 54, 31, 269, DateTimeKind.Unspecified).AddTicks(8624), new TimeSpan(0, 4, 0, 0, 0)) });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
