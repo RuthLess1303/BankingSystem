@@ -1,10 +1,12 @@
 using BankingSystem.Reporting.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankingSystem.Reporting.Api.Controllers;
 
 [ApiController]
 [Route("api/transaction-statistics")]
+[Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
 public class TransactionStatisticsController : ControllerBase
 {
     private readonly ITransactionStatisticsService _transactionStatisticsService;

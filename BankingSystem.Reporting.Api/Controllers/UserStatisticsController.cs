@@ -1,10 +1,12 @@
 using BankingSystem.Reporting.Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankingSystem.Reporting.Api.Controllers;
 
 [ApiController]
 [Route("api/user-statistics")]
+[Authorize("ApiOperator", AuthenticationSchemes = "Bearer")]
 public class UserStatisticsController : ControllerBase
 {
     private readonly IUserStatisticsRepository _userStatisticsRepository;
