@@ -56,8 +56,13 @@ public class AccountRepository : IAccountRepository
 
     public async Task<TransactionEntity?> HasTransaction(string iban)
     {
-        var transaction = await _db.Transaction.FirstOrDefaultAsync(t => t.ReceiverIban == iban);
-        return transaction;
+        var transactionReceiver = await _db.Transaction.FirstOrDefaultAsync(t => t.ReceiverIban == iban);
+        if (transactionReceiver != null)
+        {
+            return transactionReceiver;
+        }
+        var transactionSender = await _db.Transaction.FirstOrDefaultAsync(t => t.SenderIban == iban);
+        return transactionSender;
     }
 
     public async Task Create(AccountEntity accountEntity)
