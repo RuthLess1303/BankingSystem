@@ -56,9 +56,9 @@ public class TransactionStatisticsController : ControllerBase
     }
 
     [HttpGet("transaction-quantity-by-days-for-one-month")]
-    public async Task<string> QuantitiesByDaysForOneMonth()
+    public async Task<Dictionary<int, long>?> QuantitiesByDaysForOneMonth()
     {
-        var transactionsByDaysForLastMonth = await _transactionStatisticsService.PrintQuantityOfTransactionsByDaysForLastMonth();
+        var transactionsByDaysForLastMonth = await _transactionStatisticsService.QuantityOfTransactionsByDaysForLastMonth();
 
         return transactionsByDaysForLastMonth;
     }

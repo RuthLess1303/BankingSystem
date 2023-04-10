@@ -96,6 +96,10 @@ public class TransactionStatisticsService : ITransactionStatisticsService
     public async Task<Dictionary<int, long>?> QuantityOfTransactionsByDaysForLastMonth()
     {
         var transactions = await _transactionStatisticsRepository.TotalQuantitiesBasedOnDays();
+        if (transactions == null)
+        {
+            throw new Exception("There are 0 transactions");
+        }
         
         return transactions;
     }
