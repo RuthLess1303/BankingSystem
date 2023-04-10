@@ -148,12 +148,13 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
     private async Task<decimal> AvgIncomeFromTransactionGel()
     {
         var transactions = _transactionStatisticsRepository.GelAllTransactions();
-        var gelAmount = await transactions
-            .Where(t => t.CurrencyCode.ToLower() == "gel")
-            .SumAsync(t => t.Amount);
+        var gelAmounts = transactions
+            .Where(t => t.CurrencyCode.ToLower() == "gel");
         var otherTransactions = await transactions
             .Where(t => t.CurrencyCode.ToLower() != "gel")
             .ToListAsync();
+        var gelAmount = await gelAmounts.SumAsync(c => c.Fee);
+        var gelAmountCount = gelAmounts.Count();
 
         foreach (var otherTransaction in otherTransactions)
         {
@@ -167,7 +168,7 @@ public class TransactionStatisticsValidations : ITransactionStatisticsValidation
             return 0;
         }
         
-        return gelAmount / otherTransactions.Count;
+        return gelAmount / (otherTransactions.Count + gelAmountCount);
     }
     
     private async Task<decimal> AvgIncomeFromTransactionUsd()
