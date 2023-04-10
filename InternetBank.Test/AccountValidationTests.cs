@@ -37,8 +37,7 @@ public class AccountValidationTests
         _propertyValidations = new PropertyValidations(
             new CurrencyRepository(_dbContext),
             userRepository,
-            new AccountRepository(_dbContext),
-            new CardRepository(_dbContext)
+            new AccountRepository(_dbContext)
         );
         _accountRepository = new AccountRepository(_dbContext);
         _accountValidation = new AccountValidation(_propertyValidations, _accountRepository);
