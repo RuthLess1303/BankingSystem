@@ -64,7 +64,7 @@ public class TransactionStatisticsRepository : ITransactionStatisticsRepository
             var transactions = await _db.Transaction.Where(t =>
                 t.Type.ToLower() != "atm" && t.TransactionTime.DayOfYear == DateTimeOffset.Now.AddDays(-i).DayOfYear).ToListAsync();
             
-            transactionByDays.Add(i, transactions.Count);
+            transactionByDays.Add(i + 1, transactions.Count);
         }
         
         return transactionByDays;
