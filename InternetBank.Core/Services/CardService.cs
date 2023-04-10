@@ -41,24 +41,24 @@ public class CardService : ICardService
     
     public async Task CreateCard(CreateCardRequest request)
     {
+        _propertyValidations.CheckCardNumberFormat(request.CardNumber);
+        await _cardRepository.CardNumberInUse(request.CardNumber);
+        _propertyValidations.CheckNameOnCard(request.NameOnCard);
+        _propertyValidations.CvvValidation(request.Cvv);
+        _propertyValidations.PinValidation(request.Pin);
+        var iban = await IbanValidation(request);
         if (request.ExpirationDate <= DateTime.Now || request.ExpirationDate.Year <= DateTime.Now.Year)
         {
             throw new Exception("Expiration date must be more than 1 year apart");
         }
-        
-        var iban = request.Iban.ToUpper().Replace(" ", "").Replace("-", "");
-        
-        _propertyValidations.CvvValidation(request.Cvv);
-        _propertyValidations.PinValidation(request.Pin);
-        _propertyValidations.CheckIbanFormat(iban);
-        _propertyValidations.CheckNameOnCard(request.NameOnCard);
-        _propertyValidations.CheckCardNumberFormat(request.CardNumber);
-        var account = await _accountRepository.GetAccountWithIban(iban);
-        if (account == null)
-        {
-            throw new Exception("Iban is not in use");
-        }
+        var cardEntity = CreateCardEntity(request);
 
+        await _cardRepository.LinkWithAccount(iban, cardEntity.Id);
+        await _userRepository.CreateCard(cardEntity);
+    }
+
+    private static CardEntity CreateCardEntity(CreateCardRequest request)
+    {
         var cardEntity = new CardEntity
         {
             Id = Guid.NewGuid(),
@@ -69,11 +69,22 @@ public class CardService : ICardService
             ExpirationDate = request.ExpirationDate,
             CreationDate = DateTime.Now
         };
-
-        await _cardRepository.LinkWithAccount(iban, cardEntity.Id);
-        await _userRepository.CreateCard(cardEntity);
+        return cardEntity;
     }
-    
+
+    private async Task<string> IbanValidation(CreateCardRequest request)
+    {
+        var iban = request.Iban.ToUpper().Replace(" ", "").Replace("-", "");
+        _propertyValidations.CheckIbanFormat(iban);
+        var account = await _accountRepository.GetAccountWithIban(iban);
+        if (account == null)
+        {
+            throw new Exception("Iban is not in use");
+        }
+
+        return iban;
+    }
+
     public async Task<(CardModel, string?)> SeeCard(string iban)
     {
         var card = await _cardValidation.GetCardWithIban(iban);

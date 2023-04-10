@@ -223,7 +223,7 @@ public class PropertyValidations : IPropertyValidations
 
         if (!Regex.IsMatch(privateNumber, @"^(?=.*[0-9]).+$") || privateNumber.Length != 11)
         {
-            throw new Exception("Invalid Private number format");
+            throw new Exception("Private number length must be 11");
         }
     }
     

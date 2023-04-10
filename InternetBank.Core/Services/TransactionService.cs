@@ -39,10 +39,7 @@ public class TransactionService : ITransactionService
     public async Task MakeTransaction(TransactionRequest request)
     {
         await _currentUserValidation.IsSameUserWithIban(request.SenderIban);
-        if (request.SenderIban == request.ReceiverIban)
-        {
-            throw new Exception("Money can not be transferred on same account");
-        }
+        IsSendingToSameIban(request.SenderIban, request.ReceiverIban);
         var senderAccount = await _accountValidation.GetAccountWithIban(request.SenderIban);
         ValidateAmount(request.Amount, senderAccount.Balance);
         var receiverAccount = await _accountValidation.GetAccountWithIban(request.ReceiverIban);
@@ -72,6 +69,14 @@ public class TransactionService : ITransactionService
         ValidateAmount(grossAmount, senderAccount.Balance);
         
         await MakeExternalTransaction(request, convertedAmount, transactionEntity, fee, grossAmount);
+    }
+
+    private static void IsSendingToSameIban(string senderIban, string receiverIban)
+    {
+        if (senderIban == receiverIban)
+        {
+            throw new Exception("Money can not be transferred on same account");
+        }
     }
 
     private static void ValidateAmount(decimal amount, decimal balance)

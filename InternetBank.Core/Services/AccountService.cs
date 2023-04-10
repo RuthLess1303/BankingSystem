@@ -42,12 +42,11 @@ public class AccountService : IAccountService
         var iban = request.Iban.ToUpper().Replace(" ", "").Replace("-", "");
         
         _propertyValidations.CheckIbanFormat(iban);
-        _propertyValidations.IsAmountValid(request.Amount);
         await _propertyValidations.CheckIbanUsage(iban);
         await _propertyValidations.CheckCurrency(request.CurrencyCode);
+        _propertyValidations.IsAmountValid(request.Amount);
 
         var accountEntity = CreateAccountEntity(request, iban);
-
         await _accountRepository.Create(accountEntity);
     }
 

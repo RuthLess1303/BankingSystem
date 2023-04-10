@@ -8,6 +8,7 @@ public interface ICardRepository
     Task LinkWithAccount(string iban, Guid cardId);
     Task<CardEntity?> GetCardWithIban(string iban);
     Task<List<CardEntity>?> GetAllCards(string privateNumber);
+    Task CardNumberInUse(string cardNumber);
 }
 
 public class CardRepository : ICardRepository
@@ -65,5 +66,14 @@ public class CardRepository : ICardRepository
             .ToListAsync();
 
         return cards;
+    }
+
+    public async Task CardNumberInUse(string cardNumber)
+    {
+        var card = await _db.Card.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+        if (card != null)
+        {
+            throw new Exception("Card number in use");
+        }
     }
 }
