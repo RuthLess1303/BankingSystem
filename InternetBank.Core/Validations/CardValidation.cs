@@ -23,11 +23,17 @@ public class CardValidation : ICardValidation
         _cardRepository = cardRepository;
     }
 
-    public async Task OnCreate(CreateCardRequest request)
+    public Task OnCreate(CreateCardRequest request)
     {
         var cardExpired = _propertyValidations.IsCardExpired(request.ExpirationDate);
         if (cardExpired) throw new Exception("Expiration date should not equal today's date");
-        await _propertyValidations.CheckCardNumberFormat(request.CardNumber);
+        var cardCheck = _propertyValidations.CheckCardNumberFormat(request.CardNumber);
+        if (!cardCheck)
+        {
+            throw new Exception("Card Number is not valid!");
+        }
+
+        return Task.CompletedTask;
     }
     
     public async Task<CardEntity> GetCardWithIban(string iban)

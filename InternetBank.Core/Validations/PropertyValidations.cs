@@ -9,7 +9,7 @@ public interface IPropertyValidations
     void IsAmountValid(decimal amount);
     Task CheckCurrency(string currencyCode);
     void CheckIbanFormat(string iban);
-    Task CheckCardNumberFormat(string cardNumber);
+    bool CheckCardNumberFormat(string cardNumber);
     void CvvValidation(string cvv);
     bool IsCardExpired(DateTime expirationDate);
     void CheckNameOnCard(string nameOnCard);
@@ -27,6 +27,10 @@ public interface IPropertyValidations
 
 public class PropertyValidations : IPropertyValidations
 {
+    
+    private const int MinCardNumberLength = 13;
+    private const int MaxCardNumberLength = 19;
+    
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
@@ -119,36 +123,46 @@ public class PropertyValidations : IPropertyValidations
         }
     }
     
-    public async Task CheckCardNumberFormat(string cardNumber)
+    public bool CheckCardNumberFormat(string cardNumber)
     {
-        if (cardNumber.Length != 16)
-        {
-            throw new Exception("Card number must be 16");
-        }
+        if (string.IsNullOrWhiteSpace(cardNumber))
+            throw new ArgumentException("Card number is null, empty or whitespace.");
 
-        if (Regex.IsMatch(cardNumber, @"^(?=.*[a-zA-Z]).+$") || Regex.IsMatch(cardNumber, @"^(?=.*[\W_]).+$"))
-        {
-            throw new Exception("Card Number must contain only numbers");
-        }
-        await _cardRepository.CardNumberUsage(cardNumber);
+        if (!cardNumber.All(char.IsDigit))
+            throw new ArgumentException("The card number can only contain digit characters.");
 
-        var sum = 0;
-        Parallel.For(cardNumber.Length - 1, -1, i =>
+        if (cardNumber.Length is < MinCardNumberLength or > MaxCardNumberLength)
+            throw new ArgumentException(
+                $"Invalid card number length. Length should be between {MinCardNumberLength} and {MaxCardNumberLength}.");
+
+        if (CalculateChecksum(cardNumber) % 10 != 0) throw new ArgumentException("Invalid card number.");
+
+        return true;
+    }
+    
+    private int CalculateChecksum(string cardNumber)
+    {
+        var reversedCardNumber = cardNumber.Reverse();
+        int sum = 0, i = 0;
+
+        foreach (var digitChar in reversedCardNumber)
         {
-            var digit = int.Parse(cardNumber[i].ToString());
-            if (i % 2 == 1)
+            if (!char.IsDigit(digitChar)) return 0;
+
+            var digit = digitChar - '0';
+
+            if ((i & 1) != 0)
             {
-                digit *= 2;
+                digit <<= 1;
+
                 if (digit > 9) digit -= 9;
             }
 
-            Interlocked.Add(ref sum, digit);
-        });
-
-        if (sum % 10 != 0)
-        {
-            throw new Exception("CardNumber is invalid");
+            sum += digit;
+            i++;
         }
+
+        return sum;
     }
 
     public bool IsCardExpired(DateTime expirationDate)

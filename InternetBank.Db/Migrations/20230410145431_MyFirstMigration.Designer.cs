@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InternetBank.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230410113852_entities_updated")]
-    partial class entities_updated
+    [Migration("20230410145431_MyFirstMigration")]
+    partial class MyFirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,7 +178,7 @@ namespace InternetBank.Db.Migrations
                         {
                             Id = 1L,
                             Code = "GEL",
-                            Date = new DateTimeOffset(new DateTime(2023, 4, 10, 15, 38, 52, 823, DateTimeKind.Unspecified).AddTicks(5400), new TimeSpan(0, 4, 0, 0, 0)),
+                            Date = new DateTimeOffset(new DateTime(2023, 4, 10, 18, 54, 31, 269, DateTimeKind.Unspecified).AddTicks(8585), new TimeSpan(0, 4, 0, 0, 0)),
                             Diff = 0m,
                             DiffFormatted = 0m,
                             Name = "ქართული ლარი",
@@ -186,7 +186,7 @@ namespace InternetBank.Db.Migrations
                             Rate = 1m,
                             RateFormatted = 0m,
                             RatePerQuantity = 1m,
-                            ValidFromDate = new DateTimeOffset(new DateTime(2023, 4, 11, 15, 38, 52, 823, DateTimeKind.Unspecified).AddTicks(5440), new TimeSpan(0, 4, 0, 0, 0))
+                            ValidFromDate = new DateTimeOffset(new DateTime(2023, 4, 11, 18, 54, 31, 269, DateTimeKind.Unspecified).AddTicks(8624), new TimeSpan(0, 4, 0, 0, 0))
                         });
                 });
 
@@ -411,7 +411,7 @@ namespace InternetBank.Db.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "a76641b4-59ac-46a9-8f49-bdfd0f3d0f2a",
+                            ConcurrencyStamp = "36d56063-fb5c-4723-9fcf-35708eda0816",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "operator@bank.com",
                             EmailConfirmed = false,
@@ -420,7 +420,7 @@ namespace InternetBank.Db.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OPERATOR@BANK.COM",
                             NormalizedUserName = "OPERATOR@BANK.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEUiCNXTVSWyjI7+dGTfS5fRnSwRP0oX8/YDbHJPILi8m3qIfzJfH543PhGlBAmOxg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPwIjVKIlX4j0KCAxF7cQhyxk2fGNbtGq1kSe6Aruq5U9NiSqmDpS4yksodAFwXgMQ==",
                             PhoneNumberConfirmed = false,
                             PrivateNumber = "01000000003",
                             TwoFactorEnabled = false,
