@@ -45,7 +45,6 @@ public class CardAuthServiceTests
     [Test]
     public async Task GetAuthorizedAccountAsync_ShouldReturnCorrectAccount()
     {
-        // Arrange
         var account = new AccountEntity
         {
             Id = Guid.NewGuid(),
@@ -77,17 +76,14 @@ public class CardAuthServiceTests
         _dbContext.CardAccountConnection.Add(connection);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _cardAuthService.GetAuthorizedAccountAsync(card.CardNumber, card.Pin);
 
-        // Assert
         Assert.That(result, Is.EqualTo(account));
     }
 
     [Test]
     public async Task GetAuthorizedAccountAsync_ShouldThrowException_WhenCardIsExpired()
     {
-        // Arrange
         var card = new CardEntity
         {
             Id = Guid.NewGuid(),
@@ -101,7 +97,6 @@ public class CardAuthServiceTests
         _dbContext.Card.Add(card);
         await _dbContext.SaveChangesAsync();
 
-        // Act & Assert
         var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
         {
             await _cardAuthService.GetAuthorizedAccountAsync(card.CardNumber, card.Pin);

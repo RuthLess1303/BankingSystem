@@ -20,13 +20,11 @@ public class CardCardPinServiceTests
     [SetUp]
     public void Setup()
     {
-        // Create an in-memory database context
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase("TestDb")
             .Options;
         _dbContext = new AppDbContext(options);
 
-        // Initialize repositories and services using the in-memory database context
         _cardRepository = new CardRepository(_dbContext);
         _cardAuthService = new CardAuthService(new AccountRepository(_dbContext), _cardRepository,
             new WithdrawalRequestValidation());
@@ -44,7 +42,6 @@ public class CardCardPinServiceTests
     [Test]
     public async Task ChangeCardPin_ValidRequest_ChangesPin()
     {
-        // Arrange
         const string cardNumber = "341824880203048";
         const string pin = "1234";
         const string newPin = "4321";
@@ -80,14 +77,10 @@ public class CardCardPinServiceTests
         _dbContext.CardAccountConnection.Add(connection);
         await _dbContext.SaveChangesAsync();
 
-        // Create a change PIN request
         var request = new ChangePinRequest { CardNumber = cardNumber, PinCode = pin, NewPin = newPin };
 
-        // Act
         await _cardPinService.ChangeCardPin(request);
 
-        // Assert
-        // Check that the PIN was changed in the in-memory database
         var updatedCard = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
         Assert.That(updatedCard.Pin, Is.EqualTo(newPin));
     }
@@ -95,12 +88,10 @@ public class CardCardPinServiceTests
     [Test]
     public async Task ChangeCardPin_InvalidRequest_ThrowsException()
     {
-        // Arrange
         const string cardNumber = "1234567890123456";
         const string pin = "1234";
         const string newPin = "4321";
 
-        // Add a card entity to the in-memory database
         var card = new CardEntity
         {
             Id = Guid.NewGuid(),
@@ -114,14 +105,10 @@ public class CardCardPinServiceTests
         _dbContext.Card.Add(card);
         await _dbContext.SaveChangesAsync();
 
-        // Create a change PIN request with invalid PIN
         var request = new ChangePinRequest { CardNumber = cardNumber, PinCode = "0000", NewPin = newPin };
 
-        // Assert
-        // Check that the method throws an exception
         Assert.ThrowsAsync<ArgumentException>(() => _cardPinService.ChangeCardPin(request));
 
-        // Check that the PIN was not changed in the in-memory database
         var updatedCard = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
         Assert.That(updatedCard.Pin, Is.EqualTo(pin));
     }

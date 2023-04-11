@@ -40,7 +40,6 @@ public class WithdrawalServiceTests
     [Test]
     public async Task Withdraw_ValidRequest_DecrementsAccountBalance()
     {
-        // Arrange
         var user = new UserEntity
         {
             UserName = "john.doe@example.com",
@@ -129,11 +128,9 @@ public class WithdrawalServiceTests
             Amount = 2000
         };
 
-        // Act
         await withdrawalService.Withdraw(request1);
         await withdrawalService.Withdraw(request2);
 
-        // Assert
         var updatedAccount1 = await _dbContext.Account.FirstOrDefaultAsync(a => a.Iban == account1.Iban);
         var updatedAccount2 = await _dbContext.Account.FirstOrDefaultAsync(a => a.Iban == account2.Iban);
         Assert.Multiple(() =>
@@ -146,8 +143,6 @@ public class WithdrawalServiceTests
     [Test]
     public Task Withdraw_InvalidRequest_ThrowsException()
     {
-        // Arrange
-
         var withdrawalService = new WithdrawalService(
             _cardAuthService,
             new TransactionRepository(_dbContext),
@@ -159,8 +154,7 @@ public class WithdrawalServiceTests
             PinCode = "1234",
             Amount = 1000
         };
-
-        // Act & Assert
+        
         Assert.ThrowsAsync<ArgumentException>(() => withdrawalService.Withdraw(request));
         return Task.CompletedTask;
     }

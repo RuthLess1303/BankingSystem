@@ -81,26 +81,6 @@ public class AccountValidationTests
         return Task.CompletedTask;
     }
 
-    // [TestCase(-100, "EE0011112222", "EUR", "12345678901")]
-    // [TestCase(1000, "invalid_iban", "EUR", "12345678901")]
-    // [TestCase(1000, "EE0011112222", "INVALID_CURRENCY", "12345678901")]
-    // public Task OnCreate_ThrowsException_WhenRequestIsInvalid(
-    //     decimal amount,
-    //     string iban,
-    //     string currencyCode,
-    //     string privateNumber)
-    // {
-    //     var request = new CreateAccountRequest
-    //     {
-    //         Amount = amount,
-    //         Iban = iban,
-    //         CurrencyCode = currencyCode,
-    //         PrivateNumber = privateNumber
-    //     };
-    //     Assert.ThrowsAsync<Exception>(() => _accountValidation.OnCreate(request));
-    //     return Task.CompletedTask;
-    // }
-
     [TestCase("01000000008")]
     [TestCase("01000000008")]
     [TestCase("01000000008")]
@@ -300,55 +280,6 @@ public class AccountValidationTests
 
         Assert.That(result, Is.Not.Null);
     }
-    //
-    // [TestCase("GB29NWBK60161331926821", 3)]
-    // [TestCase("EE0011112222", 3)]
-    // [TestCase("US123456789012345678901234", 3)]
-    // [TestCase("TR987654321098765432109876", 3)]
-    // public async Task GetTransactionsWithIban_Returns_Correct_Transactions_Count(string iban, int expectedCount)
-    // {
-    //     var transaction1 = new TransactionEntity
-    //     {
-    //         SenderIban = iban,
-    //         ReceiverIban = "TR987654321098765432109876",
-    //         Amount = 100,
-    //         TransactionTime = DateTime.UtcNow,
-    //         CurrencyCode = "Usd",
-    //         Type = "Transfer"
-    //     };
-    //     var transaction2 = new TransactionEntity
-    //     {
-    //         SenderIban = "EE0011112222",
-    //         ReceiverIban = iban,
-    //         Amount = 200,
-    //         TransactionTime = DateTime.UtcNow,
-    //         CurrencyCode = "Gel",
-    //         Type = "Transfer"
-    //     };
-    //     var transaction3 = new TransactionEntity
-    //     {
-    //         SenderIban = iban,
-    //         ReceiverIban = "US123456789012345678901234",
-    //         Amount = 300,
-    //         TransactionTime = DateTime.UtcNow,
-    //         CurrencyCode = "Eur",
-    //         Type = "Transfer"
-    //     };
-    //
-    //
-    //     await _dbContext.Transaction.AddRangeAsync(transaction1, transaction2, transaction3);
-    //     await _dbContext.SaveChangesAsync();
-    //
-    //     var result = await _accountValidation.GetTransactionsWithIban(iban);
-    //
-    //     Assert.That(result, Has.Count.EqualTo(expectedCount));
-    //     foreach (var transaction in result)
-    //         Assert.Multiple(() =>
-    //         {
-    //             Assert.That(transaction.SenderIban, Is.EqualTo(iban).Or.EqualTo(transaction.SenderIban));
-    //             Assert.That(transaction.ReceiverIban, Is.EqualTo(iban).Or.EqualTo(transaction.ReceiverIban));
-    //         });
-    // }
 
     [TestCase("GB29NWBK60161331926821", "1111222233334444", "John Doe", "123", "1234", "Usd", "1234567890")]
     public async Task GetCardWithIban_Returns_Card_When_Exists(string iban, string cardNumber, string cardHolderName,
