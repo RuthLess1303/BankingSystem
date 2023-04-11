@@ -77,24 +77,20 @@ public class BalanceServiceTests
             PinCode = "1234"
         };
         
-        // Act
         var balance = await _balanceService.SeeBalance(request);
 
-        // Assert
         Assert.That(balance, Is.EqualTo(account.Balance));
     }
 
     [Test]
     public void SeeBalance_WithInvalidCredentials_ThrowsArgumentException()
     {
-        // Arrange
         var request = new AuthorizeCardRequest
         {
             CardNumber = "1111222233334444",
             PinCode = "9999"
         };
 
-        // Act + Assert
         Assert.ThrowsAsync<ArgumentException>(() => _balanceService.SeeBalance(request));
     }
 }

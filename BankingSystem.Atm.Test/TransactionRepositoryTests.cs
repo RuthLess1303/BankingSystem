@@ -82,17 +82,14 @@ public class TransactionRepositoryTests
         await _dbContext.Transaction.AddRangeAsync(transaction1, transaction2);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _transactionRepository.GetWithdrawalAmountInLast24HoursAsync(iban);
 
-        // Assert
         Assert.That(result, Is.EqualTo(150));
     }
 
     [Test]
     public async Task AddTransactionInDb_AddsTransactionToDatabase()
     {
-        // Arrange
         var transaction = new TransactionEntity
         {
             Id = 1,
@@ -103,11 +100,9 @@ public class TransactionRepositoryTests
             TransactionTime = DateTime.UtcNow,
             CurrencyCode = "Usd"
         };
-
-        // Act
+        
         await _transactionRepository.AddTransactionInDb(transaction);
 
-        // Assert
         var result = await _dbContext.Transaction.FindAsync(transaction.Id);
         Assert.That(result, Is.Not.Null);
         Assert.That(result, Is.EqualTo(transaction));

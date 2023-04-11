@@ -32,7 +32,6 @@ public class PinRepositoryTests
     [Test]
     public async Task ChangePinInDb_WhenCalled_UpdatesPinInDatabase()
     {
-        // Arrange
         var card = new CardEntity
         {
             CardNumber = "1234567890123456",
@@ -47,10 +46,8 @@ public class PinRepositoryTests
 
         const string newPin = "5678";
 
-        // Act
         await _pinRepository.ChangePinInDb(card, newPin);
 
-        // Assert
         var updatedCard = await _dbContext.Card.FindAsync(card.Id);
         Assert.That(updatedCard, Is.Not.Null);
         Assert.That(updatedCard.Pin, Is.EqualTo(newPin));

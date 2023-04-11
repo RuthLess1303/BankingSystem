@@ -32,7 +32,6 @@ public class CardRepositoryTests
     [Test]
     public async Task FindCardEntityByCardNumberAsync_WhenCardExists_ReturnsCardEntity()
     {
-        // Arrange
         const string cardNumber = "1234567890123456";
         var card = new CardEntity
         {
@@ -46,10 +45,8 @@ public class CardRepositoryTests
         _dbContext.Card.Add(card);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _cardRepository.FindCardEntityByCardNumberAsync(cardNumber);
 
-        // Assert
         Assert.That(result, Is.Not.Null);
         Assert.That(result.CardNumber, Is.EqualTo(cardNumber));
     }
@@ -57,10 +54,8 @@ public class CardRepositoryTests
     [Test]
     public Task FindCardEntityByCardNumberAsync_WhenCardDoesNotExist_ReturnsNull()
     {
-        // Arrange
         const string cardNumber = "1234567890123456";
         
-        // Assert
         Assert.ThrowsAsync<ArgumentException>(() => _cardRepository.FindCardEntityByCardNumberAsync(cardNumber),
             $"Card with number {cardNumber} does not exist");
         return Task.CompletedTask;

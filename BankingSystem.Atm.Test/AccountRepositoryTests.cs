@@ -33,7 +33,6 @@ public class AccountRepositoryTests
     [Test]
     public async Task GetAccountByCardDetails_WhenValidCardDetailsProvided_ReturnsAccount()
     {
-        // Arrange
         var card = new CardEntity
         {
             Id = Guid.NewGuid(),
@@ -64,10 +63,8 @@ public class AccountRepositoryTests
         _dbContext.CardAccountConnection.Add(cardAccountConnection);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _accountRepository.GetAccountByCardDetails(card.CardNumber, card.Pin);
 
-        // Assert
         Assert.That(result, Is.Not.Null);
         Assert.Multiple(() =>
         {
@@ -79,11 +76,9 @@ public class AccountRepositoryTests
     [Test]
     public void GetAccountByCardDetails_WhenInvalidCardDetailsProvided_ThrowsException()
     {
-        // Arrange
         const string invalidCardNumber = "1234567890123456";
         const string invalidPin = "0000";
 
-        // Act and Assert
         Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
             _accountRepository.GetAccountByCardDetails(invalidCardNumber, invalidPin));
     }
@@ -91,7 +86,6 @@ public class AccountRepositoryTests
     [Test]
     public async Task GetAccountMoney_WhenValidIbanProvided_ReturnsBalance()
     {
-        // Arrange
         var account = new AccountEntity
         {
             Id = Guid.NewGuid(),
@@ -104,20 +98,16 @@ public class AccountRepositoryTests
         _dbContext.Account.Add(account);
         await _dbContext.SaveChangesAsync();
 
-        // Act
         var result = await _accountRepository.GetAccountBalance(account.Iban);
 
-        // Assert
         Assert.That(result, Is.EqualTo(account.Balance));
     }
 
     [Test]
     public void GetAccountMoney_WhenInvalidIbanProvided_ThrowsException()
     {
-        // Arrange
         const string invalidIban = "invalid_iban";
 
-        // Act and Assert
         Assert.ThrowsAsync<ArgumentException>(() => _accountRepository.GetAccountBalance(invalidIban));
     }
 }
